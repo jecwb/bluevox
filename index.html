@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#00ff00">
+    <meta name="description" content="Repertório de músicas - BlueVox">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Repertório BlueVox</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --cor-primaria: #00ff00;
+            --cor-secundaria: #00aa00;
+            --cor-fundo: #000000;
+            --cor-texto: #00ff00;
+            --cor-destaque: #ffff00;
+            --cor-botao: #003300;
+            --cor-hover: #004400;
+        }
+        
+        body {
+            background: var(--cor-fundo);
+            color: var(--cor-texto);
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--cor-primaria);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--cor-primaria);
+            color: var(--cor-primaria);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #111111;
+            border: 2px dashed var(--cor-secundaria);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .empty-state h2 {
+            color: var(--cor-primaria);
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .empty-state p {
+            color: var(--cor-secundaria);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .music-list {
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .music-item {
+            background: #111111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .music-item:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+            transform: translateX(5px);
+        }
+        
+        .music-name {
+            color: var(--cor-primaria);
+            font-size: 1.1rem;
+            font-weight: bold;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 15px;
+        }
+        
+        .music-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .action-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 35px;
+            height: 35px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        
+        .action-btn:hover {
+            background: var(--cor-hover);
+            transform: scale(1.1);
+        }
+        
+        .edit-btn {
+            background: #003366;
+            border-color: #0066cc;
+        }
+        
+        .delete-btn {
+            background: #660000;
+            border-color: #ff4444;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-add {
+            background: #006600;
+            font-size: 1rem;
+        }
+        
+        .btn-secondary {
+            background: #333333;
+            border-color: #666666;
+        }
+        
+        .music-count {
+            text-align: center;
+            color: var(--cor-secundaria);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #111;
+            border-radius: 5px;
+            border: 1px solid var(--cor-secundaria);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--cor-fundo);
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 5px 10px;
+            background: #111;
+            border-bottom: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .modal-title-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .modal-header h2 {
+            color: var(--cor-primaria);
+            font-size: 0.8rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .separator {
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin: 0 3px;
+        }
+        
+        .font-controls-header {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+        
+        .font-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .font-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .scroll-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .scroll-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        
+        .scroll-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .scroll-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .scroll-speed-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .speed-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            min-width: 20px;
+        }
+        
+        .speed-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .speed-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .close {
+            color: var(--cor-primaria);
+            font-size: 16px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 2px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 3px;
+        }
+        
+        .modal-body {
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .lyrics-content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 16px;
+            padding: 20px 15px;
+            min-height: calc(100vh - 40px);
+            margin: 0;
+            box-sizing: border-box;
+            color: var(--cor-texto);
+            transition: font-size 0.3s ease;
+        }
+
+        .yellow-line {
+            color: var(--cor-destaque) !important;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
+        }
+        
+        .normal-line {
+            margin: 8px 0;
+            color: var(--cor-texto);
+        }
+        
+        .add-form, .edit-form, .config-form {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-secundaria);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--cor-primaria);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--cor-fundo);
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 5px;
+            color: var(--cor-texto);
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 8px var(--cor-primaria);
+        }
+        
+        .form-textarea {
+            height: 400px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--cor-secundaria);
+        }
+        
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .color-option {
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-option.active {
+            border-color: var(--cor-primaria);
+        }
+        
+        .success {
+            color: var(--cor-primaria);
+            background: #003300;
+            border-radius: 8px;
+            border: 1px solid var(--cor-primaria);
+            padding: 12px;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .install-prompt {
+            background: #003300;
+            border: 1px solid var(--cor-primaria);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .backup-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .backup-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .backup-info {
+            text-align: center;
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .import-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .import-option {
+            background: #111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .import-option:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+        }
+        
+        .import-option.selected {
+            background: #003300;
+            border-color: var(--cor-primaria);
+        }
+        
+        .import-option h3 {
+            color: var(--cor-primaria);
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .import-option p {
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        @keyframes pulse {
+            0% { border-color: var(--cor-primaria); }
+            50% { border-color: var(--cor-destaque); }
+            100% { border-color: var(--cor-primaria); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .music-item { padding: 12px 15px; }
+            .music-name { font-size: 1rem; }
+            .action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; }
+            .modal-header { padding: 5px 8px; }
+            .font-btn, .scroll-btn, .speed-btn { transform: scale(0.9); }
+            .backup-options { flex-direction: column; }
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .music-item { padding: 10px 12px; }
+            .music-name { font-size: 0.9rem; }
+            .action-btn { width: 30px; height: 30px; font-size: 0.75rem; }
+            .form-actions { flex-direction: column; }
+            .lyrics-content { font-size: 14px; padding: 15px 10px; }
+            .modal-header { flex-wrap: wrap; gap: 5px; }
+            .modal-title-container { min-width: 100px; }
+        }
+        
+        @media (max-width: 400px) {
+            .modal-header { padding: 5px 5px; }
+            .font-controls-header, .scroll-controls, .scroll-speed-controls { 
+                transform: scale(0.8); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>REPERTÓRIO BLUEVOX</h1>
+        </header>
+        
+        <div id="install-prompt" class="install-prompt" style="display: none;">
+            <strong>💡 Para melhor experiência:</strong><br>
+            Adicione este app à tela inicial do seu celular!
+            <button class="btn" onclick="instalarApp()" style="margin-top: 10px;">📱 Instalar App</button>
+        </div>
+        
+        <div id="music-count" class="music-count" style="display: none;"></div>
+        
+        <div id="empty-state" class="empty-state">
+            <h2>🎵 Bem-vindo ao Repertório BlueVox!</h2>
+            <p>Gerencie seu repertório musical de forma prática e offline</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px;">
+                <button class="btn btn-add" onclick="mostrarFormulario()" style="min-width: 200px;">
+                    ➕ Adicionar Primeira Música
+                </button>
+                
+                <div style="color: #00aa00; margin: 10px 0;">ou</div>
+                
+                <div class="backup-options">
+                    <div class="backup-option">
+                        <div class="file-input-wrapper">
+                            <button class="btn" onclick="document.getElementById('file-input-initial').click()" style="min-width: 200px;">
+                                📥 Importar Backup
+                            </button>
+                            <input type="file" id="file-input-initial" accept=".xml" style="display: none;" onchange="iniciarImportacao(event)">
+                        </div>
+                        <div class="backup-info">Arquivo .xml</div>
+                    </div>
+                    <div class="backup-option">
+                        <button class="btn" onclick="mostrarImportacaoURL()" style="min-width: 200px;">
+                            🌐 Importar de URL
+                        </button>
+                        <div class="backup-info">URL .xml</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 15px; background: #111; border-radius: 8px; border: 1px solid #00aa00;">
+                <strong style="color: #00ff00;">✨ Dicas:</strong>
+                <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
+                    <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
+                    <li>Adicione à tela inicial para acesso rápido</li>
+                    <li>Todos os dados ficam salvos no seu navegador</li>
+                    <li>Backup único em formato XML universal</li>
+                    <li>Importe de arquivo local ou URL remota</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="music-list" class="music-list" style="display: none;"></div>
+        
+        <div id="controls" class="controls" style="display: none;">
+            <button class="btn btn-add" onclick="mostrarFormulario()">➕ Adicionar Música</button>
+            
+            <div class="backup-options">
+                <div class="backup-option">
+                    <button class="btn" onclick="exportarDados()">📤 Exportar Backup</button>
+                    <div class="backup-info">Arquivo .xml</div>
+                </div>
+            </div>
+            
+            <div class="backup-options">
+                <div class="backup-option">
+                    <div class="file-input-wrapper">
+                        <button class="btn" onclick="document.getElementById('file-input').click()">📥 Importar Backup</button>
+                        <input type="file" id="file-input" accept=".xml" style="display: none;" onchange="iniciarImportacao(event)">
+                    </div>
+                    <div class="backup-info">Arquivo .xml</div>
+                </div>
+                <div class="backup-option">
+                    <button class="btn" onclick="mostrarImportacaoURL()">🌐 Importar de URL</button>
+                    <div class="backup-info">URL .xml</div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="mostrarConfiguracoes()">🎨 Cores</button>
+            <button class="btn" onclick="mostrarAjuda()">❓ Ajuda</button>
+        </div>
+    </div>
+
+    <footer class="footer" style="text-align: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #00aa00; color: #00cc00;">
+        <div class="copyright">© 2024 BlueVox - Repertório Musical</div>
+    </footer>
+
+    <!-- MODAL DA LETRA -->
+    <div id="music-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <h2 id="modal-title">TÍTULO DA MÚSICA</h2>
+                    <span class="separator">-</span>
+                    <div class="font-controls-header">
+                        <button class="font-btn" onclick="ajustarFonte(-2)" title="Diminuir fonte">A-</button>
+                        <button class="font-btn" onclick="ajustarFonte(0)" title="Fonte padrão">A</button>
+                        <button class="font-btn" onclick="ajustarFonte(2)" title="Aumentar fonte">A+</button>
+                    </div>
+                    <div class="scroll-controls">
+                        <button class="scroll-btn" id="scroll-toggle" onclick="toggleAutoScroll()" title="Auto Scroll">▶️ Scroll</button>
+                    </div>
+                    <div class="scroll-speed-controls" id="speed-controls" style="display: none;">
+                        <button class="speed-btn" onclick="setScrollSpeed(1)" title="Lento">🐢</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(2)" title="Normal">🚶</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(3)" title="Rápido">🏃</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(4)" title="Muito Rápido">⚡</button>
+                    </div>
+                </div>
+                <button class="close" onclick="fecharModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="lyrics-content" class="lyrics-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR MÚSICA -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ ADICIONAR NOVA MÚSICA</h2>
+                <button class="close" onclick="fecharAddModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-form" class="add-form" onsubmit="adicionarMusica(event)">
+                    <div class="form-group">
+                        <label for="nome-musica">NOME DA MÚSICA:</label>
+                        <input type="text" id="nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="letra-musica">LETRA DA MÚSICA:</label>
+                        <textarea id="letra-musica" class="form-input form-textarea" required 
+                                  placeholder="Cole aqui a letra completa...
+
+Exemplo:
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
+
+💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharAddModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">💾 Salvar Música</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR MÚSICA -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ EDITAR MÚSICA</h2>
+                <button class="close" onclick="fecharEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form" class="edit-form" onsubmit="editarMusica(event)">
+                    <input type="hidden" id="edit-index">
+                    <div class="form-group">
+                        <label for="edit-nome-musica">NOME DA MÚSICA:</label>
+                        <input type="text" id="edit-nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-letra-musica">LETRA DA MÚSICA:</label>
+                        <textarea id="edit-letra-musica" class="form-input form-textarea" required 
+                                  placeholder="Cole aqui a letra completa...
+
+Exemplo:
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
+
+💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharEditModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">💾 Atualizar Música</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAÇÕES -->
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎨 CONFIGURAÇÕES DE CORES</h2>
+                <button class="close" onclick="fecharConfigModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="config-form">
+                    <div class="form-group">
+                        <label>SELECIONE UM TEMA:</label>
+                        <div class="color-options">
+                            <div class="color-option active" data-theme="green" 
+                                 style="background: #000000; color: #00ff00; border: 1px solid #00ff00;"
+                                 onclick="aplicarTema('green')">
+                                🟢 Verde Neon
+                            </div>
+                            <div class="color-option" data-theme="blue"
+                                 style="background: #000033; color: #0088ff; border: 1px solid #0088ff;"
+                                 onclick="aplicarTema('blue')">
+                                🔵 Azul Tech
+                            </div>
+                            <div class="color-option" data-theme="red"
+                                 style="background: #330000; color: #ff4444; border: 1px solid #ff4444;"
+                                 onclick="aplicarTema('red')">
+                                🔴 Vermelho
+                            </div>
+                            <div class="color-option" data-theme="purple"
+                                 style="background: #1a001a; color: #cc00ff; border: 1px solid #cc00ff;"
+                                 onclick="aplicarTema('purple')">
+                                🟣 Roxo
+                            </div>
+                            <div class="color-option" data-theme="orange"
+                                 style="background: #331900; color: #ff8800; border: 1px solid #ff8800;"
+                                 onclick="aplicarTema('orange')">
+                                🟠 Laranja
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharConfigModal()">Fechar</button>
+                        <button type="button" class="btn" onclick="resetarTema()">🔄 Tema Padrão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OPÇÕES DE IMPORTAR -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📥 OPÇÕES DE IMPORTAR</h2>
+                <button class="close" onclick="fecharImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 600px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>ENCONTRADAS <span id="import-count">0</span> MÚSICA(S) NO BACKUP</label>
+                        <p style="color: var(--cor-secundaria); margin-bottom: 20px;">
+                            Selecione como deseja importar as músicas:
+                        </p>
+                        
+                        <div class="import-options">
+                            <div class="import-option" onclick="selecionarOpcaoImport('substituir')" id="option-substituir">
+                                <h3>🔄 SUBSTITUIR TUDO</h3>
+                                <p>Remove todas as músicas atuais e importa apenas as do backup</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoImport('adicionar')" id="option-adicionar">
+                                <h3>➕ ADICIONAR NOVAS</h3>
+                                <p>Mantém as músicas atuais e adiciona apenas as que não existem</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoImport('mesclar')" id="option-mesclar">
+                                <h3>🔄 MESCLAR TUDO</h3>
+                                <p>Combina todas as músicas, atualizando as existentes e adicionando novas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharImportModal()">Cancelar</button>
+                        <button type="button" class="btn btn-add" onclick="confirmarImportacao()" id="confirm-import-btn" disabled>
+                            💾 Confirmar Importação
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL IMPORTAR VIA URL -->
+    <div id="import-url-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🌐 IMPORTAR DE URL</h2>
+                <button class="close" onclick="fecharImportURLModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="config-form" onsubmit="importarDeURL(event)">
+                    <div class="form-group">
+                        <label for="url-xml">URL DO ARQUIVO XML:</label>
+                        <input type="url" id="url-xml" class="form-input" required 
+                               placeholder="Ex: http://teste.com.br/musicas.xml"
+                               pattern="https?://.+" title="Digite uma URL válida começando com http:// ou https://">
+                        <p style="color: var(--cor-secundaria); margin-top: 8px; font-size: 0.8rem;">
+                            💡 A URL deve apontar para um arquivo XML válido do Repertório BlueVox
+                        </p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharImportURLModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">📥 Importar da URL</button>
+                    </div>
+                </form>
+                
+                <div id="url-loading" style="display: none; text-align: center; padding: 20px;">
+                    <div style="color: var(--cor-primaria); margin-bottom: 10px;">⏳ Carregando dados da URL...</div>
+                    <div style="color: var(--cor-secundaria); font-size: 0.8rem;">
+                        Aguarde enquanto buscamos o arquivo XML
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO
+        let musicas = [];
+        let deferredPrompt = null;
+        let tamanhoFonteBase = 16;
+        let autoScrollAtivo = false;
+        let scrollInterval = null;
+        let scrollSpeed = 2; // 1=lento, 2=normal, 3=rápido, 4=muito rápido
+        
+        // Variáveis para controle de importação
+        let dadosImportacao = null;
+        let opcaoImportSelecionada = null;
+        let importacaoURLEmAndamento = false;
+
+        const temas = {
+            green: {
+                primaria: '#00ff00',
+                secundaria: '#00aa00',
+                fundo: '#000000',
+                texto: '#00ff00',
+                destaque: '#ffff00',
+                botao: '#003300',
+                hover: '#004400'
+            },
+            blue: {
+                primaria: '#0088ff',
+                secundaria: '#0066cc',
+                fundo: '#000033',
+                texto: '#0088ff',
+                destaque: '#00ffff',
+                botao: '#003366',
+                hover: '#004477'
+            },
+            red: {
+                primaria: '#ff4444',
+                secundaria: '#cc0000',
+                fundo: '#330000',
+                texto: '#ff4444',
+                destaque: '#ff8888',
+                botao: '#660000',
+                hover: '#770000'
+            },
+            purple: {
+                primaria: '#cc00ff',
+                secundaria: '#9900cc',
+                fundo: '#1a001a',
+                texto: '#cc00ff',
+                destaque: '#ff88ff',
+                botao: '#330033',
+                hover: '#440044'
+            },
+            orange: {
+                primaria: '#ff8800',
+                secundaria: '#cc6600',
+                fundo: '#331900',
+                texto: '#ff8800',
+                destaque: '#ffcc00',
+                botao: '#663300',
+                hover: '#774400'
+            }
+        };
+
+        // INICIAR APLICAÇÃO
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎵 Repertório BlueVox iniciado');
+            
+            // Configurar PWA
+            configurarPWA();
+            
+            // Carregar configurações salvas
+            carregarConfiguracoes();
+            
+            // Carregar músicas salvas
+            const musicasSalvas = localStorage.getItem('catalogoMusicas');
+            if (musicasSalvas) {
+                try {
+                    musicas = JSON.parse(musicasSalvas);
+                    if (musicas.length > 0) {
+                        mostrarInterfaceComMusicas();
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar músicas:', e);
+                    musicas = [];
+                }
+            }
+
+            // Registrar Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registrado:', registration))
+                    .catch(error => console.log('SW falhou:', error));
+            }
+
+            // Configurar eventos GLOBAIS (só uma vez)
+            configurarEventosGlobais();
+        });
+
+        // CONFIGURAR PWA
+        function configurarPWA() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                mostrarPromptInstalacao();
+            });
+
+            // Verificar se já está instalado
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('📱 Executando em modo PWA');
+                document.getElementById('install-prompt').style.display = 'none';
+            }
+        }
+
+        function mostrarPromptInstalacao() {
+            setTimeout(() => {
+                document.getElementById('install-prompt').style.display = 'block';
+            }, 3000);
+        }
+
+        function instalarApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ App instalado');
+                        document.getElementById('install-prompt').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // CONFIGURAÇÕES DE CORES
+        function carregarConfiguracoes() {
+            const temaSalvo = localStorage.getItem('temaRepertorio') || 'green';
+            aplicarTema(temaSalvo);
+        }
+
+        function mostrarConfiguracoes() {
+            document.getElementById('config-modal').style.display = 'block';
+            const temaAtual = localStorage.getItem('temaRepertorio') || 'green';
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.theme === temaAtual) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        function fecharConfigModal() {
+            document.getElementById('config-modal').style.display = 'none';
+        }
+
+        function aplicarTema(tema) {
+            const cores = temas[tema];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--cor-primaria', cores.primaria);
+            root.style.setProperty('--cor-secundaria', cores.secundaria);
+            root.style.setProperty('--cor-fundo', cores.fundo);
+            root.style.setProperty('--cor-texto', cores.texto);
+            root.style.setProperty('--cor-destaque', cores.destaque);
+            root.style.setProperty('--cor-botao', cores.botao);
+            root.style.setProperty('--cor-hover', cores.hover);
+            
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', cores.primaria);
+            localStorage.setItem('temaRepertorio', tema);
+            
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-theme="${tema}"]`).classList.add('active');
+        }
+
+        function resetarTema() {
+            aplicarTema('green');
+        }
+
+        // CONTROLES DE FONTE E SCROLL
+        function ajustarFonte(mudanca) {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
+            
+            if (mudanca === 0) {
+                // Reset para tamanho base
+                elemento.style.fontSize = tamanhoFonteBase + 'px';
+            } else {
+                const novoTamanho = Math.max(10, Math.min(30, tamanhoAtual + mudanca));
+                elemento.style.fontSize = novoTamanho + 'px';
+                
+                // Se estiver aumentando muito, ajustar automaticamente
+                if (novoTamanho > 24) {
+                    ajustarFonteAuto();
+                }
+            }
+        }
+
+        function ajustarFonteAuto() {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            const texto = elemento.textContent;
+            const linhas = texto.split('\n');
+            const linhaMaisLonga = linhas.reduce((maisLonga, linha) => 
+                linha.length > maisLonga.length ? linha : maisLonga, '');
+            
+            const larguraDisponivel = elemento.clientWidth - 40;
+            const tamanhoIdeal = Math.max(12, Math.min(24, Math.floor(larguraDisponivel / (linhaMaisLonga.length * 0.6))));
+            
+            elemento.style.fontSize = tamanhoIdeal + 'px';
+            tamanhoFonteBase = tamanhoIdeal;
+        }
+
+        function toggleAutoScroll() {
+            autoScrollAtivo = !autoScrollAtivo;
+            const botao = document.getElementById('scroll-toggle');
+            const controlesVelocidade = document.getElementById('speed-controls');
+            
+            if (!botao) return;
+            
+            if (autoScrollAtivo) {
+                botao.classList.add('active');
+                botao.innerHTML = '⏸️ Scroll';
+                controlesVelocidade.style.display = 'flex';
+                iniciarAutoScroll();
+            } else {
+                botao.classList.remove('active');
+                botao.innerHTML = '▶️ Scroll';
+                controlesVelocidade.style.display = 'none';
+                pararAutoScroll();
+            }
+        }
+
+        function setScrollSpeed(velocidade) {
+            scrollSpeed = velocidade;
+            
+            // Atualizar botões de velocidade
+            document.querySelectorAll('.speed-btn').forEach((btn, index) => {
+                if (index + 1 === velocidade) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Reiniciar scroll se estiver ativo
+            if (autoScrollAtivo) {
+                pararAutoScroll();
+                iniciarAutoScroll();
+            }
+        }
+
+        function iniciarAutoScroll() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const modalBody = document.querySelector('.modal-body');
+            
+            if (!lyricsContent || !modalBody) return;
+            
+            // Verificar se já chegou ao final
+            if (modalBody.scrollTop >= lyricsContent.scrollHeight - modalBody.clientHeight) {
+                // Se estiver no final, voltar para o topo
+                modalBody.scrollTop = 0;
+            }
+            
+            // Velocidades em pixels por intervalo (mais suaves)
+            const velocidades = {
+                1: 0.5,   // Muito lento
+                2: 1,     // Lento
+                3: 2,     // Normal
+                4: 3      // Rápido
+            };
+            
+            pararAutoScroll(); // Garantir que não há intervalos duplicados
+            
+            scrollInterval = setInterval(() => {
+                const currentScroll = modalBody.scrollTop;
+                const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
+                
+                if (currentScroll >= maxScroll) {
+                    // Chegou ao final - parar auto scroll
+                    pararAutoScroll();
+                    autoScrollAtivo = false;
+                    const scrollToggle = document.getElementById('scroll-toggle');
+                    if (scrollToggle) {
+                        scrollToggle.classList.remove('active');
+                        scrollToggle.innerHTML = '▶️ Scroll';
+                    }
+                    const speedControls = document.getElementById('speed-controls');
+                    if (speedControls) speedControls.style.display = 'none';
+                    return;
+                }
+                
+                // Aplicar scroll suave
+                modalBody.scrollTop += velocidades[scrollSpeed];
+                
+            }, 16); // ≈ 60fps
+        }
+
+        function pararAutoScroll() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+        }
+
+        // EVENTOS GLOBAIS - executados apenas uma vez
+        function configurarEventosGlobais() {
+            // Fechar modais ao clicar fora
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                }
+            });
+
+            // Fechar modais com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                }
+            });
+
+            // Tela cheia automática em dispositivos móveis
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        // CONFIGURAR EVENTOS DO MODAL - executados quando o modal é aberto
+        function configurarEventosModal() {
+            const modalBody = document.querySelector('.modal-body');
+            if (modalBody) {
+                // Remover event listeners antigos para evitar duplicação
+                modalBody.replaceWith(modalBody.cloneNode(true));
+                
+                // Re-aplicar event listeners
+                const novoModalBody = document.querySelector('.modal-body');
+                
+                novoModalBody.addEventListener('wheel', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('touchstart', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('scroll', () => {
+                    // Se o usuário estiver scrollando manualmente e o auto scroll estiver ativo
+                    if (autoScrollAtivo) {
+                        // Verificar se o usuário está tentando scrollar na direção oposta
+                        const lyricsContent = document.getElementById('lyrics-content');
+                        const maxScroll = lyricsContent.scrollHeight - novoModalBody.clientHeight;
+                        
+                        // Se estiver perto do final ou se o scroll manual for significativo, parar auto scroll
+                        if (novoModalBody.scrollTop >= maxScroll - 10) {
+                            toggleAutoScroll();
+                        }
+                    }
+                });
+            }
+        }
+
+        function mostrarInterfaceComMusicas() {
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('music-list').style.display = 'block';
+            document.getElementById('controls').style.display = 'flex';
+            document.getElementById('music-count').style.display = 'block';
+            exibirListaMusicas();
+        }
+
+        function exibirListaMusicas() {
+            const lista = document.getElementById('music-list');
+            
+            if (musicas.length === 0) {
+                document.getElementById('empty-state').style.display = 'block';
+                document.getElementById('music-list').style.display = 'none';
+                document.getElementById('controls').style.display = 'none';
+                document.getElementById('music-count').style.display = 'none';
+                return;
+            }
+            
+            musicas.sort((a, b) => a.nome.localeCompare(b.nome));
+            
+            lista.innerHTML = musicas.map((musica, index) => `
+                <div class="music-item" onclick="abrirMusica(${index})">
+                    <div class="music-name">${musica.nome}</div>
+                    <div class="music-actions">
+                        <button class="action-btn edit-btn" onclick="event.stopPropagation(); editarMusicaForm(${index})" title="Editar música">✏️</button>
+                        <button class="action-btn delete-btn" onclick="event.stopPropagation(); removerMusica(${index})" title="Remover música">×</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            atualizarContador();
+        }
+
+        function atualizarContador() {
+            const countElement = document.getElementById('music-count');
+            const total = musicas.length;
+            countElement.textContent = `${total} música${total !== 1 ? 's' : ''} no repertório`;
+        }
+
+        function salvarMusicas() {
+            localStorage.setItem('catalogoMusicas', JSON.stringify(musicas));
+            atualizarContador();
+        }
+
+        function mostrarFormulario() {
+            document.getElementById('add-form').reset();
+            document.getElementById('add-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('nome-musica').focus(), 100);
+        }
+
+        function fecharAddModal() {
+            document.getElementById('add-modal').style.display = 'none';
+        }
+
+        function adicionarMusica(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nome-musica').value.trim();
+            const letra = document.getElementById('letra-musica').value;
+
+            if (!nome || !letra.trim()) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            if (musicas.some(m => m.nome.toUpperCase() === nome.toUpperCase())) {
+                alert('❌ Já existe uma música com este nome!');
+                return;
+            }
+
+            const novaMusica = {
+                nome: nome.toUpperCase(),
+                letra: letra,
+                dataCriacao: new Date().toISOString()
+            };
+
+            musicas.push(novaMusica);
+            salvarMusicas();
+
+            if (musicas.length === 1) {
+                mostrarInterfaceComMusicas();
+            } else {
+                exibirListaMusicas();
+            }
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" adicionada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
+            fecharAddModal();
+        }
+
+        function editarMusicaForm(index) {
+            const musica = musicas[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-nome-musica').value = musica.nome;
+            document.getElementById('edit-letra-musica').value = musica.letra;
+            document.getElementById('edit-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
+        }
+
+        function fecharEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function editarMusica(event) {
+            event.preventDefault();
+            const index = document.getElementById('edit-index').value;
+            const nome = document.getElementById('edit-nome-musica').value.trim();
+            const letra = document.getElementById('edit-letra-musica').value;
+
+            if (!nome || !letra.trim()) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            // Verificar se o nome já existe (excluindo a própria música)
+            const nomeExistente = musicas.some((m, i) => 
+                i != index && m.nome.toUpperCase() === nome.toUpperCase()
+            );
+
+            if (nomeExistente) {
+                alert('❌ Já existe uma música com este nome!');
+                return;
+            }
+
+            // Atualizar a música
+            musicas[index] = {
+                ...musicas[index],
+                nome: nome.toUpperCase(),
+                letra: letra,
+                dataModificacao: new Date().toISOString()
+            };
+
+            salvarMusicas();
+            exibirListaMusicas();
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" atualizada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
+            fecharEditModal();
+        }
+
+        function removerMusica(index) {
+            const nomeMusica = musicas[index].nome;
+            if (confirm(`Tem certeza que deseja remover "${nomeMusica}"?`)) {
+                musicas.splice(index, 1);
+                salvarMusicas();
+                exibirListaMusicas();
+                
+                // Feedback visual
+                const lista = document.getElementById('music-list');
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" removida com sucesso!`;
+                lista.insertBefore(successMsg, lista.firstChild);
+                setTimeout(() => successMsg.remove(), 3000);
+            }
+        }
+
+        function abrirMusica(index) {
+            const musica = musicas[index];
+            document.getElementById('modal-title').textContent = musica.nome;
+            document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
+            document.getElementById('music-modal').style.display = 'block';
+            
+            // Resetar controles de scroll
+            autoScrollAtivo = false;
+            pararAutoScroll();
+            const scrollToggle = document.getElementById('scroll-toggle');
+            if (scrollToggle) {
+                scrollToggle.classList.remove('active');
+                scrollToggle.innerHTML = '▶️ Scroll';
+            }
+            const speedControls = document.getElementById('speed-controls');
+            if (speedControls) speedControls.style.display = 'none';
+            
+            // Configurar eventos do modal
+            setTimeout(() => {
+                configurarEventosModal();
+                document.querySelector('.modal-body').scrollTop = 0;
+                ajustarFonteAuto();
+            }, 100);
+            
+            // Tela cheia automática ao abrir música
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        function formatarLetra(texto) {
+            const linhas = texto.split('\n');
+            let html = '';
+            
+            linhas.forEach(linha => {
+                linha = linha.trim();
+                if (!linha) {
+                    html += '<br>';
+                    return;
+                }
+                
+                if (linha.toUpperCase().startsWith('[R]')) {
+                    const linhaSemR = linha.substring(3).trim();
+                    html += `<div class="yellow-line">${linhaSemR.toUpperCase()}</div>`;
+                } else {
+                    html += `<div class="normal-line">${linha.toUpperCase()}</div>`;
+                }
+            });
+            
+            return html;
+        }
+
+        function fecharModal() {
+            // Parar auto scroll se estiver ativo
+            if (autoScrollAtivo) {
+                pararAutoScroll();
+                autoScrollAtivo = false;
+            }
+            document.getElementById('music-modal').style.display = 'none';
+        }
+
+        // FUNÇÕES DE BACKUP EM XML
+        function exportarDados() {
+            // Criar estrutura XML
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            xml += '<repertorio>\n';
+            xml += `  <info>\n`;
+            xml += `    <aplicacao>Repertório BlueVox</aplicacao>\n`;
+            xml += `    <versao>1.0</versao>\n`;
+            xml += `    <dataExportacao>${new Date().toISOString()}</dataExportacao>\n`;
+            xml += `    <totalMusicas>${musicas.length}</totalMusicas>\n`;
+            xml += `  </info>\n`;
+            xml += `  <musicas>\n`;
+            
+            // Adicionar cada música
+            musicas.forEach(musica => {
+                xml += `    <musica>\n`;
+                xml += `      <nome><![CDATA[${musica.nome}]]></nome>\n`;
+                xml += `      <letra><![CDATA[${musica.letra}]]></letra>\n`;
+                xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
+                if (musica.dataModificacao) {
+                    xml += `      <dataModificacao>${musica.dataModificacao}</dataModificacao>\n`;
+                }
+                xml += `    </musica>\n`;
+            });
+            
+            xml += `  </musicas>\n`;
+            xml += `</repertorio>`;
+            
+            // Criar e baixar arquivo
+            const blob = new Blob([xml], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `repertorio-bluevox-${new Date().toISOString().split('T')[0]}.xml`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`📤 Backup XML exportado com sucesso!\n${musicas.length} música(s) salvas.`);
+        }
+
+        // FUNÇÕES DE IMPORTAR VIA URL
+        function mostrarImportacaoURL() {
+            document.getElementById('import-url-modal').style.display = 'block';
+            document.getElementById('url-xml').value = '';
+            document.getElementById('url-loading').style.display = 'none';
+            setTimeout(() => document.getElementById('url-xml').focus(), 100);
+        }
+
+        function fecharImportURLModal() {
+            if (importacaoURLEmAndamento) {
+                if (!confirm('A importação está em andamento. Deseja realmente cancelar?')) {
+                    return;
+                }
+            }
+            document.getElementById('import-url-modal').style.display = 'none';
+            importacaoURLEmAndamento = false;
+        }
+
+        async function importarDeURL(event) {
+            event.preventDefault();
+            
+            const urlInput = document.getElementById('url-xml').value.trim();
+            
+            if (!urlInput) {
+                alert('❌ Por favor, digite uma URL válida.');
+                return;
+            }
+            
+            // Validar formato da URL
+            if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+                alert('❌ A URL deve começar com http:// ou https://');
+                return;
+            }
+            
+            try {
+                // Mostrar loading
+                document.getElementById('url-loading').style.display = 'block';
+                importacaoURLEmAndamento = true;
+                
+                console.log('🌐 Iniciando importação da URL:', urlInput);
+                
+                // Fazer requisição para a URL
+                const response = await fetch(urlInput);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                // Verificar se o conteúdo é XML
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/xml') && !contentType.includes('text/xml')) {
+                    console.warn('Content-Type não é XML:', contentType);
+                    // Continuamos mesmo assim, pois alguns servidores podem não configurar o content-type corretamente
+                }
+                
+                const xmlText = await response.text();
+                
+                if (!xmlText || xmlText.trim().length === 0) {
+                    throw new Error('O arquivo da URL está vazio');
+                }
+                
+                // Processar o XML (reutilizando a lógica existente)
+                processarXMLImportado(xmlText, `URL: ${urlInput}`);
+                
+            } catch (error) {
+                console.error('❌ Erro na importação via URL:', error);
+                
+                let mensagemErro = 'Erro ao importar da URL: ';
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    mensagemErro += 'Não foi possível conectar ao servidor. Verifique a URL e sua conexão com a internet.';
+                } else if (error.message.includes('404')) {
+                    mensagemErro += 'Arquivo não encontrado (404). Verifique se a URL está correta.';
+                } else if (error.message.includes('403')) {
+                    mensagemErro += 'Acesso negado (403). O servidor pode estar bloqueando o acesso.';
+                } else if (error.message.includes('CORS')) {
+                    mensagemErro += 'Bloqueado por política CORS. O servidor não permite acesso de outros domínios.';
+                } else {
+                    mensagemErro += error.message;
+                }
+                
+                alert('❌ ' + mensagemErro);
+            } finally {
+                // Esconder loading
+                document.getElementById('url-loading').style.display = 'none';
+                importacaoURLEmAndamento = false;
+            }
+        }
+
+        // Função para processar XML importado (reutilizável para arquivo e URL)
+        function processarXMLImportado(xmlText, fonte) {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Verificar se é um backup do Repertório BlueVox
+                const aplicacao = xmlDoc.querySelector('aplicacao');
+                if (!aplicacao || aplicacao.textContent !== 'Repertório BlueVox') {
+                    // Tentar uma verificação mais flexível
+                    const musicasNodes = xmlDoc.querySelectorAll('musica');
+                    if (musicasNodes.length === 0) {
+                        throw new Error('Arquivo XML não é um backup válido do Repertório BlueVox');
+                    }
+                    console.warn('⚠️ Arquivo XML pode não ser um backup oficial do BlueVox, mas tentando importar...');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasImportadas = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
+                    
+                    if (nome && letra) {
+                        musicasImportadas.push({
+                            nome: nome,
+                            letra: letra,
+                            dataCriacao: dataCriacao,
+                            fonte: fonte
+                        });
+                    }
+                });
+                
+                if (musicasImportadas.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no arquivo');
+                }
+
+                // Salvar dados para uso posterior
+                dadosImportacao = musicasImportadas;
+                
+                // Mostrar modal de opções de importação
+                mostrarOpcoesImportacao(musicasImportadas.length);
+                
+                // Fechar modal de URL se estiver aberto
+                fecharImportURLModal();
+
+            } catch (error) {
+                console.error('Erro ao processar XML:', error);
+                alert(`❌ Erro ao processar o arquivo da URL!\n${error.message}`);
+            }
+        }
+
+        function iniciarImportacao(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validar tipo de arquivo
+            if (!file.name.toLowerCase().endsWith('.xml')) {
+                alert('❌ Por favor, selecione um arquivo XML válido.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processarXMLImportado(e.target.result, `Arquivo: ${file.name}`);
+            };
+            
+            reader.onerror = function() {
+                alert('❌ Erro ao ler o arquivo. Tente novamente.');
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function mostrarOpcoesImportacao(quantidadeMusicas) {
+            document.getElementById('import-count').textContent = quantidadeMusicas;
+            document.getElementById('import-modal').style.display = 'block';
+            
+            // Resetar seleção
+            opcaoImportSelecionada = null;
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('confirm-import-btn').disabled = true;
+        }
+
+        function fecharImportModal() {
+            document.getElementById('import-modal').style.display = 'none';
+            dadosImportacao = null;
+            opcaoImportSelecionada = null;
+            
+            // Limpar inputs
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-input-initial').value = '';
+        }
+
+        function selecionarOpcaoImport(opcao) {
+            opcaoImportSelecionada = opcao;
+            
+            // Atualizar visualmente a seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(`option-${opcao}`).classList.add('selected');
+            
+            // Habilitar botão de confirmação
+            document.getElementById('confirm-import-btn').disabled = false;
+        }
+
+        function confirmarImportacao() {
+            if (!dadosImportacao || !opcaoImportSelecionada) {
+                alert('❌ Selecione uma opção de importação.');
+                return;
+            }
+
+            let mensagem = '';
+            let musicasAdicionadas = 0;
+            let musicasAtualizadas = 0;
+
+            switch (opcaoImportSelecionada) {
+                case 'substituir':
+                    // Substituir tudo
+                    musicas = dadosImportacao;
+                    mensagem = `✅ Backup importado! ${musicas.length} música(s) carregadas.`;
+                    break;
+                    
+                case 'adicionar':
+                    // Adicionar apenas novas
+                    const musicasExistentes = new Set(musicas.map(m => m.nome.toUpperCase()));
+                    const novasMusicas = dadosImportacao.filter(m => 
+                        !musicasExistentes.has(m.nome.toUpperCase())
+                    );
+                    
+                    if (novasMusicas.length === 0) {
+                        alert('ℹ️ Todas as músicas do backup já existem no repertório.');
+                        fecharImportModal();
+                        return;
+                    }
+                    
+                    musicas.push(...novasMusicas);
+                    musicasAdicionadas = novasMusicas.length;
+                    mensagem = `✅ Backup importado! ${musicasAdicionadas} nova(s) música(s) adicionadas.`;
+                    break;
+                    
+                case 'mesclar':
+                    // Mesclar tudo - combinar e atualizar
+                    const mapaMusicas = new Map();
+                    
+                    // Primeiro, adicionar todas as músicas atuais ao mapa
+                    musicas.forEach(musica => {
+                        mapaMusicas.set(musica.nome.toUpperCase(), musica);
+                    });
+                    
+                    // Depois, adicionar/atualizar com as músicas do backup
+                    dadosImportacao.forEach(musicaBackup => {
+                        const chave = musicaBackup.nome.toUpperCase();
+                        if (mapaMusicas.has(chave)) {
+                            // Atualizar música existente
+                            mapaMusicas.set(chave, {
+                                ...mapaMusicas.get(chave),
+                                letra: musicaBackup.letra,
+                                dataModificacao: new Date().toISOString()
+                            });
+                            musicasAtualizadas++;
+                        } else {
+                            // Adicionar nova música
+                            mapaMusicas.set(chave, musicaBackup);
+                            musicasAdicionadas++;
+                        }
+                    });
+                    
+                    // Converter mapa de volta para array
+                    musicas = Array.from(mapaMusicas.values());
+                    mensagem = `✅ Backup mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
+                    break;
+            }
+
+            salvarMusicas();
+            exibirListaMusicas();
+            
+            if (musicas.length > 0) {
+                mostrarInterfaceComMusicas();
+            }
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = mensagem;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 5000);
+
+            fecharImportModal();
+        }
+
+        function mostrarAjuda() {
+            alert(`🎵 AJUDA - REPERTÓRIO BLUEVOX
+
+👁️ VISUALIZAR MÚSICA:
+• A- A A+ = Controles de tamanho da fonte
+• ▶️ Scroll = Auto scroll automático
+• 🐢🚶🏃⚡ = Velocidades do scroll
+
+➕ ADICIONAR MÚSICA:
+• Clique em "Adicionar Música"
+• Digite o nome e cole a letra
+• Use [R] para linhas em AMARELO
+
+✏️ EDITAR MÚSICA:
+• Clique no ícone ✏️ ao lado da música
+• Altere o nome e/ou letra
+• Salve as alterações
+
+🗑️ REMOVER MÚSICA:
+• Clique no × vermelho ao lado da música
+
+💾 BACKUP:
+• EXPORTAR: Gera arquivo XML universal
+• IMPORTAR: Carrega backup XML (arquivo ou URL)
+• Formatos suportados: Substituir, Adicionar, Mesclar
+
+🌐 IMPORTAR DE URL:
+• Digite a URL completa do arquivo XML
+• Suporta http:// e https://
+• Funciona com qualquer servidor público
+
+🎨 PERSONALIZAR:
+• Botão "Cores" para mudar o tema
+• 5 temas diferentes disponíveis
+
+📱 INSTALAÇÃO:
+• Adicione à tela inicial para acesso rápido
+• Funciona 100% offline
+• Dados salvos no navegador
+
+💡 Use [R] no início das linhas para destaque em amarelo!`);
+        }
+    </script>
+</body>
+</html>
