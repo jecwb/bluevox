@@ -600,7 +600,12 @@
         <div id="install-prompt" class="install-prompt" style="display: none;">
             <strong>💡 Para melhor experiência:</strong><br>
             Adicione este app à tela inicial do seu celular!
-            <button class="btn" onclick="instalarApp()" style="margin-top: 10px;">📱 Instalar App</button>
+            <button class="btn" onclick="instalarApp()" style="margin-top: 10px; width: 100%; max-width: 300px;">
+                📱 Instalar App
+            </button>
+            <div style="margin-top: 10px; font-size: 0.8rem; color: #00cc00;">
+                ⚡ Acesso rápido ⚡ Sem internet ⚡ Totalmente offline
+            </div>
         </div>
         
         <div id="music-count" class="music-count" style="display: none;"></div>
@@ -1008,41 +1013,52 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             configurarEventosGlobais();
         });
 
-        // CONFIGURAR PWA - CORREÇÃO PARA GITHUB PAGES
+        // CONFIGURAR PWA - CORREÇÃO PARA MOBILE E GITHUB PAGES
         function configurarPWA() {
-            // Verificar se estamos no GitHub Pages
             const isGitHubPages = window.location.hostname === 'jecwb.github.io';
             const repoPath = '/bluevox/';
             
             // Verificar se já está instalado (modo standalone)
-            if (window.matchMedia('(display-mode: standalone)').matches) {
+            const isInStandaloneMode = () => 
+                (window.matchMedia('(display-mode: standalone)').matches) ||
+                (window.navigator.standalone) ||
+                (document.referrer.includes('android-app://'));
+            
+            if (isInStandaloneMode()) {
                 console.log('📱 Executando em modo PWA');
                 document.getElementById('install-prompt').style.display = 'none';
                 
                 // Se estiver no GitHub Pages e em modo PWA, verificar se estamos no caminho correto
                 if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
-                    // Redirecionar para o caminho correto
                     console.log('🔄 Redirecionando para o caminho correto do GitHub Pages');
                     window.location.href = repoPath;
                     return;
                 }
             } else {
-                // Só mostrar prompt de instalação se não estiver em modo PWA
+                console.log('🌐 Executando no navegador - habilitando instalação PWA');
+                
+                // Configurar evento para capturar o prompt de instalação
                 window.addEventListener('beforeinstallprompt', (e) => {
+                    console.log('📲 Evento beforeinstallprompt disparado');
                     e.preventDefault();
                     deferredPrompt = e;
-                    // Mostrar prompt apenas se não for uma visita recorrente
-                    if (!localStorage.getItem('pwaInstalado')) {
-                        mostrarPromptInstalacao();
-                    }
+                    
+                    // Mostrar prompt após um tempo se o usuário ainda não instalou
+                    setTimeout(() => {
+                        if (deferredPrompt && !localStorage.getItem('pwaDismissed')) {
+                            console.log('👆 Mostrando prompt de instalação');
+                            mostrarPromptInstalacao();
+                        }
+                    }, 3000);
                 });
             }
 
-            // Detectar se o app foi aberto a partir da tela inicial
+            // Detectar se o app foi instalado
             window.addEventListener('appinstalled', () => {
                 console.log('✅ App instalado com sucesso');
                 localStorage.setItem('pwaInstalado', 'true');
                 document.getElementById('install-prompt').style.display = 'none';
+                deferredPrompt = null;
                 
                 // Se for GitHub Pages, garantir que estamos no caminho correto
                 if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
@@ -1051,23 +1067,77 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                     }, 1000);
                 }
             });
+
+            // Verificar critérios de instalabilidade
+            verificarInstalabilidade();
+        }
+
+        function verificarInstalabilidade() {
+            // Critérios básicos para PWA instalável
+            const hasManifest = document.querySelector('link[rel="manifest"]') !== null;
+            const hasIcons = document.querySelector('link[rel="icon"][sizes="192x192"]') !== null ||
+                            document.querySelector('link[rel="icon"][sizes="512x512"]') !== null;
+            const isHTTPS = window.location.protocol === 'https:';
+            const hasServiceWorker = 'serviceWorker' in navigator;
+            
+            console.log('🔍 Critérios PWA:', {
+                hasManifest,
+                hasIcons,
+                isHTTPS,
+                hasServiceWorker,
+                isGitHubPages: window.location.hostname === 'jecwb.github.io'
+            });
+
+            // Mesmo sem service worker, podemos tentar mostrar o prompt
+            if (hasManifest && hasIcons && isHTTPS) {
+                console.log('✅ App atende aos critérios mínimos para instalação PWA');
+            }
         }
 
         function mostrarPromptInstalacao() {
-            // Só mostrar após um delay e se não estiver em modo PWA
-            setTimeout(() => {
-                if (!window.matchMedia('(display-mode: standalone)').matches) {
-                    document.getElementById('install-prompt').style.display = 'block';
+            const installPrompt = document.getElementById('install-prompt');
+            if (installPrompt && !localStorage.getItem('pwaInstalado')) {
+                installPrompt.style.display = 'block';
+                
+                // Adicionar botão de fechar
+                if (!document.getElementById('close-install-prompt')) {
+                    const closeBtn = document.createElement('button');
+                    closeBtn.id = 'close-install-prompt';
+                    closeBtn.innerHTML = '×';
+                    closeBtn.style.cssText = `
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                        background: none;
+                        border: none;
+                        color: var(--cor-primaria);
+                        font-size: 18px;
+                        cursor: pointer;
+                        width: 25px;
+                        height: 25px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
+                    closeBtn.onclick = function() {
+                        installPrompt.style.display = 'none';
+                        localStorage.setItem('pwaDismissed', 'true');
+                    };
+                    installPrompt.style.position = 'relative';
+                    installPrompt.appendChild(closeBtn);
                 }
-            }, 5000);
+            }
         }
 
         function instalarApp() {
             if (deferredPrompt) {
+                console.log('🚀 Iniciando instalação PWA...');
                 deferredPrompt.prompt();
+                
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ App instalado');
+                        console.log('✅ Usuário aceitou a instalação PWA');
                         localStorage.setItem('pwaInstalado', 'true');
                         document.getElementById('install-prompt').style.display = 'none';
                         
@@ -1077,12 +1147,29 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                                 window.location.href = '/bluevox/';
                             }, 1000);
                         }
+                    } else {
+                        console.log('❌ Usuário recusou a instalação PWA');
+                        localStorage.setItem('pwaDismissed', 'true');
                     }
                     deferredPrompt = null;
                 });
             } else {
+                console.log('ℹ️ Prompt de instalação não disponível, mostrando instruções manuais');
                 // Fallback para quando não há prompt de instalação
-                alert('📱 Para instalar o app:\n\n• No Chrome: Menu → "Adicionar à tela inicial"\n• No Safari: Compartilhar → "Adicionar à tela de início"\n• No Firefox: Menu → "Instalar site"');
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                
+                let instructions = '';
+                
+                if (isIOS) {
+                    instructions = 'Para instalar no iPhone/iPad:\n\n1. Toque no ícone de compartilhar (📤)\n2. Role para baixo e toque em "Adicionar à Tela de Início"\n3. Toque em "Adicionar" no canto superior direito';
+                } else if (isAndroid) {
+                    instructions = 'Para instalar no Android:\n\n1. Toque no menu (⋯) no canto superior direito\n2. Toque em "Adicionar à tela inicial"\n3. Toque em "Adicionar" para confirmar';
+                } else {
+                    instructions = 'Para instalar o app:\n\n• Chrome: Menu → "Instalar Repertório BlueVox"\n• Safari: Compartilhar → "Adicionar à tela de início"\n• Firefox: Menu → "Instalar site"';
+                }
+                
+                alert('📱 ' + instructions);
             }
         }
 
