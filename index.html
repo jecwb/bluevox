@@ -698,10 +698,13 @@
                         <button class="scroll-btn" id="scroll-toggle" onclick="toggleAutoScroll()" title="Auto Scroll">▶️ Scroll</button>
                     </div>
                     <div class="scroll-speed-controls" id="speed-controls" style="display: none;">
-                        <button class="speed-btn" onclick="setScrollSpeed(1)" title="Lento">🐢</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(2)" title="Normal">🚶</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(3)" title="Rápido">🏃</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(4)" title="Muito Rápido">⚡</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(1)" title="Muito Muito Lento">🐌</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(2)" title="Muito Lento">🐢🐢</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(3)" title="Lento">🐢</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(4)" title="Normal-Lento">🚶🐢</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(5)" title="Normal">🚶</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
+                        <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
                     </div>
                 </div>
                 <button class="close" onclick="fecharModal()">&times;</button>
@@ -922,7 +925,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
         let tamanhoFonteBase = 16;
         let autoScrollAtivo = false;
         let scrollInterval = null;
-        let scrollSpeed = 2; // 1=lento, 2=normal, 3=rápido, 4=muito rápido
+        let scrollSpeed = 5; // 5 será a velocidade "normal" (meio da escala)
         
         // Variáveis para controle de importação
         let dadosImportacao = null;
@@ -1138,14 +1141,35 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             
             if (autoScrollAtivo) {
                 botao.classList.add('active');
-                botao.innerHTML = '⏸️ Scroll';
+                botao.innerHTML = '⏳ Scroll';
                 controlesVelocidade.style.display = 'flex';
+                
+                // Mostrar mensagem informando sobre o delay
+                const lyricsContent = document.getElementById('lyrics-content');
+                if (lyricsContent) {
+                    const mensagemDelay = document.createElement('div');
+                    mensagemDelay.style.cssText = 'position: fixed; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #00ff00; padding: 10px; border-radius: 5px; border: 1px solid #00ff00; z-index: 1000;';
+                    mensagemDelay.innerHTML = '⏳ Auto scroll iniciará em 10 segundos...';
+                    mensagemDelay.id = 'delay-message';
+                    document.querySelector('.modal-content').appendChild(mensagemDelay);
+                    
+                    // Remover mensagem após 3 segundos
+                    setTimeout(() => {
+                        const msg = document.getElementById('delay-message');
+                        if (msg) msg.remove();
+                    }, 3000);
+                }
+                
                 iniciarAutoScroll();
             } else {
                 botao.classList.remove('active');
                 botao.innerHTML = '▶️ Scroll';
                 controlesVelocidade.style.display = 'none';
                 pararAutoScroll();
+                
+                // Remover mensagem de delay se existir
+                const mensagemDelay = document.getElementById('delay-message');
+                if (mensagemDelay) mensagemDelay.remove();
             }
         }
 
@@ -1180,38 +1204,44 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 modalBody.scrollTop = 0;
             }
             
-            // Velocidades em pixels por intervalo (mais suaves)
+            // AGORA TEMOS MAIS VELOCIDADES LENTAS:
             const velocidades = {
-                1: 0.5,   // Muito lento
-                2: 1,     // Lento
-                3: 2,     // Normal
-                4: 3      // Rápido
+                1: 0.3,   // Muito muito lento
+                2: 0.6,   // Muito lento
+                3: 1,     // Lento
+                4: 1.5,   // Normal-lento
+                5: 2,     // Normal
+                6: 3,     // Rápido
+                7: 4      // Muito rápido
             };
             
             pararAutoScroll(); // Garantir que não há intervalos duplicados
             
-            scrollInterval = setInterval(() => {
-                const currentScroll = modalBody.scrollTop;
-                const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
-                
-                if (currentScroll >= maxScroll) {
-                    // Chegou ao final - parar auto scroll
-                    pararAutoScroll();
-                    autoScrollAtivo = false;
-                    const scrollToggle = document.getElementById('scroll-toggle');
-                    if (scrollToggle) {
-                        scrollToggle.classList.remove('active');
-                        scrollToggle.innerHTML = '▶️ Scroll';
+            // AGUARDAR 10 SEGUNDOS ANTES DE INICIAR O SCROLL
+            setTimeout(() => {
+                scrollInterval = setInterval(() => {
+                    const currentScroll = modalBody.scrollTop;
+                    const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
+                    
+                    if (currentScroll >= maxScroll) {
+                        // Chegou ao final - parar auto scroll
+                        pararAutoScroll();
+                        autoScrollAtivo = false;
+                        const scrollToggle = document.getElementById('scroll-toggle');
+                        if (scrollToggle) {
+                            scrollToggle.classList.remove('active');
+                            scrollToggle.innerHTML = '▶️ Scroll';
+                        }
+                        const speedControls = document.getElementById('speed-controls');
+                        if (speedControls) speedControls.style.display = 'none';
+                        return;
                     }
-                    const speedControls = document.getElementById('speed-controls');
-                    if (speedControls) speedControls.style.display = 'none';
-                    return;
-                }
-                
-                // Aplicar scroll suave
-                modalBody.scrollTop += velocidades[scrollSpeed];
-                
-            }, 16); // ≈ 60fps
+                    
+                    // Aplicar scroll suave
+                    modalBody.scrollTop += velocidades[scrollSpeed];
+                    
+                }, 16); // ≈ 60fps
+            }, 10000); // 10 segundos de delay
         }
 
         function pararAutoScroll() {
@@ -1862,8 +1892,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
 👁️ VISUALIZAR MÚSICA:
 • A- A A+ = Controles de tamanho da fonte
-• ▶️ Scroll = Auto scroll automático
-• 🐢🚶🏃⚡ = Velocidades do scroll
+• ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
+• 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
 
 ➕ ADICIONAR MÚSICA:
 • Clique em "Adicionar Música"
@@ -1896,6 +1926,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • Adicione à tela inicial para acesso rápido
 • Funciona 100% offline
 • Dados salvos no navegador
+
+⏰ AUTO SCROLL:
+• Inicia automaticamente após 10 segundos
+• 7 velocidades diferentes
+• Mais opções de velocidade lenta para melhor controle
 
 💡 Use [R] no início das linhas para destaque em amarelo!`);
         }
