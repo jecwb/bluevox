@@ -1004,23 +1004,28 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 }
             }
 
-            // Registrar Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('SW registrado:', registration))
-                    .catch(error => console.log('SW falhou:', error));
-            }
-
             // Configurar eventos GLOBAIS (só uma vez)
             configurarEventosGlobais();
         });
 
-        // CONFIGURAR PWA - CORREÇÃO PARA EVITAR ERRO 404
+        // CONFIGURAR PWA - CORREÇÃO PARA GITHUB PAGES
         function configurarPWA() {
+            // Verificar se estamos no GitHub Pages
+            const isGitHubPages = window.location.hostname === 'jecwb.github.io';
+            const repoPath = '/bluevox/';
+            
             // Verificar se já está instalado (modo standalone)
             if (window.matchMedia('(display-mode: standalone)').matches) {
                 console.log('📱 Executando em modo PWA');
                 document.getElementById('install-prompt').style.display = 'none';
+                
+                // Se estiver no GitHub Pages e em modo PWA, verificar se estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    // Redirecionar para o caminho correto
+                    console.log('🔄 Redirecionando para o caminho correto do GitHub Pages');
+                    window.location.href = repoPath;
+                    return;
+                }
             } else {
                 // Só mostrar prompt de instalação se não estiver em modo PWA
                 window.addEventListener('beforeinstallprompt', (e) => {
@@ -1038,6 +1043,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 console.log('✅ App instalado com sucesso');
                 localStorage.setItem('pwaInstalado', 'true');
                 document.getElementById('install-prompt').style.display = 'none';
+                
+                // Se for GitHub Pages, garantir que estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    setTimeout(() => {
+                        window.location.href = repoPath;
+                    }, 1000);
+                }
             });
         }
 
@@ -1058,6 +1070,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                         console.log('✅ App instalado');
                         localStorage.setItem('pwaInstalado', 'true');
                         document.getElementById('install-prompt').style.display = 'none';
+                        
+                        // Se for GitHub Pages, redirecionar para o caminho correto após instalação
+                        if (window.location.hostname === 'jecwb.github.io' && !window.location.pathname.startsWith('/bluevox/')) {
+                            setTimeout(() => {
+                                window.location.href = '/bluevox/';
+                            }, 1000);
+                        }
                     }
                     deferredPrompt = null;
                 });
