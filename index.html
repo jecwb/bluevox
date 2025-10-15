@@ -1015,25 +1015,39 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             configurarEventosGlobais();
         });
 
-        // CONFIGURAR PWA
+        // CONFIGURAR PWA - CORREÇÃO PARA EVITAR ERRO 404
         function configurarPWA() {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                mostrarPromptInstalacao();
-            });
-
-            // Verificar se já está instalado
+            // Verificar se já está instalado (modo standalone)
             if (window.matchMedia('(display-mode: standalone)').matches) {
                 console.log('📱 Executando em modo PWA');
                 document.getElementById('install-prompt').style.display = 'none';
+            } else {
+                // Só mostrar prompt de instalação se não estiver em modo PWA
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    // Mostrar prompt apenas se não for uma visita recorrente
+                    if (!localStorage.getItem('pwaInstalado')) {
+                        mostrarPromptInstalacao();
+                    }
+                });
             }
+
+            // Detectar se o app foi aberto a partir da tela inicial
+            window.addEventListener('appinstalled', () => {
+                console.log('✅ App instalado com sucesso');
+                localStorage.setItem('pwaInstalado', 'true');
+                document.getElementById('install-prompt').style.display = 'none';
+            });
         }
 
         function mostrarPromptInstalacao() {
+            // Só mostrar após um delay e se não estiver em modo PWA
             setTimeout(() => {
-                document.getElementById('install-prompt').style.display = 'block';
-            }, 3000);
+                if (!window.matchMedia('(display-mode: standalone)').matches) {
+                    document.getElementById('install-prompt').style.display = 'block';
+                }
+            }, 5000);
         }
 
         function instalarApp() {
@@ -1042,10 +1056,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         console.log('✅ App instalado');
+                        localStorage.setItem('pwaInstalado', 'true');
                         document.getElementById('install-prompt').style.display = 'none';
                     }
                     deferredPrompt = null;
                 });
+            } else {
+                // Fallback para quando não há prompt de instalação
+                alert('📱 Para instalar o app:\n\n• No Chrome: Menu → "Adicionar à tela inicial"\n• No Safari: Compartilhar → "Adicionar à tela de início"\n• No Firefox: Menu → "Instalar site"');
             }
         }
 
