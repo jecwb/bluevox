@@ -208,6 +208,28 @@
             border: 1px solid var(--cor-secundaria);
         }
         
+        .update-alert {
+            background: #003366;
+            border: 1px solid #0088ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .update-alert h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .update-alert p {
+            color: #00ccff;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -633,6 +655,14 @@
             <h1>REPERTÓRIO BLUEVOX</h1>
         </header>
         
+        <div id="update-alert" class="update-alert" style="display: none;">
+            <h3>🔄 ATUALIZAÇÃO DISPONÍVEL!</h3>
+            <p>Há uma nova versão do repertório disponível.</p>
+            <button class="btn" onclick="mostrarOpcoesUpdate()">
+                🔄 Fazer Update do Repertório
+            </button>
+        </div>
+        
         <div id="install-prompt" class="install-prompt" style="display: none;">
             <strong>💡 Para melhor experiência:</strong><br>
             Adicione este app à tela inicial do seu celular!
@@ -669,6 +699,11 @@
                     <div class="backup-option">
                         <button class="btn" onclick="mostrarImportacaoURL()">
                             🌐 Importar de URL
+                        </button>
+                    </div>
+                    <div class="backup-option">
+                        <button class="btn" onclick="mostrarOpcoesUpdate()">
+                            🔄 Update do Repertório
                         </button>
                     </div>
                 </div>
@@ -712,6 +747,10 @@
                 <button class="btn" onclick="mostrarImportacaoURL()">
                     🌐 Importar de URL
                 </button>
+                
+                <button class="btn" onclick="mostrarOpcoesUpdate()">
+                    🔄 Update do Repertório
+                </button>
             </div>
 
             <div class="section-title">CONFIGURAÇÕES</div>
@@ -719,6 +758,10 @@
             <div class="backup-options">
                 <button class="btn" onclick="mostrarConfiguracoes()">
                     🎨 Cores
+                </button>
+                
+                <button class="btn" onclick="resetarAplicativo()">
+                    🗑️ Resetar App
                 </button>
                 
                 <button class="btn btn-install" onclick="instalarApp()" id="install-btn">
@@ -733,7 +776,7 @@
     </div>
 
     <footer class="footer" style="text-align: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #00aa00; color: #00cc00;">
-        <div class="copyright">© 2024 BlueVox - Repertório Musical</div>
+        <div class="copyright">© 2024 BlueVox - Repertório - By Jeferson</div>
     </footer>
 
     <!-- MODAL DA LETRA -->
@@ -972,6 +1015,45 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
         </div>
     </div>
 
+    <!-- MODAL UPDATE DO REPERTÓRIO -->
+    <div id="update-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔄 UPDATE DO REPERTÓRIO</h2>
+                <button class="close" onclick="fecharUpdateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 600px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>ENCONTRADAS <span id="update-count">0</span> MÚSICA(S) NO REPERTÓRIO ONLINE</label>
+                        <p style="color: var(--cor-secundaria); margin-bottom: 20px;">
+                            Selecione como deseja atualizar o repertório:
+                        </p>
+                        
+                        <div class="import-options">
+                            <div class="import-option" onclick="selecionarOpcaoUpdate('substituir')" id="update-option-substituir">
+                                <h3>🔄 SUBSTITUIR TUDO</h3>
+                                <p>Remove todas as músicas atuais e importa apenas as do repertório online</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoUpdate('mesclar')" id="update-option-mesclar">
+                                <h3>🔄 MESCLAR TUDO</h3>
+                                <p>Combina todas as músicas, atualizando as existentes e adicionando novas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharUpdateModal()">Cancelar</button>
+                        <button type="button" class="btn btn-add" onclick="confirmarUpdate()" id="confirm-update-btn" disabled>
+                            💾 Confirmar Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CONFIGURAÇÃO
         let musicas = [];
@@ -985,6 +1067,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
         let dadosImportacao = null;
         let opcaoImportSelecionada = null;
         let importacaoURLEmAndamento = false;
+
+        // URL do repertório online
+        const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
 
         const temas = {
             green: {
@@ -1060,6 +1145,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
             // Configurar eventos GLOBAIS (só uma vez)
             configurarEventosGlobais();
+            
+            // Verificar se há atualizações disponíveis
+            verificarAtualizacoes();
         });
 
         // CONFIGURAR PWA - COM BOTÃO FIXO
@@ -1414,6 +1502,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                     fecharConfigModal();
                     fecharImportModal();
                     fecharImportURLModal();
+                    fecharUpdateModal();
                 }
             });
 
@@ -1426,6 +1515,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                     fecharConfigModal();
                     fecharImportModal();
                     fecharImportURLModal();
+                    fecharUpdateModal();
                 }
             });
 
@@ -1755,7 +1845,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
         function fecharImportURLModal() {
             if (importacaoURLEmAndamento) {
-                if (!confirm('A importação está em andamento. Deseja realmente cancelar?')) {
+                if (!confirm('Deseja continuar?')) {
                     return;
                 }
             }
@@ -2039,6 +2129,288 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             fecharImportModal();
         }
 
+        // FUNÇÕES DE UPDATE DO REPERTÓRIO
+        async function verificarAtualizacoes() {
+            try {
+                console.log('🔄 Verificando atualizações do repertório...');
+                
+                const response = await fetch(REPERTORIO_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasOnline = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    
+                    if (nome && letra) {
+                        musicasOnline.push({
+                            nome: nome,
+                            letra: letra
+                        });
+                    }
+                });
+                
+                if (musicasOnline.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no repertório online');
+                }
+                
+                // Salvar hash do repertório online para comparação futura
+                const hashOnline = calcularHash(musicasOnline);
+                const hashSalvo = localStorage.getItem('repertorioHash');
+                
+                console.log('🔍 Hash do repertório online:', hashOnline);
+                console.log('🔍 Hash do repertório salvo:', hashSalvo);
+                
+                // Se não há hash salvo ou se o hash é diferente, mostrar alerta
+                if (!hashSalvo || hashSalvo !== hashOnline) {
+                    console.log('🆕 Atualização disponível!');
+                    localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
+                    mostrarAlertaAtualizacao();
+                } else {
+                    console.log('✅ Repertório está atualizado');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao verificar atualizações:', error);
+                // Não mostrar erro para o usuário para não poluir a experiência
+            }
+        }
+
+        function calcularHash(musicasArray) {
+            // Criar uma string única baseada nas músicas para comparação
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}`).join('');
+            let hash = 0;
+            for (let i = 0; i < dados.length; i++) {
+                const char = dados.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash.toString();
+        }
+
+        function mostrarAlertaAtualizacao() {
+            const alertElement = document.getElementById('update-alert');
+            if (alertElement) {
+                alertElement.style.display = 'block';
+            }
+        }
+
+        function mostrarOpcoesUpdate() {
+            // Tentar carregar dados online salvos
+            const musicasOnlineSalvas = localStorage.getItem('repertorioOnline');
+            let musicasOnline = [];
+            
+            if (musicasOnlineSalvas) {
+                try {
+                    musicasOnline = JSON.parse(musicasOnlineSalvas);
+                } catch (e) {
+                    console.error('Erro ao carregar repertório online salvo:', e);
+                }
+            }
+            
+            // Se não há dados salvos, buscar online
+            if (musicasOnline.length === 0) {
+                buscarRepertorioOnline();
+                return;
+            }
+            
+            document.getElementById('update-count').textContent = musicasOnline.length;
+            document.getElementById('update-modal').style.display = 'block';
+            
+            // Resetar seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('confirm-update-btn').disabled = true;
+        }
+
+        async function buscarRepertorioOnline() {
+            try {
+                console.log('🌐 Buscando repertório online...');
+                
+                const response = await fetch(REPERTORIO_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasOnline = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    
+                    if (nome && letra) {
+                        musicasOnline.push({
+                            nome: nome,
+                            letra: letra
+                        });
+                    }
+                });
+                
+                if (musicasOnline.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no repertório online');
+                }
+                
+                // Salvar dados online
+                localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
+                
+                // Mostrar modal de opções
+                document.getElementById('update-count').textContent = musicasOnline.length;
+                document.getElementById('update-modal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar repertório online:', error);
+                alert(`❌ Erro ao buscar repertório online:\n${error.message}`);
+            }
+        }
+
+        function fecharUpdateModal() {
+            document.getElementById('update-modal').style.display = 'none';
+        }
+
+        function selecionarOpcaoUpdate(opcao) {
+            // Atualizar visualmente a seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(`update-option-${opcao}`).classList.add('selected');
+            
+            // Habilitar botão de confirmação
+            document.getElementById('confirm-update-btn').disabled = false;
+        }
+
+        function confirmarUpdate() {
+            const opcaoSelecionada = document.querySelector('#update-modal .import-option.selected');
+            if (!opcaoSelecionada) {
+                alert('❌ Selecione uma opção de update.');
+                return;
+            }
+            
+            const opcao = opcaoSelecionada.id.replace('update-option-', '');
+            const musicasOnlineSalvas = localStorage.getItem('repertorioOnline');
+            
+            if (!musicasOnlineSalvas) {
+                alert('❌ Dados do repertório online não encontrados. Tente novamente.');
+                return;
+            }
+            
+            try {
+                const musicasOnline = JSON.parse(musicasOnlineSalvas);
+                let mensagem = '';
+                let musicasAdicionadas = 0;
+                let musicasAtualizadas = 0;
+
+                switch (opcao) {
+                    case 'substituir':
+                        // Substituir tudo
+                        musicas = musicasOnline;
+                        mensagem = `✅ Repertório atualizado! ${musicas.length} música(s) carregadas.`;
+                        break;
+                        
+                    case 'mesclar':
+                        // Mesclar tudo - combinar e atualizar
+                        const mapaMusicas = new Map();
+                        
+                        // Primeiro, adicionar todas as músicas atuais ao mapa
+                        musicas.forEach(musica => {
+                            mapaMusicas.set(musica.nome.toUpperCase(), musica);
+                        });
+                        
+                        // Depois, adicionar/atualizar com as músicas online
+                        musicasOnline.forEach(musicaOnline => {
+                            const chave = musicaOnline.nome.toUpperCase();
+                            if (mapaMusicas.has(chave)) {
+                                // Atualizar música existente
+                                mapaMusicas.set(chave, {
+                                    ...mapaMusicas.get(chave),
+                                    letra: musicaOnline.letra,
+                                    dataModificacao: new Date().toISOString()
+                                });
+                                musicasAtualizadas++;
+                            } else {
+                                // Adicionar nova música
+                                mapaMusicas.set(chave, musicaOnline);
+                                musicasAdicionadas++;
+                            }
+                        });
+                        
+                        // Converter mapa de volta para array
+                        musicas = Array.from(mapaMusicas.values());
+                        mensagem = `✅ Repertório mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
+                        break;
+                }
+
+                // Atualizar hash do repertório
+                const hashOnline = calcularHash(musicasOnline);
+                localStorage.setItem('repertorioHash', hashOnline);
+                
+                // Esconder alerta de atualização
+                document.getElementById('update-alert').style.display = 'none';
+                
+                salvarMusicas();
+                exibirListaMusicas();
+                
+                if (musicas.length > 0) {
+                    mostrarInterfaceComMusicas();
+                }
+
+                // Feedback visual
+                const lista = document.getElementById('music-list');
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.innerHTML = mensagem;
+                lista.insertBefore(successMsg, lista.firstChild);
+                setTimeout(() => successMsg.remove(), 5000);
+
+                fecharUpdateModal();
+                
+            } catch (error) {
+                console.error('Erro ao processar update:', error);
+                alert(`❌ Erro ao processar update:\n${error.message}`);
+            }
+        }
+
+        // FUNÇÃO PARA RESETAR O APLICATIVO
+        function resetarAplicativo() {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n\nTem certeza que deseja resetar o aplicativo?')) {
+                // Limpar todos os dados do localStorage
+                localStorage.clear();
+                
+                // Recarregar a página para aplicar o reset
+                alert('✅ Aplicativo resetado com sucesso!\n\nA página será recarregada.');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        }
+
         function mostrarAjuda() {
             alert(`🎵 AJUDA - REPERTÓRIO BLUEVOX
 
@@ -2065,6 +2437,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • IMPORTAR: Carrega backup XML (arquivo ou URL)
 • Formatos suportados: Substituir, Adicionar, Mesclar
 
+🔄 UPDATE DO REPERTÓRIO:
+• Busca atualizações do repertório online
+• Opções: Substituir tudo ou Mesclar
+• Verificação automática na inicialização
+
 🌐 IMPORTAR DE URL:
 • Digite a URL completa do arquivo XML
 • Suporta http:// e https://
@@ -2073,6 +2450,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 🎨 PERSONALIZAR:
 • Botão "Cores" para mudar o tema
 • 5 temas diferentes disponíveis
+
+🗑️ RESETAR APP:
+• Apaga todos os dados do aplicativo
+• Reinicia completamente o sistema
 
 📱 INSTALAÇÃO:
 • Adicione à tela inicial para acesso rápido
