@@ -20,7 +20,6 @@
             --cor-fundo: #000000;
             --cor-texto: #00ff00;
             --cor-destaque: #ffff00;
-            --cor-laranja: #ff8800;
             --cor-botao: #003300;
             --cor-hover: #004400;
         }
@@ -416,12 +415,6 @@
             color: var(--cor-texto);
         }
         
-        .laranja {
-            color: #ff8800 !important;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
-        }
-        
         .add-form, .edit-form, .config-form {
             background: #111;
             padding: 20px;
@@ -720,7 +713,6 @@
                 <strong style="color: #00ff00;">✨ Dicas:</strong>
                 <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
                     <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
-                    <li>Use <strong>|texto|</strong> para mostrar <strong>[texto]</strong> em laranja</li>
                     <li>Adicione à tela inicial para acesso rápido</li>
                     <li>Todos os dados ficam salvos no seu navegador</li>
                     <li>Backup único em formato XML universal</li>
@@ -845,8 +837,7 @@ Exemplo:
 NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO
-💡 Use |Bm| para mostrar [Bm] em LARANJA"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -884,8 +875,7 @@ Exemplo:
 NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO
-💡 Use |Bm| para mostrar [Bm] em LARANJA"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -1071,7 +1061,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
         let tamanhoFonteBase = 16;
         let autoScrollAtivo = false;
         let scrollInterval = null;
-        let scrollSpeed = 5;
+        let scrollSpeed = 5; // 5 será a velocidade "normal" (meio da escala)
         
         // Variáveis para controle de importação
         let dadosImportacao = null;
@@ -1080,6 +1070,54 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
+
+        const temas = {
+            green: {
+                primaria: '#00ff00',
+                secundaria: '#00aa00',
+                fundo: '#000000',
+                texto: '#00ff00',
+                destaque: '#ffff00',
+                botao: '#003300',
+                hover: '#004400'
+            },
+            blue: {
+                primaria: '#0088ff',
+                secundaria: '#0066cc',
+                fundo: '#000033',
+                texto: '#0088ff',
+                destaque: '#00ffff',
+                botao: '#003366',
+                hover: '#004477'
+            },
+            red: {
+                primaria: '#ff4444',
+                secundaria: '#cc0000',
+                fundo: '#330000',
+                texto: '#ff4444',
+                destaque: '#ff8888',
+                botao: '#660000',
+                hover: '#770000'
+            },
+            purple: {
+                primaria: '#cc00ff',
+                secundaria: '#9900cc',
+                fundo: '#1a001a',
+                texto: '#cc00ff',
+                destaque: '#ff88ff',
+                botao: '#330033',
+                hover: '#440044'
+            },
+            orange: {
+                primaria: '#ff8800',
+                secundaria: '#cc6600',
+                fundo: '#331900',
+                texto: '#ff8800',
+                destaque: '#ffcc00',
+                botao: '#663300',
+                hover: '#774400'
+            }
+        };
 
         // INICIAR APLICAÇÃO
         document.addEventListener('DOMContentLoaded', function() {
@@ -1105,118 +1143,150 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 }
             }
 
-            // Configurar eventos GLOBAIS
+            // Configurar eventos GLOBAIS (só uma vez)
             configurarEventosGlobais();
             
             // Verificar se há atualizações disponíveis
             verificarAtualizacoes();
         });
 
-        // FUNÇÃO PRINCIPAL DE FORMATAÇÃO - CORRIGIDA
-        function formatarLetra(texto) {
-            const linhas = texto.split('\n');
-            let html = '';
+        // CONFIGURAR PWA - COM BOTÃO FIXO
+        function configurarPWA() {
+            const isGitHubPages = window.location.hostname === 'jecwb.github.io';
+            const repoPath = '/bluevox/';
             
-            linhas.forEach(linha => {
-                linha = linha.trim();
-                if (!linha) {
-                    html += '<br>';
+            // Verificar se já está instalado (modo standalone)
+            const isInStandaloneMode = () => 
+                (window.matchMedia('(display-mode: standalone)').matches) ||
+                (window.navigator.standalone) ||
+                (document.referrer.includes('android-app://'));
+            
+            if (isInStandaloneMode()) {
+                console.log('📱 Executando em modo PWA - ocultando botão de instalação');
+                // Ocultar botão de instalação se já estiver instalado
+                const installBtn = document.getElementById('install-btn');
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                document.getElementById('install-prompt').style.display = 'none';
+                
+                // Se estiver no GitHub Pages e em modo PWA, verificar se estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    console.log('🔄 Redirecionando para o caminho correto do GitHub Pages');
+                    window.location.href = repoPath;
                     return;
                 }
+            } else {
+                console.log('🌐 Executando no navegador - habilitando instalação PWA');
                 
-                // Processar texto entre || para mostrar entre [] na cor laranja
-                let linhaFormatada = processarBarrasLaranja(linha);
+                // Configurar evento para capturar o prompt de instalação
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    console.log('📲 Evento beforeinstallprompt disparado');
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    
+                    // Mostrar prompt automático após um tempo
+                    setTimeout(() => {
+                        if (deferredPrompt && !localStorage.getItem('pwaDismissed')) {
+                            console.log('👆 Mostrando prompt de instalação automático');
+                            document.getElementById('install-prompt').style.display = 'block';
+                        }
+                    }, 3000);
+                });
+            }
+
+            // Detectar se o app foi instalado
+            window.addEventListener('appinstalled', () => {
+                console.log('✅ App instalado com sucesso');
+                localStorage.setItem('pwaInstalado', 'true');
+                document.getElementById('install-prompt').style.display = 'none';
                 
-                if (linha.toUpperCase().startsWith('[R]')) {
-                    const linhaSemR = linha.substring(3).trim();
-                    linhaFormatada = processarBarrasLaranja(linhaSemR);
-                    html += `<div class="yellow-line">${linhaFormatada.toUpperCase()}</div>`;
-                } else {
-                    html += `<div class="normal-line">${linhaFormatada.toUpperCase()}</div>`;
+                // Ocultar botão de instalação
+                const installBtn = document.getElementById('install-btn');
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                
+                deferredPrompt = null;
+                
+                // Se for GitHub Pages, garantir que estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    setTimeout(() => {
+                        window.location.href = repoPath;
+                    }, 1000);
                 }
             });
-            
-            return html;
-        }
 
-        // FUNÇÃO CORRIGIDA PARA PROCESSAR BARRAS LARANJA
-        function processarBarrasLaranja(texto) {
-            console.log('Processando texto:', texto);
-            
-            // Expressão regular para encontrar texto entre ||
-            const regex = /\|([^|]+)\|/g;
-            
-            // Substituir cada ocorrência
-            const resultado = texto.replace(regex, function(match, conteudo) {
-                console.log('Encontrado:', match, 'Conteúdo:', conteudo);
-                return `<span class="laranja">[${conteudo}]</span>`;
-            });
-            
-            console.log('Resultado:', resultado);
-            return resultado;
-        }
-
-        // TESTE RÁPIDO - Vamos adicionar uma música de teste automaticamente
-        function adicionarMusicaTeste() {
-            const musicaTeste = {
-                nome: "MÚSICA TESTE LARANJA",
-                letra: `[R] ESTA É UMA MÚSICA DE TESTE
-[R] PARA VERIFICAR A COR LARANJA
-
-VAMOS TESTAR A COR LARANJA:
-Um homem |Bm| dançava no chão
-E uma mulher |G| cantava uma canção
-No acorde |C| todos se alegravam
-E no |F| a festa continuava
-
-OUTRO EXEMPLO:
-|Intro| |Verso| |Refrão| |Final|
-
-ISSO DEVE APARECER EM LARANJA!`,
-                dataCriacao: new Date().toISOString()
-            };
-
-            musicas.push(musicaTeste);
-            salvarMusicas();
-            exibirListaMusicas();
-            mostrarInterfaceComMusicas();
-            
-            // Abrir a música de teste automaticamente
-            setTimeout(() => {
-                abrirMusica(musicas.length - 1);
-            }, 500);
-        }
-
-        // DEMONSTRAÇÃO - Adicionar botão de teste
-        document.addEventListener('DOMContentLoaded', function() {
-            // Adicionar botão de teste após o carregamento
-            setTimeout(() => {
-                const emptyState = document.getElementById('empty-state');
-                if (emptyState) {
-                    const testButton = document.createElement('button');
-                    testButton.className = 'btn';
-                    testButton.style.marginTop = '10px';
-                    testButton.style.backgroundColor = '#663300';
-                    testButton.innerHTML = '🧪 TESTAR COR LARANJA';
-                    testButton.onclick = adicionarMusicaTeste;
-                    emptyState.querySelector('.backup-options').appendChild(testButton);
-                }
-            }, 1000);
-        });
-
-        // ... (o restante do código permanece igual - funções de PWA, configurações, controles, etc.)
-
-        // CONFIGURAR PWA
-        function configurarPWA() {
-            // ... (código PWA existente)
+            // Verificar critérios de instalabilidade
+            verificarInstalabilidade();
         }
 
         function verificarInstalabilidade() {
-            // ... (código existente)
+            // Critérios básicos para PWA instalável
+            const hasManifest = document.querySelector('link[rel="manifest"]') !== null;
+            const hasIcons = document.querySelector('link[rel="icon"][sizes="192x192"]') !== null ||
+                            document.querySelector('link[rel="icon"][sizes="512x512"]') !== null;
+            const isHTTPS = window.location.protocol === 'https:';
+            
+            console.log('🔍 Critérios PWA:', {
+                hasManifest,
+                hasIcons,
+                isHTTPS,
+                isGitHubPages: window.location.hostname === 'jecwb.github.io'
+            });
+
+            if (hasManifest && hasIcons && isHTTPS) {
+                console.log('✅ App atende aos critérios mínimos para instalação PWA');
+            }
         }
 
         function instalarApp() {
-            // ... (código existente)
+            if (deferredPrompt) {
+                console.log('🚀 Iniciando instalação PWA via botão...');
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ Usuário aceitou a instalação PWA');
+                        localStorage.setItem('pwaInstalado', 'true');
+                        document.getElementById('install-prompt').style.display = 'none';
+                        
+                        // Ocultar botão de instalação
+                        const installBtn = document.getElementById('install-btn');
+                        if (installBtn) {
+                            installBtn.style.display = 'none';
+                        }
+                        
+                        // Se for GitHub Pages, redirecionar para o caminho correto após instalação
+                        if (window.location.hostname === 'jecwb.github.io' && !window.location.pathname.startsWith('/bluevox/')) {
+                            setTimeout(() => {
+                                window.location.href = '/bluevox/';
+                            }, 1000);
+                        }
+                    } else {
+                        console.log('❌ Usuário recusou a instalação PWA');
+                        localStorage.setItem('pwaDismissed', 'true');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                console.log('ℹ️ Prompt de instalação não disponível, mostrando instruções manuais');
+                // Fallback para quando não há prompt de instalação
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                
+                let instructions = '';
+                
+                if (isIOS) {
+                    instructions = 'Para instalar no iPhone/iPad:\n\n1. Toque no ícone de compartilhar (📤)\n2. Role para baixo e toque em "Adicionar à Tela de Início"\n3. Toque em "Adicionar" no canto superior direito';
+                } else if (isAndroid) {
+                    instructions = 'Para instalar no Android:\n\n1. Toque no menu (⋯) no canto superior direito\n2. Toque em "Adicionar à tela inicial"\n3. Toque em "Adicionar" para confirmar';
+                } else {
+                    instructions = 'Para instalar o app:\n\n• Chrome: Menu → "Instalar Repertório BlueVox"\n• Safari: Compartilhar → "Adicionar à tela de início"\n• Firefox: Menu → "Instalar site"';
+                }
+                
+                alert('📱 ' + instructions);
+            }
         }
 
         // CONFIGURAÇÕES DE CORES
@@ -1241,14 +1311,6 @@ ISSO DEVE APARECER EM LARANJA!`,
         }
 
         function aplicarTema(tema) {
-            const temas = {
-                green: { primaria: '#00ff00', secundaria: '#00aa00', fundo: '#000000', texto: '#00ff00', destaque: '#ffff00', laranja: '#ff8800' },
-                blue: { primaria: '#0088ff', secundaria: '#0066cc', fundo: '#000033', texto: '#0088ff', destaque: '#00ffff', laranja: '#ff8800' },
-                red: { primaria: '#ff4444', secundaria: '#cc0000', fundo: '#330000', texto: '#ff4444', destaque: '#ff8888', laranja: '#ff8800' },
-                purple: { primaria: '#cc00ff', secundaria: '#9900cc', fundo: '#1a001a', texto: '#cc00ff', destaque: '#ff88ff', laranja: '#ff8800' },
-                orange: { primaria: '#ff8800', secundaria: '#cc6600', fundo: '#331900', texto: '#ff8800', destaque: '#ffcc00', laranja: '#ffaa00' }
-            };
-            
             const cores = temas[tema];
             const root = document.documentElement;
             
@@ -1257,7 +1319,8 @@ ISSO DEVE APARECER EM LARANJA!`,
             root.style.setProperty('--cor-fundo', cores.fundo);
             root.style.setProperty('--cor-texto', cores.texto);
             root.style.setProperty('--cor-destaque', cores.destaque);
-            root.style.setProperty('--cor-laranja', cores.laranja);
+            root.style.setProperty('--cor-botao', cores.botao);
+            root.style.setProperty('--cor-hover', cores.hover);
             
             document.querySelector('meta[name="theme-color"]').setAttribute('content', cores.primaria);
             localStorage.setItem('temaRepertorio', tema);
@@ -1272,9 +1335,234 @@ ISSO DEVE APARECER EM LARANJA!`,
             aplicarTema('green');
         }
 
-        // ... (as demais funções permanecem iguais: controles, eventos, backup, importação, update, etc.)
+        // CONTROLES DE FONTE E SCROLL
+        function ajustarFonte(mudanca) {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
+            
+            if (mudanca === 0) {
+                // Reset para tamanho base
+                elemento.style.fontSize = tamanhoFonteBase + 'px';
+            } else {
+                const novoTamanho = Math.max(10, Math.min(30, tamanhoAtual + mudanca));
+                elemento.style.fontSize = novoTamanho + 'px';
+                
+                // Se estiver aumentando muito, ajustar automaticamente
+                if (novoTamanho > 24) {
+                    ajustarFonteAuto();
+                }
+            }
+        }
 
-        // FUNÇÕES PRINCIPAIS DA APLICAÇÃO
+        function ajustarFonteAuto() {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            const texto = elemento.textContent;
+            const linhas = texto.split('\n');
+            const linhaMaisLonga = linhas.reduce((maisLonga, linha) => 
+                linha.length > maisLonga.length ? linha : maisLonga, '');
+            
+            const larguraDisponivel = elemento.clientWidth - 40;
+            const tamanhoIdeal = Math.max(12, Math.min(24, Math.floor(larguraDisponivel / (linhaMaisLonga.length * 0.6))));
+            
+            elemento.style.fontSize = tamanhoIdeal + 'px';
+            tamanhoFonteBase = tamanhoIdeal;
+        }
+
+        function toggleAutoScroll() {
+            autoScrollAtivo = !autoScrollAtivo;
+            const botao = document.getElementById('scroll-toggle');
+            const controlesVelocidade = document.getElementById('speed-controls');
+            
+            if (!botao) return;
+            
+            if (autoScrollAtivo) {
+                botao.classList.add('active');
+                botao.innerHTML = '⏳ Scroll';
+                controlesVelocidade.style.display = 'flex';
+                
+                // Mostrar mensagem informando sobre o delay
+                const lyricsContent = document.getElementById('lyrics-content');
+                if (lyricsContent) {
+                    const mensagemDelay = document.createElement('div');
+                    mensagemDelay.style.cssText = 'position: fixed; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #00ff00; padding: 10px; border-radius: 5px; border: 1px solid #00ff00; z-index: 1000;';
+                    mensagemDelay.innerHTML = '⏳ Auto scroll iniciará em 10 segundos...';
+                    mensagemDelay.id = 'delay-message';
+                    document.querySelector('.modal-content').appendChild(mensagemDelay);
+                    
+                    // Remover mensagem após 3 segundos
+                    setTimeout(() => {
+                        const msg = document.getElementById('delay-message');
+                        if (msg) msg.remove();
+                    }, 3000);
+                }
+                
+                iniciarAutoScroll();
+            } else {
+                botao.classList.remove('active');
+                botao.innerHTML = '▶️ Scroll';
+                controlesVelocidade.style.display = 'none';
+                pararAutoScroll();
+                
+                // Remover mensagem de delay se existir
+                const mensagemDelay = document.getElementById('delay-message');
+                if (mensagemDelay) mensagemDelay.remove();
+            }
+        }
+
+        function setScrollSpeed(velocidade) {
+            scrollSpeed = velocidade;
+            
+            // Atualizar botões de velocidade
+            document.querySelectorAll('.speed-btn').forEach((btn, index) => {
+                if (index + 1 === velocidade) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Reiniciar scroll se estiver ativo
+            if (autoScrollAtivo) {
+                pararAutoScroll();
+                iniciarAutoScroll();
+            }
+        }
+
+        function iniciarAutoScroll() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const modalBody = document.querySelector('.modal-body');
+            
+            if (!lyricsContent || !modalBody) return;
+            
+            // Verificar se já chegou ao final
+            if (modalBody.scrollTop >= lyricsContent.scrollHeight - modalBody.clientHeight) {
+                // Se estiver no final, voltar para o topo
+                modalBody.scrollTop = 0;
+            }
+            
+            // AGORA TEMOS MAIS VELOCIDADES LENTAS:
+            const velocidades = {
+                1: 0.3,   // Muito muito lento
+                2: 0.6,   // Muito lento
+                3: 1,     // Lento
+                4: 1.5,   // Normal-lento
+                5: 2,     // Normal
+                6: 3,     // Rápido
+                7: 4      // Muito rápido
+            };
+            
+            pararAutoScroll(); // Garantir que não há intervalos duplicados
+            
+            // AGUARDAR 10 SEGUNDOS ANTES DE INICIAR O SCROLL
+            setTimeout(() => {
+                scrollInterval = setInterval(() => {
+                    const currentScroll = modalBody.scrollTop;
+                    const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
+                    
+                    if (currentScroll >= maxScroll) {
+                        // Chegou ao final - parar auto scroll
+                        pararAutoScroll();
+                        autoScrollAtivo = false;
+                        const scrollToggle = document.getElementById('scroll-toggle');
+                        if (scrollToggle) {
+                            scrollToggle.classList.remove('active');
+                            scrollToggle.innerHTML = '▶️ Scroll';
+                        }
+                        const speedControls = document.getElementById('speed-controls');
+                        if (speedControls) speedControls.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Aplicar scroll suave
+                    modalBody.scrollTop += velocidades[scrollSpeed];
+                    
+                }, 16); // ≈ 60fps
+            }, 10000); // 10 segundos de delay
+        }
+
+        function pararAutoScroll() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+        }
+
+        // EVENTOS GLOBAIS - executados apenas uma vez
+        function configurarEventosGlobais() {
+            // Fechar modais ao clicar fora
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                    fecharUpdateModal();
+                }
+            });
+
+            // Fechar modais com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                    fecharUpdateModal();
+                }
+            });
+
+            // Tela cheia automática em dispositivos móveis
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        // CONFIGURAR EVENTOS DO MODAL - executados quando o modal é aberto
+        function configurarEventosModal() {
+            const modalBody = document.querySelector('.modal-body');
+            if (modalBody) {
+                // Remover event listeners antigos para evitar duplicação
+                modalBody.replaceWith(modalBody.cloneNode(true));
+                
+                // Re-aplicar event listeners
+                const novoModalBody = document.querySelector('.modal-body');
+                
+                novoModalBody.addEventListener('wheel', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('touchstart', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('scroll', () => {
+                    // Se o usuário estiver scrollando manualmente e o auto scroll estiver ativo
+                    if (autoScrollAtivo) {
+                        // Verificar se o usuário está tentando scrollar na direção oposta
+                        const lyricsContent = document.getElementById('lyrics-content');
+                        const maxScroll = lyricsContent.scrollHeight - novoModalBody.clientHeight;
+                        
+                        // Se estiver perto do final ou se o scroll manual for significativo, parar auto scroll
+                        if (novoModalBody.scrollTop >= maxScroll - 10) {
+                            toggleAutoScroll();
+                        }
+                    }
+                });
+            }
+        }
+
         function mostrarInterfaceComMusicas() {
             document.getElementById('empty-state').style.display = 'none';
             document.getElementById('music-list').style.display = 'block';
@@ -1360,6 +1648,14 @@ ISSO DEVE APARECER EM LARANJA!`,
                 exibirListaMusicas();
             }
 
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" adicionada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
             fecharAddModal();
         }
 
@@ -1387,6 +1683,7 @@ ISSO DEVE APARECER EM LARANJA!`,
                 return;
             }
 
+            // Verificar se o nome já existe (excluindo a própria música)
             const nomeExistente = musicas.some((m, i) => 
                 i != index && m.nome.toUpperCase() === nome.toUpperCase()
             );
@@ -1396,6 +1693,7 @@ ISSO DEVE APARECER EM LARANJA!`,
                 return;
             }
 
+            // Atualizar a música
             musicas[index] = {
                 ...musicas[index],
                 nome: nome.toUpperCase(),
@@ -1405,6 +1703,15 @@ ISSO DEVE APARECER EM LARANJA!`,
 
             salvarMusicas();
             exibirListaMusicas();
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" atualizada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
             fecharEditModal();
         }
 
@@ -1414,6 +1721,14 @@ ISSO DEVE APARECER EM LARANJA!`,
                 musicas.splice(index, 1);
                 salvarMusicas();
                 exibirListaMusicas();
+                
+                // Feedback visual
+                const lista = document.getElementById('music-list');
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" removida com sucesso!`;
+                lista.insertBefore(successMsg, lista.firstChild);
+                setTimeout(() => successMsg.remove(), 3000);
             }
         }
 
@@ -1423,6 +1738,7 @@ ISSO DEVE APARECER EM LARANJA!`,
             document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
             document.getElementById('music-modal').style.display = 'block';
             
+            // Resetar controles de scroll
             autoScrollAtivo = false;
             pararAutoScroll();
             const scrollToggle = document.getElementById('scroll-toggle');
@@ -1433,14 +1749,43 @@ ISSO DEVE APARECER EM LARANJA!`,
             const speedControls = document.getElementById('speed-controls');
             if (speedControls) speedControls.style.display = 'none';
             
+            // Configurar eventos do modal
             setTimeout(() => {
                 configurarEventosModal();
                 document.querySelector('.modal-body').scrollTop = 0;
                 ajustarFonteAuto();
             }, 100);
+            
+            // Tela cheia automática ao abrir música
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        function formatarLetra(texto) {
+            const linhas = texto.split('\n');
+            let html = '';
+            
+            linhas.forEach(linha => {
+                linha = linha.trim();
+                if (!linha) {
+                    html += '<br>';
+                    return;
+                }
+                
+                if (linha.toUpperCase().startsWith('[R]')) {
+                    const linhaSemR = linha.substring(3).trim();
+                    html += `<div class="yellow-line">${linhaSemR.toUpperCase()}</div>`;
+                } else {
+                    html += `<div class="normal-line">${linha.toUpperCase()}</div>`;
+                }
+            });
+            
+            return html;
         }
 
         function fecharModal() {
+            // Parar auto scroll se estiver ativo
             if (autoScrollAtivo) {
                 pararAutoScroll();
                 autoScrollAtivo = false;
@@ -1448,194 +1793,9 @@ ISSO DEVE APARECER EM LARANJA!`,
             document.getElementById('music-modal').style.display = 'none';
         }
 
-        // ... (restante das funções: eventos, controles, backup, importação, update, etc.)
-
-        // CONTROLES DE FONTE E SCROLL
-        function ajustarFonte(mudanca) {
-            const elemento = document.getElementById('lyrics-content');
-            if (!elemento) return;
-            
-            let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
-            
-            if (mudanca === 0) {
-                elemento.style.fontSize = tamanhoFonteBase + 'px';
-            } else {
-                const novoTamanho = Math.max(10, Math.min(30, tamanhoAtual + mudanca));
-                elemento.style.fontSize = novoTamanho + 'px';
-                
-                if (novoTamanho > 24) {
-                    ajustarFonteAuto();
-                }
-            }
-        }
-
-        function ajustarFonteAuto() {
-            const elemento = document.getElementById('lyrics-content');
-            if (!elemento) return;
-            
-            const texto = elemento.textContent;
-            const linhas = texto.split('\n');
-            const linhaMaisLonga = linhas.reduce((maisLonga, linha) => 
-                linha.length > maisLonga.length ? linha : maisLonga, '');
-            
-            const larguraDisponivel = elemento.clientWidth - 40;
-            const tamanhoIdeal = Math.max(12, Math.min(24, Math.floor(larguraDisponivel / (linhaMaisLonga.length * 0.6))));
-            
-            elemento.style.fontSize = tamanhoIdeal + 'px';
-            tamanhoFonteBase = tamanhoIdeal;
-        }
-
-        function toggleAutoScroll() {
-            autoScrollAtivo = !autoScrollAtivo;
-            const botao = document.getElementById('scroll-toggle');
-            const controlesVelocidade = document.getElementById('speed-controls');
-            
-            if (!botao) return;
-            
-            if (autoScrollAtivo) {
-                botao.classList.add('active');
-                botao.innerHTML = '⏳ Scroll';
-                controlesVelocidade.style.display = 'flex';
-                iniciarAutoScroll();
-            } else {
-                botao.classList.remove('active');
-                botao.innerHTML = '▶️ Scroll';
-                controlesVelocidade.style.display = 'none';
-                pararAutoScroll();
-            }
-        }
-
-        function setScrollSpeed(velocidade) {
-            scrollSpeed = velocidade;
-            
-            document.querySelectorAll('.speed-btn').forEach((btn, index) => {
-                if (index + 1 === velocidade) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            if (autoScrollAtivo) {
-                pararAutoScroll();
-                iniciarAutoScroll();
-            }
-        }
-
-        function iniciarAutoScroll() {
-            const lyricsContent = document.getElementById('lyrics-content');
-            const modalBody = document.querySelector('.modal-body');
-            
-            if (!lyricsContent || !modalBody) return;
-            
-            if (modalBody.scrollTop >= lyricsContent.scrollHeight - modalBody.clientHeight) {
-                modalBody.scrollTop = 0;
-            }
-            
-            const velocidades = {
-                1: 0.3, 2: 0.6, 3: 1, 4: 1.5, 5: 2, 6: 3, 7: 4
-            };
-            
-            pararAutoScroll();
-            
-            setTimeout(() => {
-                scrollInterval = setInterval(() => {
-                    const currentScroll = modalBody.scrollTop;
-                    const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
-                    
-                    if (currentScroll >= maxScroll) {
-                        pararAutoScroll();
-                        autoScrollAtivo = false;
-                        const scrollToggle = document.getElementById('scroll-toggle');
-                        if (scrollToggle) {
-                            scrollToggle.classList.remove('active');
-                            scrollToggle.innerHTML = '▶️ Scroll';
-                        }
-                        const speedControls = document.getElementById('speed-controls');
-                        if (speedControls) speedControls.style.display = 'none';
-                        return;
-                    }
-                    
-                    modalBody.scrollTop += velocidades[scrollSpeed];
-                    
-                }, 16);
-            }, 10000);
-        }
-
-        function pararAutoScroll() {
-            if (scrollInterval) {
-                clearInterval(scrollInterval);
-                scrollInterval = null;
-            }
-        }
-
-        // EVENTOS GLOBAIS
-        function configurarEventosGlobais() {
-            window.addEventListener('click', function(e) {
-                if (e.target.classList.contains('modal')) {
-                    fecharModal();
-                    fecharAddModal();
-                    fecharEditModal();
-                    fecharConfigModal();
-                    fecharImportModal();
-                    fecharImportURLModal();
-                    fecharUpdateModal();
-                }
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    fecharModal();
-                    fecharAddModal();
-                    fecharEditModal();
-                    fecharConfigModal();
-                    fecharImportModal();
-                    fecharImportURLModal();
-                    fecharUpdateModal();
-                }
-            });
-
-            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-                document.documentElement.requestFullscreen?.();
-            }
-        }
-
-        function configurarEventosModal() {
-            const modalBody = document.querySelector('.modal-body');
-            if (modalBody) {
-                modalBody.replaceWith(modalBody.cloneNode(true));
-                
-                const novoModalBody = document.querySelector('.modal-body');
-                
-                novoModalBody.addEventListener('wheel', () => {
-                    if (autoScrollAtivo) {
-                        toggleAutoScroll();
-                    }
-                });
-
-                novoModalBody.addEventListener('touchstart', () => {
-                    if (autoScrollAtivo) {
-                        toggleAutoScroll();
-                    }
-                });
-
-                novoModalBody.addEventListener('scroll', () => {
-                    if (autoScrollAtivo) {
-                        const lyricsContent = document.getElementById('lyrics-content');
-                        const maxScroll = lyricsContent.scrollHeight - novoModalBody.clientHeight;
-                        
-                        if (novoModalBody.scrollTop >= maxScroll - 10) {
-                            toggleAutoScroll();
-                        }
-                    }
-                });
-            }
-        }
-
-        // ... (restante das funções: exportarDados, importação, update, etc.)
-
-        // FUNÇÕES DE BACKUP
+        // FUNÇÕES DE BACKUP EM XML
         function exportarDados() {
+            // Criar estrutura XML
             let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
             xml += '<repertorio>\n';
             xml += `  <info>\n`;
@@ -1646,6 +1806,7 @@ ISSO DEVE APARECER EM LARANJA!`,
             xml += `  </info>\n`;
             xml += `  <musicas>\n`;
             
+            // Adicionar cada música
             musicas.forEach(musica => {
                 xml += `    <musica>\n`;
                 xml += `      <nome><![CDATA[${musica.nome}]]></nome>\n`;
@@ -1660,6 +1821,7 @@ ISSO DEVE APARECER EM LARANJA!`,
             xml += `  </musicas>\n`;
             xml += `</repertorio>`;
             
+            // Criar e baixar arquivo
             const blob = new Blob([xml], { type: 'application/xml' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1673,7 +1835,299 @@ ISSO DEVE APARECER EM LARANJA!`,
             alert(`📤 Backup XML exportado com sucesso!\n${musicas.length} música(s) salvas.`);
         }
 
-        // ... (funções de importação, update, etc. - mantidas iguais)
+        // FUNÇÕES DE IMPORTAR VIA URL
+        function mostrarImportacaoURL() {
+            document.getElementById('import-url-modal').style.display = 'block';
+            document.getElementById('url-xml').value = '';
+            document.getElementById('url-loading').style.display = 'none';
+            setTimeout(() => document.getElementById('url-xml').focus(), 100);
+        }
+
+        function fecharImportURLModal() {
+            if (importacaoURLEmAndamento) {
+                if (!confirm('Deseja continuar?')) {
+                    return;
+                }
+            }
+            document.getElementById('import-url-modal').style.display = 'none';
+            importacaoURLEmAndamento = false;
+        }
+
+        async function importarDeURL(event) {
+            event.preventDefault();
+            
+            const urlInput = document.getElementById('url-xml').value.trim();
+            
+            if (!urlInput) {
+                alert('❌ Por favor, digite uma URL válida.');
+                return;
+            }
+            
+            // Validar formato da URL
+            if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+                alert('❌ A URL deve começar com http:// ou https://');
+                return;
+            }
+            
+            try {
+                // Mostrar loading
+                document.getElementById('url-loading').style.display = 'block';
+                importacaoURLEmAndamento = true;
+                
+                console.log('🌐 Iniciando importação da URL:', urlInput);
+                
+                // Fazer requisição para a URL
+                const response = await fetch(urlInput);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                // Verificar se o conteúdo é XML
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/xml') && !contentType.includes('text/xml')) {
+                    console.warn('Content-Type não é XML:', contentType);
+                    // Continuamos mesmo assim, pois alguns servidores podem não configurar o content-type corretamente
+                }
+                
+                const xmlText = await response.text();
+                
+                if (!xmlText || xmlText.trim().length === 0) {
+                    throw new Error('O arquivo da URL está vazio');
+                }
+                
+                // Processar o XML (reutilizando a lógica existente)
+                processarXMLImportado(xmlText, `URL: ${urlInput}`);
+                
+            } catch (error) {
+                console.error('❌ Erro na importação via URL:', error);
+                
+                let mensagemErro = 'Erro ao importar da URL: ';
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    mensagemErro += 'Não foi possível conectar ao servidor. Verifique a URL e sua conexão com a internet.';
+                } else if (error.message.includes('404')) {
+                    mensagemErro += 'Arquivo não encontrado (404). Verifique se a URL está correta.';
+                } else if (error.message.includes('403')) {
+                    mensagemErro += 'Acesso negado (403). O servidor pode estar bloqueando o acesso.';
+                } else if (error.message.includes('CORS')) {
+                    mensagemErro += 'Bloqueado por política CORS. O servidor não permite acesso de outros domínios.';
+                } else {
+                    mensagemErro += error.message;
+                }
+                
+                alert('❌ ' + mensagemErro);
+            } finally {
+                // Esconder loading
+                document.getElementById('url-loading').style.display = 'none';
+                importacaoURLEmAndamento = false;
+            }
+        }
+
+        // Função para processar XML importado (reutilizável para arquivo e URL)
+        function processarXMLImportado(xmlText, fonte) {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Verificar se é um backup do Repertório BlueVox
+                const aplicacao = xmlDoc.querySelector('aplicacao');
+                if (!aplicacao || aplicacao.textContent !== 'Repertório BlueVox') {
+                    // Tentar uma verificação mais flexível
+                    const musicasNodes = xmlDoc.querySelectorAll('musica');
+                    if (musicasNodes.length === 0) {
+                        throw new Error('Arquivo XML não é um backup válido do Repertório BlueVox');
+                    }
+                    console.warn('⚠️ Arquivo XML pode não ser um backup oficial do BlueVox, mas tentando importar...');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasImportadas = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
+                    
+                    if (nome && letra) {
+                        musicasImportadas.push({
+                            nome: nome,
+                            letra: letra,
+                            dataCriacao: dataCriacao,
+                            fonte: fonte
+                        });
+                    }
+                });
+                
+                if (musicasImportadas.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no arquivo');
+                }
+
+                // Salvar dados para uso posterior
+                dadosImportacao = musicasImportadas;
+                
+                // Mostrar modal de opções de importação
+                mostrarOpcoesImportacao(musicasImportadas.length);
+                
+                // Fechar modal de URL se estiver aberto
+                fecharImportURLModal();
+
+            } catch (error) {
+                console.error('Erro ao processar XML:', error);
+                alert(`❌ Erro ao processar o arquivo da URL!\n${error.message}`);
+            }
+        }
+
+        function iniciarImportacao(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validar tipo de arquivo
+            if (!file.name.toLowerCase().endsWith('.xml')) {
+                alert('❌ Por favor, selecione um arquivo XML válido.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processarXMLImportado(e.target.result, `Arquivo: ${file.name}`);
+            };
+            
+            reader.onerror = function() {
+                alert('❌ Erro ao ler o arquivo. Tente novamente.');
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function mostrarOpcoesImportacao(quantidadeMusicas) {
+            document.getElementById('import-count').textContent = quantidadeMusicas;
+            document.getElementById('import-modal').style.display = 'block';
+            
+            // Resetar seleção
+            opcaoImportSelecionada = null;
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('confirm-import-btn').disabled = true;
+        }
+
+        function fecharImportModal() {
+            document.getElementById('import-modal').style.display = 'none';
+            dadosImportacao = null;
+            opcaoImportSelecionada = null;
+            
+            // Limpar inputs
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-input-initial').value = '';
+        }
+
+        function selecionarOpcaoImport(opcao) {
+            opcaoImportSelecionada = opcao;
+            
+            // Atualizar visualmente a seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(`option-${opcao}`).classList.add('selected');
+            
+            // Habilitar botão de confirmação
+            document.getElementById('confirm-import-btn').disabled = false;
+        }
+
+        function confirmarImportacao() {
+            if (!dadosImportacao || !opcaoImportSelecionada) {
+                alert('❌ Selecione uma opção de importação.');
+                return;
+            }
+
+            let mensagem = '';
+            let musicasAdicionadas = 0;
+            let musicasAtualizadas = 0;
+
+            switch (opcaoImportSelecionada) {
+                case 'substituir':
+                    // Substituir tudo
+                    musicas = dadosImportacao;
+                    mensagem = `✅ Backup importado! ${musicas.length} música(s) carregadas.`;
+                    break;
+                    
+                case 'adicionar':
+                    // Adicionar apenas novas
+                    const musicasExistentes = new Set(musicas.map(m => m.nome.toUpperCase()));
+                    const novasMusicas = dadosImportacao.filter(m => 
+                        !musicasExistentes.has(m.nome.toUpperCase())
+                    );
+                    
+                    if (novasMusicas.length === 0) {
+                        alert('ℹ️ Todas as músicas do backup já existem no repertório.');
+                        fecharImportModal();
+                        return;
+                    }
+                    
+                    musicas.push(...novasMusicas);
+                    musicasAdicionadas = novasMusicas.length;
+                    mensagem = `✅ Backup importado! ${musicasAdicionadas} nova(s) música(s) adicionadas.`;
+                    break;
+                    
+                case 'mesclar':
+                    // Mesclar tudo - combinar e atualizar
+                    const mapaMusicas = new Map();
+                    
+                    // Primeiro, adicionar todas as músicas atuais ao mapa
+                    musicas.forEach(musica => {
+                        mapaMusicas.set(musica.nome.toUpperCase(), musica);
+                    });
+                    
+                    // Depois, adicionar/atualizar com as músicas do backup
+                    dadosImportacao.forEach(musicaBackup => {
+                        const chave = musicaBackup.nome.toUpperCase();
+                        if (mapaMusicas.has(chave)) {
+                            // Atualizar música existente
+                            mapaMusicas.set(chave, {
+                                ...mapaMusicas.get(chave),
+                                letra: musicaBackup.letra,
+                                dataModificacao: new Date().toISOString()
+                            });
+                            musicasAtualizadas++;
+                        } else {
+                            // Adicionar nova música
+                            mapaMusicas.set(chave, musicaBackup);
+                            musicasAdicionadas++;
+                        }
+                    });
+                    
+                    // Converter mapa de volta para array
+                    musicas = Array.from(mapaMusicas.values());
+                    mensagem = `✅ Backup mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
+                    break;
+            }
+
+            salvarMusicas();
+            exibirListaMusicas();
+            
+            if (musicas.length > 0) {
+                mostrarInterfaceComMusicas();
+            }
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = mensagem;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 5000);
+
+            fecharImportModal();
+        }
 
         // FUNÇÕES DE UPDATE DO REPERTÓRIO
         async function verificarAtualizacoes() {
@@ -1690,10 +2144,12 @@ ISSO DEVE APARECER EM LARANJA!`,
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, "application/xml");
                 
+                // Verificar se é um XML válido
                 if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
                     throw new Error('XML malformado ou inválido');
                 }
                 
+                // Extrair músicas do XML
                 const musicasNodes = xmlDoc.querySelectorAll('musica');
                 const musicasOnline = [];
                 
@@ -1713,12 +2169,14 @@ ISSO DEVE APARECER EM LARANJA!`,
                     throw new Error('Nenhuma música válida encontrada no repertório online');
                 }
                 
+                // Salvar hash do repertório online para comparação futura
                 const hashOnline = calcularHash(musicasOnline);
                 const hashSalvo = localStorage.getItem('repertorioHash');
                 
                 console.log('🔍 Hash do repertório online:', hashOnline);
                 console.log('🔍 Hash do repertório salvo:', hashSalvo);
                 
+                // Se não há hash salvo ou se o hash é diferente, mostrar alerta
                 if (!hashSalvo || hashSalvo !== hashOnline) {
                     console.log('🆕 Atualização disponível!');
                     localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
@@ -1729,16 +2187,18 @@ ISSO DEVE APARECER EM LARANJA!`,
                 
             } catch (error) {
                 console.error('❌ Erro ao verificar atualizações:', error);
+                // Não mostrar erro para o usuário para não poluir a experiência
             }
         }
 
         function calcularHash(musicasArray) {
+            // Criar uma string única baseada nas músicas para comparação
             const dados = musicasArray.map(m => `${m.nome}${m.letra}`).join('');
             let hash = 0;
             for (let i = 0; i < dados.length; i++) {
                 const char = dados.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
+                hash = hash & hash; // Convert to 32bit integer
             }
             return hash.toString();
         }
@@ -1751,6 +2211,7 @@ ISSO DEVE APARECER EM LARANJA!`,
         }
 
         function mostrarOpcoesUpdate() {
+            // Tentar carregar dados online salvos
             const musicasOnlineSalvas = localStorage.getItem('repertorioOnline');
             let musicasOnline = [];
             
@@ -1762,6 +2223,7 @@ ISSO DEVE APARECER EM LARANJA!`,
                 }
             }
             
+            // Se não há dados salvos, buscar online
             if (musicasOnline.length === 0) {
                 buscarRepertorioOnline();
                 return;
@@ -1770,6 +2232,7 @@ ISSO DEVE APARECER EM LARANJA!`,
             document.getElementById('update-count').textContent = musicasOnline.length;
             document.getElementById('update-modal').style.display = 'block';
             
+            // Resetar seleção
             document.querySelectorAll('.import-option').forEach(option => {
                 option.classList.remove('selected');
             });
@@ -1790,10 +2253,12 @@ ISSO DEVE APARECER EM LARANJA!`,
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, "application/xml");
                 
+                // Verificar se é um XML válido
                 if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
                     throw new Error('XML malformado ou inválido');
                 }
                 
+                // Extrair músicas do XML
                 const musicasNodes = xmlDoc.querySelectorAll('musica');
                 const musicasOnline = [];
                 
@@ -1813,8 +2278,10 @@ ISSO DEVE APARECER EM LARANJA!`,
                     throw new Error('Nenhuma música válida encontrada no repertório online');
                 }
                 
+                // Salvar dados online
                 localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
                 
+                // Mostrar modal de opções
                 document.getElementById('update-count').textContent = musicasOnline.length;
                 document.getElementById('update-modal').style.display = 'block';
                 
@@ -1829,11 +2296,13 @@ ISSO DEVE APARECER EM LARANJA!`,
         }
 
         function selecionarOpcaoUpdate(opcao) {
+            // Atualizar visualmente a seleção
             document.querySelectorAll('.import-option').forEach(option => {
                 option.classList.remove('selected');
             });
             document.getElementById(`update-option-${opcao}`).classList.add('selected');
             
+            // Habilitar botão de confirmação
             document.getElementById('confirm-update-btn').disabled = false;
         }
 
@@ -1860,20 +2329,25 @@ ISSO DEVE APARECER EM LARANJA!`,
 
                 switch (opcao) {
                     case 'substituir':
+                        // Substituir tudo
                         musicas = musicasOnline;
                         mensagem = `✅ Repertório atualizado! ${musicas.length} música(s) carregadas.`;
                         break;
                         
                     case 'mesclar':
+                        // Mesclar tudo - combinar e atualizar
                         const mapaMusicas = new Map();
                         
+                        // Primeiro, adicionar todas as músicas atuais ao mapa
                         musicas.forEach(musica => {
                             mapaMusicas.set(musica.nome.toUpperCase(), musica);
                         });
                         
+                        // Depois, adicionar/atualizar com as músicas online
                         musicasOnline.forEach(musicaOnline => {
                             const chave = musicaOnline.nome.toUpperCase();
                             if (mapaMusicas.has(chave)) {
+                                // Atualizar música existente
                                 mapaMusicas.set(chave, {
                                     ...mapaMusicas.get(chave),
                                     letra: musicaOnline.letra,
@@ -1881,19 +2355,23 @@ ISSO DEVE APARECER EM LARANJA!`,
                                 });
                                 musicasAtualizadas++;
                             } else {
+                                // Adicionar nova música
                                 mapaMusicas.set(chave, musicaOnline);
                                 musicasAdicionadas++;
                             }
                         });
                         
+                        // Converter mapa de volta para array
                         musicas = Array.from(mapaMusicas.values());
                         mensagem = `✅ Repertório mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
                         break;
                 }
 
+                // Atualizar hash do repertório
                 const hashOnline = calcularHash(musicasOnline);
                 localStorage.setItem('repertorioHash', hashOnline);
                 
+                // Esconder alerta de atualização
                 document.getElementById('update-alert').style.display = 'none';
                 
                 salvarMusicas();
@@ -1903,6 +2381,7 @@ ISSO DEVE APARECER EM LARANJA!`,
                     mostrarInterfaceComMusicas();
                 }
 
+                // Feedback visual
                 const lista = document.getElementById('music-list');
                 const successMsg = document.createElement('div');
                 successMsg.className = 'success';
@@ -1921,7 +2400,10 @@ ISSO DEVE APARECER EM LARANJA!`,
         // FUNÇÃO PARA RESETAR O APLICATIVO
         function resetarAplicativo() {
             if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n\nTem certeza que deseja resetar o aplicativo?')) {
+                // Limpar todos os dados do localStorage
                 localStorage.clear();
+                
+                // Recarregar a página para aplicar o reset
                 alert('✅ Aplicativo resetado com sucesso!\n\nA página será recarregada.');
                 setTimeout(() => {
                     window.location.reload();
@@ -1941,7 +2423,6 @@ ISSO DEVE APARECER EM LARANJA!`,
 • Clique em "Adicionar Música"
 • Digite o nome e cole a letra
 • Use [R] para linhas em AMARELO
-• Use |Bm| para mostrar [Bm] em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
@@ -1951,10 +2432,41 @@ ISSO DEVE APARECER EM LARANJA!`,
 🗑️ REMOVER MÚSICA:
 • Clique no × vermelho ao lado da música
 
-💡 Use |texto| para mostrar [texto] em LARANJA!`);
-        }
+💾 BACKUP:
+• EXPORTAR: Gera arquivo XML universal
+• IMPORTAR: Carrega backup XML (arquivo ou URL)
+• Formatos suportados: Substituir, Adicionar, Mesclar
 
-        // ... (funções de importação via URL e arquivo - mantidas iguais)
+🔄 UPDATE DO REPERTÓRIO:
+• Busca atualizações do repertório online
+• Opções: Substituir tudo ou Mesclar
+• Verificação automática na inicialização
+
+🌐 IMPORTAR DE URL:
+• Digite a URL completa do arquivo XML
+• Suporta http:// e https://
+• Funciona com qualquer servidor público
+
+🎨 PERSONALIZAR:
+• Botão "Cores" para mudar o tema
+• 5 temas diferentes disponíveis
+
+🗑️ RESETAR APP:
+• Apaga todos os dados do aplicativo
+• Reinicia completamente o sistema
+
+📱 INSTALAÇÃO:
+• Adicione à tela inicial para acesso rápido
+• Funciona 100% offline
+• Dados salvos no navegador
+
+⏰ AUTO SCROLL:
+• Inicia automaticamente após 10 segundos
+• 7 velocidades diferentes
+• Mais opções de velocidade lenta para melhor controle
+
+💡 Use [R] no início das linhas para destaque em amarelo!`);
+        }
     </script>
 </body>
 </html>
