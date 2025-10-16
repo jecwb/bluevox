@@ -414,6 +414,13 @@
             margin: 8px 0;
             color: var(--cor-texto);
         }
+
+        /* NOVO ESTILO PARA CIFRAS LARANJA */
+        .orange-chord {
+            color: #ff8800 !important;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
+        }
         
         .add-form, .edit-form, .config-form {
             background: #111;
@@ -713,6 +720,7 @@
                 <strong style="color: #00ff00;">✨ Dicas:</strong>
                 <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
                     <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
+                    <li>Use <strong>|D|</strong> para cifras em laranja (ex: |G|, |C#m|, etc.)</li>
                     <li>Adicione à tela inicial para acesso rápido</li>
                     <li>Todos os dados ficam salvos no seu navegador</li>
                     <li>Backup único em formato XML universal</li>
@@ -832,12 +840,13 @@
                                   placeholder="Cole aqui a letra completa...
 
 Exemplo:
-[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR
-[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR
-NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
-CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR |G|
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR |D|
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR |C|
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use |D|, |G|, |C#m| para cifras em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -870,12 +879,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                                   placeholder="Cole aqui a letra completa...
 
 Exemplo:
-[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR
-[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR
-NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
-CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR |G|
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR |D|
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR |C|
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use |D|, |G|, |C#m| para cifras em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -1762,9 +1772,15 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             }
         }
 
+        // FUNÇÃO FORMATAR LETRA MODIFICADA - COM SUPORTE PARA CIFRAS LARANJAS
         function formatarLetra(texto) {
             const linhas = texto.split('\n');
             let html = '';
+            
+            // Função para processar cifras entre ||
+            const processarCifras = (texto) => {
+                return texto.replace(/\|([^|]+)\|/g, '<span class="orange-chord">$1</span>');
+            };
             
             linhas.forEach(linha => {
                 linha = linha.trim();
@@ -1775,9 +1791,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 
                 if (linha.toUpperCase().startsWith('[R]')) {
                     const linhaSemR = linha.substring(3).trim();
-                    html += `<div class="yellow-line">${linhaSemR.toUpperCase()}</div>`;
+                    const linhaComCifras = processarCifras(linhaSemR.toUpperCase());
+                    html += `<div class="yellow-line">${linhaComCifras}</div>`;
                 } else {
-                    html += `<div class="normal-line">${linha.toUpperCase()}</div>`;
+                    const linhaComCifras = processarCifras(linha.toUpperCase());
+                    html += `<div class="normal-line">${linhaComCifras}</div>`;
                 }
             });
             
@@ -2423,6 +2441,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • Clique em "Adicionar Música"
 • Digite o nome e cole a letra
 • Use [R] para linhas em AMARELO
+• Use |D|, |G|, |C#m| para cifras em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
@@ -2465,7 +2484,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • 7 velocidades diferentes
 • Mais opções de velocidade lenta para melhor controle
 
-💡 Use [R] no início das linhas para destaque em amarelo!`);
+💡 DICAS DE FORMATAÇÃO:
+• [R] no início da linha → linha inteira em AMARELO
+• |D|, |G|, |C#m| em qualquer lugar → cifra em LARANJA
+• Combine ambos: [R] linha com |D| cifra |G|`);
         }
     </script>
 </body>
