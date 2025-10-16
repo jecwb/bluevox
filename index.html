@@ -20,6 +20,7 @@
             --cor-fundo: #000000;
             --cor-texto: #00ff00;
             --cor-destaque: #ffff00;
+            --cor-laranja: #ff8800;
             --cor-botao: #003300;
             --cor-hover: #004400;
         }
@@ -415,6 +416,12 @@
             color: var(--cor-texto);
         }
         
+        .orange-text {
+            color: var(--cor-laranja) !important;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
+        }
+        
         .add-form, .edit-form, .config-form {
             background: #111;
             padding: 20px;
@@ -713,6 +720,7 @@
                 <strong style="color: #00ff00;">✨ Dicas:</strong>
                 <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
                     <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
+                    <li>Use <strong>{texto}</strong> para destaque em laranja</li>
                     <li>Adicione à tela inicial para acesso rápido</li>
                     <li>Todos os dados ficam salvos no seu navegador</li>
                     <li>Backup único em formato XML universal</li>
@@ -837,7 +845,8 @@ Exemplo:
 NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use {texto} para destacar em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -875,7 +884,8 @@ Exemplo:
 NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
-💡 Use [R] no início das linhas que devem aparecer em AMARELO"></textarea>
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use {texto} para destacar em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -1078,6 +1088,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 fundo: '#000000',
                 texto: '#00ff00',
                 destaque: '#ffff00',
+                laranja: '#ff8800',
                 botao: '#003300',
                 hover: '#004400'
             },
@@ -1087,6 +1098,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 fundo: '#000033',
                 texto: '#0088ff',
                 destaque: '#00ffff',
+                laranja: '#ff8800',
                 botao: '#003366',
                 hover: '#004477'
             },
@@ -1096,6 +1108,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 fundo: '#330000',
                 texto: '#ff4444',
                 destaque: '#ff8888',
+                laranja: '#ff8800',
                 botao: '#660000',
                 hover: '#770000'
             },
@@ -1105,6 +1118,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 fundo: '#1a001a',
                 texto: '#cc00ff',
                 destaque: '#ff88ff',
+                laranja: '#ff8800',
                 botao: '#330033',
                 hover: '#440044'
             },
@@ -1114,6 +1128,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                 fundo: '#331900',
                 texto: '#ff8800',
                 destaque: '#ffcc00',
+                laranja: '#ffaa00',
                 botao: '#663300',
                 hover: '#774400'
             }
@@ -1319,6 +1334,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             root.style.setProperty('--cor-fundo', cores.fundo);
             root.style.setProperty('--cor-texto', cores.texto);
             root.style.setProperty('--cor-destaque', cores.destaque);
+            root.style.setProperty('--cor-laranja', cores.laranja);
             root.style.setProperty('--cor-botao', cores.botao);
             root.style.setProperty('--cor-hover', cores.hover);
             
@@ -1773,15 +1789,27 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                     return;
                 }
                 
+                // Processar texto entre chaves {} para cor laranja
+                let linhaFormatada = processarChavesLaranja(linha);
+                
                 if (linha.toUpperCase().startsWith('[R]')) {
                     const linhaSemR = linha.substring(3).trim();
-                    html += `<div class="yellow-line">${linhaSemR.toUpperCase()}</div>`;
+                    linhaFormatada = processarChavesLaranja(linhaSemR);
+                    html += `<div class="yellow-line">${linhaFormatada.toUpperCase()}</div>`;
                 } else {
-                    html += `<div class="normal-line">${linha.toUpperCase()}</div>`;
+                    html += `<div class="normal-line">${linhaFormatada.toUpperCase()}</div>`;
                 }
             });
             
             return html;
+        }
+
+        function processarChavesLaranja(texto) {
+            // Expressão regular para encontrar texto entre chaves {}
+            const regex = /{([^}]+)}/g;
+            
+            // Substituir cada ocorrência por um span com classe orange-text
+            return texto.replace(regex, '<span class="orange-text">$1</span>');
         }
 
         function fecharModal() {
@@ -2423,6 +2451,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • Clique em "Adicionar Música"
 • Digite o nome e cole a letra
 • Use [R] para linhas em AMARELO
+• Use {texto} para destacar em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
@@ -2465,7 +2494,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • 7 velocidades diferentes
 • Mais opções de velocidade lenta para melhor controle
 
-💡 Use [R] no início das linhas para destaque em amarelo!`);
+💡 Use [R] no início das linhas para destaque em AMARELO!
+💡 Use {texto} para destacar em LARANJA!`);
         }
     </script>
 </body>
