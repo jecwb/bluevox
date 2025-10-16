@@ -720,7 +720,7 @@
                 <strong style="color: #00ff00;">✨ Dicas:</strong>
                 <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
                     <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
-                    <li>Use <strong>{texto}</strong> para destaque em laranja</li>
+                    <li>Use <strong>|texto|</strong> para mostrar <strong>[texto]</strong> em laranja</li>
                     <li>Adicione à tela inicial para acesso rápido</li>
                     <li>Todos os dados ficam salvos no seu navegador</li>
                     <li>Backup único em formato XML universal</li>
@@ -846,7 +846,7 @@ NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
 💡 Use [R] no início das linhas que devem aparecer em AMARELO
-💡 Use {texto} para destacar em LARANJA"></textarea>
+💡 Use |Bm| para mostrar [Bm] em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -885,7 +885,7 @@ NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR
 CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 
 💡 Use [R] no início das linhas que devem aparecer em AMARELO
-💡 Use {texto} para destacar em LARANJA"></textarea>
+💡 Use |Bm| para mostrar [Bm] em LARANJA"></textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -1789,12 +1789,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
                     return;
                 }
                 
-                // Processar texto entre chaves {} para cor laranja
-                let linhaFormatada = processarChavesLaranja(linha);
+                // Processar texto entre || para mostrar entre [] na cor laranja
+                let linhaFormatada = processarBarrasLaranja(linha);
                 
                 if (linha.toUpperCase().startsWith('[R]')) {
                     const linhaSemR = linha.substring(3).trim();
-                    linhaFormatada = processarChavesLaranja(linhaSemR);
+                    linhaFormatada = processarBarrasLaranja(linhaSemR);
                     html += `<div class="yellow-line">${linhaFormatada.toUpperCase()}</div>`;
                 } else {
                     html += `<div class="normal-line">${linhaFormatada.toUpperCase()}</div>`;
@@ -1804,12 +1804,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             return html;
         }
 
-        function processarChavesLaranja(texto) {
-            // Expressão regular para encontrar texto entre chaves {}
-            const regex = /{([^}]+)}/g;
+        function processarBarrasLaranja(texto) {
+            // Expressão regular para encontrar texto entre ||
+            const regex = /\|([^|]+)\|/g;
             
-            // Substituir cada ocorrência por um span com classe orange-text
-            return texto.replace(regex, '<span class="orange-text">$1</span>');
+            // Substituir cada ocorrência por um span com classe orange-text e colchetes
+            return texto.replace(regex, '<span class="orange-text">[$1]</span>');
         }
 
         function fecharModal() {
@@ -2451,7 +2451,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • Clique em "Adicionar Música"
 • Digite o nome e cole a letra
 • Use [R] para linhas em AMARELO
-• Use {texto} para destacar em LARANJA
+• Use |Bm| para mostrar [Bm] em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
@@ -2495,7 +2495,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
 • Mais opções de velocidade lenta para melhor controle
 
 💡 Use [R] no início das linhas para destaque em AMARELO!
-💡 Use {texto} para destacar em LARANJA!`);
+💡 Use |texto| para mostrar [texto] em LARANJA!`);
         }
     </script>
 </body>
