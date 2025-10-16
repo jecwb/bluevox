@@ -416,7 +416,7 @@
             color: var(--cor-texto);
         }
         
-        .orange-text {
+        .laranja {
             color: var(--cor-laranja) !important;
             font-weight: bold;
             text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
@@ -1808,8 +1808,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR
             // Expressão regular para encontrar texto entre ||
             const regex = /\|([^|]+)\|/g;
             
-            // Substituir cada ocorrência por um span com classe orange-text e colchetes
-            return texto.replace(regex, '<span class="orange-text">[$1]</span>');
+            // Substituir cada ocorrência por um span com classe laranja e colchetes
+            return texto.replace(regex, '<span class="laranja">[$1]</span>');
         }
 
         function fecharModal() {
