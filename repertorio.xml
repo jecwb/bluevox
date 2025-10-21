@@ -3,10 +3,41 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-10-21T13:52:52.078Z</dataExportacao>
-    <totalMusicas>7</totalMusicas>
+    <dataExportacao>2025-10-21T18:10:25.376Z</dataExportacao>
+    <totalMusicas>8</totalMusicas>
   </info>
   <musicas>
+    <musica>
+      <nome><![CDATA[DONOS DO MUNDO]]></nome>
+      <letra><![CDATA[Das torres vem o império, o olhar artificial
+Controlam o pensamento, chamam isso de ideal
+Vendendo o medo em série, moldando a razão
+O ouro é o novo deus, a fé, manipulação
+
+[R][Refrão]
+Erga os punhos contra o véu!
+Rasgue o falso céu!
+Somos fogo, somos fim!
+Nada é mais forte que o que há em mim!
+
+Nas telas, as mentiras, disfarçadas de amor
+Escravos conectados, servindo ao opressor
+O som das multidões, calado em confusão
+Enquanto os falsos deuses selam a nação
+
+R][Refrão]
+
+Mil vozes invisíveis, prontas pra lutar
+Das ruínas do sistema, a verdade há de vir
+E os donos do mundo... vão ter que cair!
+
+[R][Refrão Final]
+Queimem tronos, caiam reis!
+Rendam-se às leis!
+Do caos vem o clarim!
+O novo nasce dentro de mim!]]></letra>
+      <dataCriacao>2025-10-21T18:10:20.605Z</dataCriacao>
+    </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
       <letra><![CDATA[
@@ -206,7 +237,6 @@ Serei o Fim... a Destruição!
 
 [R][REFRÃO]]]></letra>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-10-21T13:52:42.063Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
