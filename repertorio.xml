@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-10-21T18:12:21.832Z</dataExportacao>
-    <totalMusicas>8</totalMusicas>
+    <dataExportacao>2025-10-22T11:18:14.791Z</dataExportacao>
+    <totalMusicas>9</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -36,8 +36,7 @@ Queimem tronos, caiam reis!
 Rendam-se às leis!
 Do caos vem o clarim!
 O novo nasce dentro de mim!]]></letra>
-      <dataCriacao>2025-10-21T18:10:20.605Z</dataCriacao>
-      <dataModificacao>2025-10-21T18:12:19.610Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -240,6 +239,70 @@ Serei o Fim... a Destruição!
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
+      <nome><![CDATA[STAND IN LINE]]></nome>
+      <letra><![CDATA[Take a number, wait your turn
+Too much paper, let it burn
+Sit down quiet, don’t ask why
+Same old people passing by
+
+[REFRÃO]
+[R]Get in line, please stand in line
+[R]Don’t talk much, you’ll be fine
+[R]Get in line, please stand in line
+[R]Wait your time, it’s all fine
+
+Stamp the paper, lose the pen
+Do it once, then do again
+Big long line, all the same
+No one knows who’s to blame
+
+[R][REFRÃO]
+
+Day by day, we stand and wait
+Little late, it’s always late
+Tick-tock clock, same old sound
+Round and round and round and round
+
+[R][REFRÃO]
+Get in line, please stand in line
+Don’t talk much, you’ll be fine
+Get in line, please stand in line
+Wait your time, it’s all fine
+
+Translate.:
+
+Pegue um número, espere a sua vez
+Papel demais, podia queimar
+Sente-se quieto, não pergunte por quê
+As mesmas pessoas passando por aí
+
+Entre na fila, por favor, fique na fila
+Não fale muito, vai ficar tudo bem
+Entre na fila, por favor, fique na fila
+Espere o seu tempo, tudo bem assim
+
+Carimbe o papel, perca a caneta
+Faça uma vez, depois faça de novo
+Fila enorme, todo mundo igual
+Ninguém sabe quem é o culpado
+
+Entre na fila, por favor, fique na fila
+Não fale muito, vai ficar tudo bem
+Entre na fila, por favor, fique na fila
+Espere o seu tempo, tudo bem assim
+
+Dia após dia, a gente fica esperando
+Um pouquinho atrasado, sempre atrasado
+Tic-tac do relógio, o mesmo som de sempre
+Girando, girando, girando sem parar
+
+Entre na fila, por favor, fique na fila
+Não fale muito, vai ficar tudo bem
+Entre na fila, por favor, fique na fila
+Espere o seu tempo, tudo bem assim]]></letra>
+      <dataCriacao>2025-10-22T11:17:14.192Z</dataCriacao>
+    </musica>
+    <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
       <letra><![CDATA[
 [|EM G C D EM|]        
@@ -261,8 +324,31 @@ A MOTHER DREAM YOU SUFFOCATE?
 [R]DO YOU! DO YOU!
 [R]WANNA BREAK THE WALL?
 [R]DO YOU! DO YOU!
-[R]WANNA WATCH IT FALL?]]></letra>
+[R]WANNA WATCH IT FALL?
+
+Translate.:
+
+VOCÊ SE IMPORTA COM O QUE DIZEM?
+VOCÊ VIVE OU DESAPARECE?
+VOCÊ LUTA OU APENAS OBEDECE?
+ME DIGA AGORA - NÃO DESVIE O OLHAR!
+
+VOCÊ! VOCÊ!
+QUER QUEBRAR O MURO?
+VOCÊ! VOCÊ!
+QUER VÊ-LO CAIR?
+
+VOCÊ SENTE O QUE EU SINTO?
+OU NADA É REAL?
+VOCÊ DORME SÓ PARA ESCAPAR?
+O SONHO DA MÃE TE SUFOCA?
+
+VOCÊ! VOCÊ!
+QUER QUEBRAR O MURO?
+VOCÊ! VOCÊ!
+QUER VÊ-LO CAIR?]]></letra>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2025-10-22T11:18:11.351Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
