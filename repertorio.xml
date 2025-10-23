@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-10-22T11:18:14.791Z</dataExportacao>
-    <totalMusicas>9</totalMusicas>
+    <dataExportacao>2025-10-23T15:36:14.407Z</dataExportacao>
+    <totalMusicas>10</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -239,6 +239,38 @@ Serei o Fim... a Destruição!
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
+      <nome><![CDATA[RUA TORTA]]></nome>
+      <letra><![CDATA[andando de lado,
+me acostumo com a dor,
+com os olhos fechados
+nem sei onde estou.
+ 
+acendo um cigarro,
+reclamo do amor,
+to preso num laço
+o porre passou.
+
+[R][REFRÃO]
+[R]Hey, hey não seja arrogante,
+[R]to numa de horror
+[R]A rua ta torta, a moto capota,o filme acabou. 
+
+Na rua deserta,
+o poste piscou,
+dei um passo errado
+o rumo mudou.
+
+Uma porta aberta,
+Minha Vida incerta,
+Desce mais uma dose
+O copo rachou.
+
+[R][REFRÃO]
+]]></letra>
+      <dataCriacao>2025-10-23T15:20:55.945Z</dataCriacao>
+      <dataModificacao>2025-10-23T15:36:01.880Z</dataModificacao>
+    </musica>
+    <musica>
       <nome><![CDATA[STAND IN LINE]]></nome>
       <letra><![CDATA[Take a number, wait your turn
 Too much paper, let it burn
@@ -300,7 +332,7 @@ Entre na fila, por favor, fique na fila
 Não fale muito, vai ficar tudo bem
 Entre na fila, por favor, fique na fila
 Espere o seu tempo, tudo bem assim]]></letra>
-      <dataCriacao>2025-10-22T11:17:14.192Z</dataCriacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
@@ -348,7 +380,6 @@ QUER QUEBRAR O MURO?
 VOCÊ! VOCÊ!
 QUER VÊ-LO CAIR?]]></letra>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-10-22T11:18:11.351Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
