@@ -3,10 +3,39 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-11-18T01:11:09.421Z</dataExportacao>
+    <dataExportacao>2025-11-18T01:12:29.495Z</dataExportacao>
     <totalMusicas>9</totalMusicas>
   </info>
   <musicas>
+    <musica>
+      <nome><![CDATA[DEIXA PRA LÁ]]></nome>
+      <letra><![CDATA[
+[|G F B♭ AM|]        
+VOZES VÊM ATRÁS, NÃO PARAM DE OLHAR
+O GRITO LÁ DO ALTO, NÃO QUERO ESCUTAR
+SE NÃO VALE NADA, NÃO VOU NEM TENTAR
+NESTA TERAPIA, NÃO VÃO ME CURAR
+[R]DEIXA PRA LÁ
+[R]A FORÇA VÃO USAR
+[R]DEIXA PRA LÁ
+[R]ESTE SURTO VAI PASSAR
+CONTENÇÃO NO LEITO, RESISTO OPOSITOR
+PICO DE ANSIEDADE, SEDADO AGORA ESTOU
+ECOPRAXIA, OS MOVIMENTOS REPETIA
+INTRAMUSCULAR, A AGULHA ATÉ QUEBROU
+[R][REFRÃO]
+CONECTA O ELETRODO, O GEL JÁ PASSOU
+CHOQUE SEM SENTIDO, RUÍDO BRANCO NO OUVIDO
+SOA COMO ALÍVIO, O PACIENTE FOI CONTIDO
+UMA CRISE DE ANEDONIA, AVOLIÇÃO E ALOGIA
+[R][REFRÃO]
+SOB O GESSO DA EUTIMIA, NENHUM AFETO BROTA
+O RISO, O PRANTO — UMA ESTÁTICA REMOTA
+CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
+E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
+      <dataCriacao></dataCriacao>
+      <dataModificacao>2025-11-18T01:12:15.503Z</dataModificacao>
+    </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
       <letra><![CDATA[[|A|]Das torres vem o império, o olhar artificial
@@ -170,34 +199,6 @@ Eu não quero nada, só penso em parar
 Não venha com histórias, mitos e memórias.
 Só quero me deitar, dormir e relaxar!
 [R] [REFRÃO]]]></letra>
-      <dataCriacao></dataCriacao>
-    </musica>
-    <musica>
-      <nome><![CDATA[PTSM]]></nome>
-      <letra><![CDATA[
-[|G F B♭ AM|]        
-VOZES VÊM ATRÁS, NÃO PARAM DE OLHAR
-O GRITO LÁ DO ALTO, NÃO QUERO ESCUTAR
-SE NÃO VALE NADA, NÃO VOU NEM TENTAR
-NESTA TERAPIA, NÃO VÃO ME CURAR
-[R]DEIXA PRA LÁ
-[R]A FORÇA VÃO USAR
-[R]DEIXA PRA LÁ
-[R]ESTE SURTO VAI PASSAR
-CONTENÇÃO NO LEITO, RESISTO OPOSITOR
-PICO DE ANSIEDADE, SEDADO AGORA ESTOU
-ECOPRAXIA, OS MOVIMENTOS REPETIA
-INTRAMUSCULAR, A AGULHA ATÉ QUEBROU
-[R][REFRÃO]
-CONECTA O ELETRODO, O GEL JÁ PASSOU
-CHOQUE SEM SENTIDO, RUÍDO BRANCO NO OUVIDO
-SOA COMO ALÍVIO, O PACIENTE FOI CONTIDO
-UMA CRISE DE ANEDONIA, AVOLIÇÃO E ALOGIA
-[R][REFRÃO]
-SOB O GESSO DA EUTIMIA, NENHUM AFETO BROTA
-O RISO, O PRANTO — UMA ESTÁTICA REMOTA
-CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
-E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
