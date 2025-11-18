@@ -130,6 +130,24 @@
             border: 1px solid var(--cor-primaria);
         }
         
+        .music-notes {
+            color: #00ccff;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            white-space: nowrap;
+            background: #003366;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid #0088ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-notes:hover {
+            background: #004477;
+            transform: scale(1.05);
+        }
+        
         .music-actions {
             display: flex;
             gap: 8px;
@@ -283,6 +301,8 @@
             max-width: none;
             max-height: none;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .modal-header {
@@ -400,12 +420,6 @@
             color: var(--cor-fundo);
         }
         
-        .setlist-modal-controls {
-            display: flex;
-            gap: 5px;
-            margin-left: 10px;
-        }
-        
         .close {
             color: var(--cor-primaria);
             font-size: 16px;
@@ -422,7 +436,7 @@
         }
         
         .modal-body {
-            height: calc(100vh - 40px);
+            flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -435,7 +449,7 @@
             text-align: center;
             font-size: 16px;
             padding: 20px 15px;
-            min-height: calc(100vh - 40px);
+            min-height: calc(100vh - 120px);
             margin: 0;
             box-sizing: border-box;
             color: var(--cor-texto);
@@ -499,7 +513,7 @@
         }
         
         .form-textarea {
-            height: 400px;
+            height: 200px;
             resize: vertical;
             font-family: Arial, sans-serif;
             line-height: 1.4;
@@ -706,6 +720,115 @@
             flex: 1;
         }
         
+        /* NOVOS ESTILOS PARA OS BOTÕES DE NAVEGAÇÃO NO MODAL */
+        .modal-footer {
+            padding: 15px;
+            background: #111;
+            border-top: 1px solid var(--cor-primaria);
+            display: none;
+        }
+        
+        .navigation-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .nav-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 2px solid var(--cor-primaria);
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .nav-btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        .nav-btn-prev {
+            background: #003366;
+            border-color: #0088ff;
+        }
+        
+        .nav-btn-next {
+            background: #006600;
+            border-color: #00ff00;
+        }
+        
+        /* Estilos para o modal de notas */
+        .notes-modal-content {
+            background: var(--cor-fundo);
+            margin: 5% auto;
+            padding: 0;
+            border: 2px solid var(--cor-primaria);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .notes-modal-header {
+            padding: 15px 20px;
+            background: #111;
+            border-bottom: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notes-modal-header h2 {
+            color: var(--cor-primaria);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .notes-modal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .notes-content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: var(--cor-texto);
+            background: #111;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--cor-secundaria);
+        }
+        
+        .notes-modal-footer {
+            padding: 15px 20px;
+            background: #111;
+            border-top: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: flex-end;
+        }
+        
         @keyframes pulse {
             0% { border-color: var(--cor-primaria); }
             50% { border-color: var(--cor-destaque); }
@@ -723,19 +846,22 @@
             .font-btn, .scroll-btn, .speed-btn { transform: scale(0.9); }
             .backup-options { flex-direction: column; }
             .setlist-controls { flex-direction: column; }
+            .navigation-controls { flex-direction: column; }
+            .nav-btn { max-width: none; }
         }
         
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .music-item { padding: 10px 12px; }
             .music-name { font-size: 0.9rem; }
-            .music-bpm { font-size: 0.7rem; margin-right: 5px; }
+            .music-bpm, .music-notes { font-size: 0.7rem; margin-right: 5px; }
             .action-btn { width: 30px; height: 30px; font-size: 0.75rem; }
             .form-actions { flex-direction: column; }
             .lyrics-content { font-size: 14px; padding: 15px 10px; }
             .modal-header { flex-wrap: wrap; gap: 5px; }
             .modal-title-container { min-width: 100px; }
             .btn { padding: 16px 20px; font-size: 1rem; }
+            .nav-btn { padding: 12px 20px; font-size: 1rem; }
         }
         
         @media (max-width: 400px) {
@@ -932,15 +1058,22 @@
                         <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
                         <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
                     </div>
-                    <div class="setlist-modal-controls">
-                        <button class="scroll-btn" onclick="musicaAnterior()" title="Música anterior">⏮️</button>
-                        <button class="scroll-btn" onclick="proximaMusica()" title="Próxima música">⏭️</button>
-                    </div>
                 </div>
                 <button class="close" onclick="fecharModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="lyrics-content" class="lyrics-content"></div>
+            </div>
+            <!-- NOVO FOOTER COM BOTÕES DE NAVEGAÇÃO -->
+            <div class="modal-footer" id="setlist-navigation">
+                <div class="navigation-controls">
+                    <button class="nav-btn nav-btn-prev" onclick="musicaAnterior()">
+                        ⏮️ Anterior
+                    </button>
+                    <button class="nav-btn nav-btn-next" onclick="proximaMusica()">
+                        ⏭️ Próxima
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -962,6 +1095,11 @@
                     <div class="form-group">
                         <label for="bpm-musica">BPM (opcional):</label>
                         <input type="number" id="bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notas-musica">NOTAS (opcional):</label>
+                        <textarea id="notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -1006,6 +1144,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="form-group">
                         <label for="edit-bpm-musica">BPM (opcional):</label>
                         <input type="number" id="edit-bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-notas-musica">NOTAS (opcional):</label>
+                        <textarea id="edit-notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -1077,6 +1220,22 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                         <button type="button" class="btn" onclick="resetarTema()">🔄 Tema Padrão</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE NOTAS -->
+    <div id="notes-modal" class="modal">
+        <div class="notes-modal-content">
+            <div class="notes-modal-header">
+                <h2 id="notes-modal-title">📝 NOTAS DA MÚSICA</h2>
+                <button class="close" onclick="fecharNotesModal()">&times;</button>
+            </div>
+            <div class="notes-modal-body">
+                <div id="notes-content" class="notes-content"></div>
+            </div>
+            <div class="notes-modal-footer">
+                <button class="btn btn-secondary" onclick="fecharNotesModal()">Fechar</button>
             </div>
         </div>
     </div>
@@ -1662,6 +1821,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharAddModal();
                     fecharEditModal();
                     fecharConfigModal();
+                    fecharNotesModal();
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
@@ -1675,6 +1835,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharAddModal();
                     fecharEditModal();
                     fecharConfigModal();
+                    fecharNotesModal();
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
@@ -1751,6 +1912,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="music-info">
                         <div class="music-name">${musica.nome}</div>
                         ${musica.bpm ? `<div class="music-bpm" onclick="event.stopPropagation();" title="BPM da música">BPM: ${musica.bpm}</div>` : ''}
+                        ${musica.notas ? `<div class="music-notes" onclick="event.stopPropagation(); mostrarNotas('${musica.nome}', '${musica.notas.replace(/'/g, "\\'")}')" title="Ver notas de execução">📝</div>` : ''}
                     </div>
                     <div class="music-actions">
                         <button class="action-btn setlist-btn ${musica.noSetlist ? 'active' : ''}" 
@@ -1795,6 +1957,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const nome = document.getElementById('nome-musica').value.trim();
             const letra = document.getElementById('letra-musica').value;
             const bpm = document.getElementById('bpm-musica').value.trim();
+            const notas = document.getElementById('notas-musica').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos!');
@@ -1810,6 +1973,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 nome: nome.toUpperCase(),
                 letra: letra,
                 bpm: bpm || null,
+                notas: notas || null,
                 noSetlist: false,
                 dataCriacao: new Date().toISOString()
             };
@@ -1840,6 +2004,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('edit-nome-musica').value = musica.nome;
             document.getElementById('edit-letra-musica').value = musica.letra;
             document.getElementById('edit-bpm-musica').value = musica.bpm || '';
+            document.getElementById('edit-notas-musica').value = musica.notas || '';
             document.getElementById('edit-modal').style.display = 'block';
             setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
         }
@@ -1854,6 +2019,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const nome = document.getElementById('edit-nome-musica').value.trim();
             const letra = document.getElementById('edit-letra-musica').value;
             const bpm = document.getElementById('edit-bpm-musica').value.trim();
+            const notas = document.getElementById('edit-notas-musica').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos!');
@@ -1876,6 +2042,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 nome: nome.toUpperCase(),
                 letra: letra,
                 bpm: bpm || null,
+                notas: notas || null,
                 dataModificacao: new Date().toISOString()
             };
 
@@ -1926,6 +2093,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('modal-title').textContent = musica.nome;
             document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
             document.getElementById('music-modal').style.display = 'block';
+            
+            // Verificar se a música está no setlist para mostrar os controles de navegação
+            const setlistIndex = setlist.indexOf(index);
+            const footer = document.getElementById('setlist-navigation');
+            if (setlistIndex !== -1) {
+                footer.style.display = 'block';
+                indiceMusicaAtual = setlistIndex;
+            } else {
+                footer.style.display = 'none';
+                indiceMusicaAtual = -1;
+            }
             
             // Resetar controles de scroll
             autoScrollAtivo = false;
@@ -1990,6 +2168,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('music-modal').style.display = 'none';
         }
 
+        // FUNÇÃO PARA MOSTRAR NOTAS
+        function mostrarNotas(nomeMusica, notas) {
+            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${nomeMusica}`;
+            document.getElementById('notes-content').textContent = notas;
+            document.getElementById('notes-modal').style.display = 'block';
+        }
+
+        function fecharNotesModal() {
+            document.getElementById('notes-modal').style.display = 'none';
+        }
+
         // FUNÇÕES DE BACKUP EM XML
         function exportarDados() {
             // Criar estrutura XML
@@ -2010,6 +2199,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 xml += `      <letra><![CDATA[${musica.letra}]]></letra>\n`;
                 if (musica.bpm) {
                     xml += `      <bpm>${musica.bpm}</bpm>\n`;
+                }
+                if (musica.notas) {
+                    xml += `      <notas><![CDATA[${musica.notas}]]></notas>\n`;
                 }
                 xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
                 if (musica.dataModificacao) {
@@ -2154,6 +2346,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
                     const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
                     
                     if (nome && letra) {
@@ -2161,6 +2354,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                             nome: nome,
                             letra: letra,
                             bpm: bpm || null,
+                            notas: notas || null,
                             noSetlist: false,
                             dataCriacao: dataCriacao,
                             fonte: fonte
@@ -2302,6 +2496,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                 ...musicaExistente,
                                 letra: musicaBackup.letra,
                                 bpm: musicaBackup.bpm || musicaExistente.bpm,
+                                notas: musicaBackup.notas || musicaExistente.notas,
                                 dataModificacao: new Date().toISOString()
                             });
                             musicasAtualizadas++;
@@ -2365,12 +2560,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
-                            bpm: bpm || null
+                            bpm: bpm || null,
+                            notas: notas || null
                         });
                     }
                 });
@@ -2403,7 +2600,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function calcularHash(musicasArray) {
             // Criar uma string única baseada nas músicas para comparação
-            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}`).join('');
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}`).join('');
             let hash = 0;
             for (let i = 0; i < dados.length; i++) {
                 const char = dados.charCodeAt(i);
@@ -2476,12 +2673,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
-                            bpm: bpm || null
+                            bpm: bpm || null,
+                            notas: notas || null
                         });
                     }
                 });
@@ -2567,6 +2766,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                     ...musicaExistente,
                                     letra: musicaOnline.letra,
                                     bpm: musicaOnline.bpm || musicaExistente.bpm,
+                                    notas: musicaOnline.notas || musicaExistente.notas,
                                     dataModificacao: new Date().toISOString()
                                 });
                                 musicasAtualizadas++;
@@ -2765,18 +2965,23 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • A- A A+ = Controles de tamanho da fonte
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
-• ⏮️ ⏭️ = Navegação no setlist durante apresentação
+• ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões grandes no rodapé)
 
 ➕ ADICIONAR MÚSICA:
 • Clique em "Adicionar Música"
-• Digite o nome, BPM (opcional) e cole a letra
+• Digite o nome, BPM (opcional), notas (opcional) e cole a letra
 • Use [R] para linhas em AMARELO
 • Use |D|, |G|, |C#m| para cifras em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
-• Altere o nome, BPM e/ou letra
+• Altere o nome, BPM, notas e/ou letra
 • Salve as alterações
+
+📝 NOTAS DE EXECUÇÃO:
+• Clique no ícone 📝 ao lado do BPM para ver as instruções de execução
+• As notas são exibidas em um modal separado
+• Útil para instruções específicas da banda
 
 ⭐ SETLIST (REPERTÓRIO DE SHOW):
 • Clique na estrela ☆ para adicionar música ao setlist
