@@ -3,10 +3,44 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-11-18T01:12:29.495Z</dataExportacao>
-    <totalMusicas>9</totalMusicas>
+    <dataExportacao>2025-11-18T13:08:15.902Z</dataExportacao>
+    <totalMusicas>10</totalMusicas>
   </info>
   <musicas>
+    <musica>
+      <nome><![CDATA[AO SOM DO ROCK’N’ROLL]]></nome>
+      <letra><![CDATA[[|E|]Segura a onda
+Não se deixe estourar          
+O mundo anda [|A|]torto
+Finjo [|E|]gostar
+
+[|B7 A E|]
+[R]Surtando bonito
+[R]Ao som do Rock’n’Roll
+[R]Se eu cair eu grito
+[R]Se eu dançar é show
+
+Riso na lata
+só pra agradar
+O caos tá na porta
+Mas eu sigo a rodar
+
+[R]REFRÃO
+
+Tá tudo errado
+Não tente mudar
+Mude de lado
+Desvie o olhar
+
+[R]REFRÃO
+
+Tá tudo errado
+Então deixa eu dançar
+
+[R]REFRÃO]]></letra>
+      <dataCriacao>2025-11-18T13:05:03.807Z</dataCriacao>
+      <dataModificacao>2025-11-18T13:07:28.774Z</dataModificacao>
+    </musica>
     <musica>
       <nome><![CDATA[DEIXA PRA LÁ]]></nome>
       <letra><![CDATA[
@@ -34,7 +68,6 @@ O RISO, O PRANTO — UMA ESTÁTICA REMOTA
 CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
 E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T01:12:15.503Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -70,7 +103,6 @@ E os donos do mundo, vão ter que cair!
 
 ]]></letra>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T01:03:51.700Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -320,7 +352,6 @@ QUER QUEBRAR O MURO?
 VOCÊ! VOCÊ!
 QUER VÊ-LO CAIR?]]></letra>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T01:05:58.420Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
