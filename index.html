@@ -409,10 +409,10 @@
             background: var(--cor-botao);
             color: var(--cor-primaria);
             border: 1px solid var(--cor-secundaria);
-            padding: 2px 4px;
+            padding: 2px 6px;
             border-radius: 3px;
             cursor: pointer;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             min-width: 20px;
         }
         
@@ -423,6 +423,14 @@
         .speed-btn.active {
             background: var(--cor-primaria);
             color: var(--cor-fundo);
+        }
+        
+        .speed-display {
+            color: var(--cor-primaria);
+            font-size: 0.7rem;
+            margin: 0 3px;
+            min-width: 15px;
+            text-align: center;
         }
         
         .view-mode-btn {
@@ -1252,13 +1260,9 @@
                         <button class="scroll-btn" id="scroll-toggle" onclick="toggleAutoScroll()" title="Auto Scroll">▶️ Scroll</button>
                     </div>
                     <div class="scroll-speed-controls" id="speed-controls" style="display: none;">
-                        <button class="speed-btn" onclick="setScrollSpeed(1)" title="Muito Muito Lento">🐌</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(2)" title="Muito Lento">🐢🐢</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(3)" title="Lento">🐢</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(4)" title="Normal-Lento">🚶🐢</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(5)" title="Normal">🚶</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
-                        <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
+                        <button class="speed-btn" onclick="changeScrollSpeed(-1)" title="Diminuir velocidade">-</button>
+                        <span class="speed-display" id="current-speed-display">1</span>
+                        <button class="speed-btn" onclick="changeScrollSpeed(1)" title="Aumentar velocidade">+</button>
                     </div>
                     <!-- BOTÃO DO METRÔNOMO ADICIONADO AQUI -->
                     <div class="metronome-controls">
@@ -1575,7 +1579,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let tamanhoFonteBase = 16;
         let autoScrollAtivo = false;
         let scrollInterval = null;
-        let scrollSpeed = 5; // 5 será a velocidade "normal" (meio da escala)
+        let scrollSpeed = 1; // AGORA INICIA NA VELOCIDADE MAIS LENTA (1)
         
         // Variáveis para controle de importação
         let dadosImportacao = null;
@@ -1946,6 +1950,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 botao.innerHTML = '⏳ Scroll';
                 controlesVelocidade.style.display = 'flex';
                 
+                // Atualizar o display da velocidade
+                atualizarDisplayVelocidade();
+                
                 // Mostrar mensagem informando sobre o delay
                 const lyricsContent = document.getElementById('lyrics-content');
                 if (lyricsContent) {
@@ -1975,22 +1982,29 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
+        // NOVA FUNÇÃO PARA MUDAR VELOCIDADE COM BOTÕES +/-
+        function changeScrollSpeed(change) {
+            const newSpeed = Math.max(1, Math.min(7, scrollSpeed + change));
+            setScrollSpeed(newSpeed);
+        }
+
         function setScrollSpeed(velocidade) {
             scrollSpeed = velocidade;
             
-            // Atualizar botões de velocidade
-            document.querySelectorAll('.speed-btn').forEach((btn, index) => {
-                if (index + 1 === velocidade) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
+            // Atualizar o display da velocidade
+            atualizarDisplayVelocidade();
             
             // Reiniciar scroll se estiver ativo
             if (autoScrollAtivo) {
                 pararAutoScroll();
                 iniciarAutoScroll();
+            }
+        }
+
+        function atualizarDisplayVelocidade() {
+            const speedDisplay = document.getElementById('current-speed-display');
+            if (speedDisplay) {
+                speedDisplay.textContent = scrollSpeed;
             }
         }
 
@@ -2006,15 +2020,15 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 modalBody.scrollTop = 0;
             }
             
-            // AGORA TEMOS MAIS VELOCIDADES LENTAS:
+            // VELOCIDADES MAIS LENTAS E GRADATIVAS:
             const velocidades = {
-                1: 0.3,   // Muito muito lento
-                2: 0.6,   // Muito lento
-                3: 1,     // Lento
-                4: 1.5,   // Normal-lento
-                5: 2,     // Normal
-                6: 3,     // Rápido
-                7: 4      // Muito rápido
+                1: 0.2,   // Muito muito lento
+                2: 0.4,   // Muito lento
+                3: 0.8,   // Lento
+                4: 1.2,   // Normal-lento
+                5: 1.8,   // Normal
+                6: 2.5,   // Rápido
+                7: 3.5    // Muito rápido
             };
             
             pararAutoScroll(); // Garantir que não há intervalos duplicados
@@ -2432,6 +2446,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
             const speedControls = document.getElementById('speed-controls');
             if (speedControls) speedControls.style.display = 'none';
+            
+            // Resetar velocidade para a mais lenta
+            scrollSpeed = 1;
+            atualizarDisplayVelocidade();
             
             // Resetar metrônomo
             if (metronomeAtivo) {
@@ -3389,7 +3407,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 👁️ VISUALIZAR MÚSICA:
 • A- A A+ = Controles de tamanho da fonte (agora funcionam em ambos os modos)
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
-• 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
+• - 1 + = Controles simples de velocidade (1-7, inicia na mais lenta)
 • ♫ Metrônomo = Inicia/para metrônomo no BPM da música (requer BPM definido)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
 • 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
@@ -3457,7 +3475,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
 ⏰ AUTO SCROLL:
 • Inicia automaticamente após 10 segundos
-• 7 velocidades diferentes
+• 7 velocidades diferentes (inicia na mais lenta)
+• Controles simples com - e +
 • Mais opções de velocidade lenta para melhor controle
 
 💡 DICAS DE FORMATAÇÃO:
