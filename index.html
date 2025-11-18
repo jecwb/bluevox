@@ -905,6 +905,17 @@
             transform: translateX(5px);
             text-decoration: underline;
         }
+
+        /* Botão para adicionar conteúdo multimídia */
+        .btn-multimidia {
+            background: #663300;
+            border-color: #ff8800;
+            margin: 5px 0;
+        }
+
+        .btn-multimidia:hover {
+            background: #884400;
+        }
         
         @keyframes pulse {
             0% { border-color: var(--cor-primaria); }
@@ -1236,29 +1247,6 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="links-multimidia">LINKS MULTIMÍDIA (opcional):</label>
-                        <textarea id="links-multimidia" class="form-input" 
-                                  placeholder="Cole aqui links de vídeos, áudios, etc. (um por linha)
-
-Exemplo:
-https://youtube.com/video-da-musica
-https://soundcloud.com/audio-da-musica
-https://drive.google.com/link-para-partitura
-
-💡 Um link por linha. Serão exibidos na área multimídia protegida por senha." 
-                                  rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="info-banda">INFORMAÇÕES INTERNAS DA BANDA (opcional):</label>
-                        <textarea id="info-banda" class="form-input" 
-                                  placeholder="Anotações privadas, instruções específicas, detalhes de arranjo, etc.
-
-💡 Estas informações só aparecem na área multimídia protegida por senha." 
-                                  rows="3"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
                         <label for="letra-musica">LETRA DA MÚSICA:</label>
                         <textarea id="letra-musica" class="form-input form-textarea" required 
                                   placeholder="Cole aqui a letra completa...
@@ -1305,29 +1293,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="form-group">
                         <label for="edit-notas-musica">NOTAS (opcional):</label>
                         <textarea id="edit-notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="edit-links-multimidia">LINKS MULTIMÍDIA (opcional):</label>
-                        <textarea id="edit-links-multimidia" class="form-input" 
-                                  placeholder="Cole aqui links de vídeos, áudios, etc. (um por linha)
-
-Exemplo:
-https://youtube.com/video-da-musica
-https://soundcloud.com/audio-da-musica
-https://drive.google.com/link-para-partitura
-
-💡 Um link por linha. Serão exibidos na área multimídia protegida por senha." 
-                                  rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-info-banda">INFORMAÇÕES INTERNAS DA BANDA (opcional):</label>
-                        <textarea id="edit-info-banda" class="form-input" 
-                                  placeholder="Anotações privadas, instruções específicas, detalhes de arranjo, etc.
-
-💡 Estas informações só aparecem na área multimídia protegida por senha." 
-                                  rows="3"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -1574,8 +1539,28 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             </div>
             <div class="modal-body">
                 <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
+                    <div class="backup-options">
+                        <button class="btn btn-multimidia" onclick="mostrarGerenciadorMultimidia()">
+                            🎵 Gerenciar Conteúdo Multimídia
+                        </button>
+                    </div>
                     <!-- Conteúdo será preenchido via JavaScript -->
                     <div id="conteudo-multimidia"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GERENCIADOR MULTIMÍDIA -->
+    <div id="gerenciador-multimidia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎵 GERENCIAR CONTEÚDO MULTIMÍDIA</h2>
+                <button class="close" onclick="fecharGerenciadorMultimidia()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
+                    <div id="conteudo-gerenciador-multimidia"></div>
                 </div>
             </div>
         </div>
@@ -1608,6 +1593,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         // Configurações de multimídia
         const SENHA_MULTIMIDIA = "Ymx1M3YweEAyMDI1"; // blu3v0x@2025 em base64
+        let multimidiaData = {}; // Objeto para armazenar dados multimídia privados
 
         const temas = {
             green: {
@@ -1678,6 +1664,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 } catch (e) {
                     console.error('Erro ao carregar músicas:', e);
                     musicas = [];
+                }
+            }
+
+            // Carregar dados multimídia
+            const multimidiaSalvo = localStorage.getItem('multimidiaData');
+            if (multimidiaSalvo) {
+                try {
+                    multimidiaData = JSON.parse(multimidiaSalvo);
+                } catch (e) {
+                    console.error('Erro ao carregar dados multimídia:', e);
+                    multimidiaData = {};
                 }
             }
 
@@ -2072,6 +2069,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharUpdateModal();
                     fecharLoginMultimidiaModal();
                     fecharMultimidiaModal();
+                    fecharGerenciadorMultimidia();
                 }
             });
 
@@ -2088,6 +2086,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharUpdateModal();
                     fecharLoginMultimidiaModal();
                     fecharMultimidiaModal();
+                    fecharGerenciadorMultimidia();
                 }
             });
 
@@ -2206,8 +2205,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const letra = document.getElementById('letra-musica').value;
             const bpm = document.getElementById('bpm-musica').value.trim();
             const notas = document.getElementById('notas-musica').value.trim();
-            const linksMultimidia = document.getElementById('links-multimidia').value.trim();
-            const infoBanda = document.getElementById('info-banda').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos obrigatórios!');
@@ -2224,8 +2221,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 letra: letra,
                 bpm: bpm || null,
                 notas: notas || null,
-                linksMultimidia: linksMultimidia || null,
-                infoBanda: infoBanda || null,
                 noSetlist: false,
                 dataCriacao: new Date().toISOString()
             };
@@ -2257,8 +2252,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('edit-letra-musica').value = musica.letra;
             document.getElementById('edit-bpm-musica').value = musica.bpm || '';
             document.getElementById('edit-notas-musica').value = musica.notas || '';
-            document.getElementById('edit-links-multimidia').value = musica.linksMultimidia || '';
-            document.getElementById('edit-info-banda').value = musica.infoBanda || '';
             document.getElementById('edit-modal').style.display = 'block';
             setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
         }
@@ -2274,8 +2267,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const letra = document.getElementById('edit-letra-musica').value;
             const bpm = document.getElementById('edit-bpm-musica').value.trim();
             const notas = document.getElementById('edit-notas-musica').value.trim();
-            const linksMultimidia = document.getElementById('edit-links-multimidia').value.trim();
-            const infoBanda = document.getElementById('edit-info-banda').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos obrigatórios!');
@@ -2299,8 +2290,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 letra: letra,
                 bpm: bpm || null,
                 notas: notas || null,
-                linksMultimidia: linksMultimidia || null,
-                infoBanda: infoBanda || null,
                 dataModificacao: new Date().toISOString()
             };
 
@@ -2332,6 +2321,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     if (indiceMusicaAtual >= setlistIndex) {
                         indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
                     }
+                }
+                
+                // Remover dados multimídia se existirem
+                if (multimidiaData[nomeMusica.toUpperCase()]) {
+                    delete multimidiaData[nomeMusica.toUpperCase()];
+                    salvarDadosMultimidia();
                 }
                 
                 musicas.splice(index, 1);
@@ -2550,11 +2545,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 if (musica.notas) {
                     xml += `      <notas><![CDATA[${musica.notas}]]></notas>\n`;
                 }
-                if (musica.linksMultimidia) {
-                    xml += `      <linksMultimidia><![CDATA[${musica.linksMultimidia}]]></linksMultimidia>\n`;
-                }
-                if (musica.infoBanda) {
-                    xml += `      <infoBanda><![CDATA[${musica.infoBanda}]]></infoBanda>\n`;
+                // Incluir dados multimídia codificados, se existirem
+                const dadosMultimidia = multimidiaData[musica.nome.toUpperCase()];
+                if (dadosMultimidia) {
+                    const dadosCodificados = codificarDadosMultimidia(dadosMultimidia);
+                    xml += `      <multimidia><![CDATA[${dadosCodificados}]]></multimidia>\n`;
                 }
                 xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
                 if (musica.dataModificacao) {
@@ -2700,8 +2695,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
-                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
-                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
+                    const multimidiaCodificado = musicaNode.querySelector('multimidia')?.textContent || '';
                     const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
                     
                     if (nome && letra) {
@@ -2710,12 +2704,16 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                             letra: letra,
                             bpm: bpm || null,
                             notas: notas || null,
-                            linksMultimidia: linksMultimidia || null,
-                            infoBanda: infoBanda || null,
                             noSetlist: false,
                             dataCriacao: dataCriacao,
                             fonte: fonte
                         });
+
+                        // Se houver dados multimídia codificados, decodificar
+                        if (multimidiaCodificado) {
+                            const dadosDecodificados = decodificarDadosMultimidia(multimidiaCodificado);
+                            multimidiaData[nome.toUpperCase()] = dadosDecodificados;
+                        }
                     }
                 });
                 
@@ -2725,6 +2723,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
                 // Salvar dados para uso posterior
                 dadosImportacao = musicasImportadas;
+                
+                // Salvar dados multimídia
+                salvarDadosMultimidia();
                 
                 // Mostrar modal de opções de importação
                 mostrarOpcoesImportacao(musicasImportadas.length);
@@ -2854,8 +2855,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                 letra: musicaBackup.letra,
                                 bpm: musicaBackup.bpm || musicaExistente.bpm,
                                 notas: musicaBackup.notas || musicaExistente.notas,
-                                linksMultimidia: musicaBackup.linksMultimidia || musicaExistente.linksMultimidia,
-                                infoBanda: musicaBackup.infoBanda || musicaExistente.infoBanda,
                                 dataModificacao: new Date().toISOString()
                             });
                             musicasAtualizadas++;
@@ -2920,18 +2919,21 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
-                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
-                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
+                    const multimidiaCodificado = musicaNode.querySelector('multimidia')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
                             bpm: bpm || null,
-                            notas: notas || null,
-                            linksMultimidia: linksMultimidia || null,
-                            infoBanda: infoBanda || null
+                            notas: notas || null
                         });
+
+                        // Se houver dados multimídia codificados, decodificar
+                        if (multimidiaCodificado) {
+                            const dadosDecodificados = decodificarDadosMultimidia(multimidiaCodificado);
+                            multimidiaData[nome.toUpperCase()] = dadosDecodificados;
+                        }
                     }
                 });
                 
@@ -2963,7 +2965,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function calcularHash(musicasArray) {
             // Criar uma string única baseada nas músicas para comparação
-            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}${m.linksMultimidia || ''}${m.infoBanda || ''}`).join('');
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}`).join('');
             let hash = 0;
             for (let i = 0; i < dados.length; i++) {
                 const char = dados.charCodeAt(i);
@@ -3037,18 +3039,21 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
-                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
-                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
+                    const multimidiaCodificado = musicaNode.querySelector('multimidia')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
                             bpm: bpm || null,
-                            notas: notas || null,
-                            linksMultimidia: linksMultimidia || null,
-                            infoBanda: infoBanda || null
+                            notas: notas || null
                         });
+
+                        // Se houver dados multimídia codificados, decodificar
+                        if (multimidiaCodificado) {
+                            const dadosDecodificados = decodificarDadosMultimidia(multimidiaCodificado);
+                            multimidiaData[nome.toUpperCase()] = dadosDecodificados;
+                        }
                     }
                 });
                 
@@ -3058,6 +3063,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 
                 // Salvar dados online
                 localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
+                
+                // Salvar dados multimídia
+                salvarDadosMultimidia();
                 
                 // Mostrar modal de opções
                 document.getElementById('update-count').textContent = musicasOnline.length;
@@ -3134,8 +3142,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                     letra: musicaOnline.letra,
                                     bpm: musicaOnline.bpm || musicaExistente.bpm,
                                     notas: musicaOnline.notas || musicaExistente.notas,
-                                    linksMultimidia: musicaOnline.linksMultimidia || musicaExistente.linksMultimidia,
-                                    infoBanda: musicaOnline.infoBanda || musicaExistente.infoBanda,
                                     dataModificacao: new Date().toISOString()
                                 });
                                 musicasAtualizadas++;
@@ -3315,7 +3321,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         // FUNÇÃO PARA RESETAR O APLICATIVO
         function resetarAplicativo() {
-            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n• Setlist atual\n\nTem certeza que deseja resetar o aplicativo?')) {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n• Setlist atual\n• Dados multimídia\n\nTem certeza que deseja resetar o aplicativo?')) {
                 // Limpar todos os dados do localStorage
                 localStorage.clear();
                 
@@ -3356,12 +3362,35 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
+        // Função para salvar dados multimídia
+        function salvarDadosMultimidia() {
+            localStorage.setItem('multimidiaData', JSON.stringify(multimidiaData));
+        }
+
+        // Função para codificar dados multimídia (embaralhar)
+        function codificarDadosMultimidia(dados) {
+            // Converter para string JSON e depois para base64
+            const jsonString = JSON.stringify(dados);
+            return btoa(unescape(encodeURIComponent(jsonString)));
+        }
+
+        // Função para decodificar dados multimídia
+        function decodificarDadosMultimidia(dadosCodificados) {
+            try {
+                const jsonString = decodeURIComponent(escape(atob(dadosCodificados)));
+                return JSON.parse(jsonString);
+            } catch (e) {
+                console.error('Erro ao decodificar dados multimídia:', e);
+                return { links: '', infoBanda: '' };
+            }
+        }
+
         function mostrarMultimidia() {
             const conteudo = document.getElementById('conteudo-multimidia');
             
             // Coletar todas as músicas com conteúdo multimídia
             const musicasComMultimidia = musicas.filter(musica => 
-                musica.linksMultimidia || musica.infoBanda
+                multimidiaData[musica.nome.toUpperCase()]
             );
             
             if (musicasComMultimidia.length === 0) {
@@ -3369,26 +3398,32 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="empty-state">
                         <h2>🎵 Nenhum conteúdo multimídia encontrado</h2>
                         <p>Adicione links e informações internas nas músicas para vê-los aqui.</p>
-                        <button class="btn" onclick="fecharMultimidiaModal()">
-                            Fechar
-                        </button>
+                        <div class="backup-options">
+                            <button class="btn btn-multimidia" onclick="mostrarGerenciadorMultimidia()">
+                                🎵 Adicionar Conteúdo Multimídia
+                            </button>
+                        </div>
                     </div>
                 `;
             } else {
                 let html = '<div class="multimidia-container">';
                 
                 musicasComMultimidia.forEach((musica, index) => {
+                    const dados = multimidiaData[musica.nome.toUpperCase()];
                     html += `
                         <div class="music-item" style="margin-bottom: 20px;">
                             <div class="music-info">
                                 <div class="music-name">${musica.nome}</div>
                             </div>
+                            <div class="music-actions">
+                                <button class="action-btn edit-btn" onclick="editarDadosMultimidia('${musica.nome.replace(/'/g, "\\'")}')" title="Editar conteúdo multimídia">✏️</button>
+                            </div>
                         </div>
                     `;
                     
                     // Links de multimídia
-                    if (musica.linksMultimidia) {
-                        const links = musica.linksMultimidia.split('\n').filter(link => link.trim());
+                    if (dados.links) {
+                        const links = dados.links.split('\n').filter(link => link.trim());
                         if (links.length > 0) {
                             html += '<div style="margin: 10px 0 15px 20px;">';
                             html += '<strong style="color: var(--cor-primaria);">🔗 Links:</strong>';
@@ -3411,12 +3446,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     }
                     
                     // Informações da banda
-                    if (musica.infoBanda) {
+                    if (dados.infoBanda) {
                         html += `
                             <div style="margin: 10px 0 15px 20px;">
                                 <strong style="color: var(--cor-primaria);">📝 Informações Internas:</strong>
                                 <div style="background: #111; padding: 10px; border-radius: 5px; margin-top: 5px; border: 1px solid var(--cor-secundaria);">
-                                    ${musica.infoBanda.replace(/\n/g, '<br>')}
+                                    ${dados.infoBanda.replace(/\n/g, '<br>')}
                                 </div>
                             </div>
                         `;
@@ -3434,6 +3469,140 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function fecharMultimidiaModal() {
             document.getElementById('multimidia-modal').style.display = 'none';
+        }
+
+        // Função para mostrar o gerenciador de multimídia
+        function mostrarGerenciadorMultimidia() {
+            const conteudo = document.getElementById('conteudo-gerenciador-multimidia');
+            
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <p style="color: var(--cor-secundaria); text-align: center;">
+                        Selecione uma música para adicionar ou editar conteúdo multimídia
+                    </p>
+                </div>
+                <div class="music-list">
+            `;
+            
+            if (musicas.length === 0) {
+                html += `
+                    <div class="empty-state">
+                        <h2>🎵 Nenhuma música encontrada</h2>
+                        <p>Adicione músicas ao repertório primeiro.</p>
+                    </div>
+                `;
+            } else {
+                musicas.forEach((musica, index) => {
+                    const temConteudo = multimidiaData[musica.nome.toUpperCase()];
+                    html += `
+                        <div class="music-item">
+                            <div class="music-info">
+                                <div class="music-name">${musica.nome}</div>
+                                ${temConteudo ? '<div class="music-notes" style="background: #006600;">🎬</div>' : ''}
+                            </div>
+                            <div class="music-actions">
+                                <button class="action-btn ${temConteudo ? 'edit-btn' : 'btn-multimidia'}" 
+                                        onclick="editarDadosMultimidia('${musica.nome.replace(/'/g, "\\'")}')"
+                                        title="${temConteudo ? 'Editar conteúdo multimídia' : 'Adicionar conteúdo multimídia'}">
+                                    ${temConteudo ? '✏️' : '➕'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += '</div>';
+            conteudo.innerHTML = html;
+            
+            document.getElementById('gerenciador-multimidia-modal').style.display = 'block';
+        }
+
+        function fecharGerenciadorMultimidia() {
+            document.getElementById('gerenciador-multimidia-modal').style.display = 'none';
+        }
+
+        // Função para editar dados multimídia de uma música específica
+        function editarDadosMultimidia(nomeMusica) {
+            const dadosAtuais = multimidiaData[nomeMusica.toUpperCase()] || { links: '', infoBanda: '' };
+            
+            // Fechar o gerenciador primeiro
+            fecharGerenciadorMultimidia();
+            
+            // Criar modal de edição
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>🎬 EDITAR MULTIMÍDIA: ${nomeMusica}</h2>
+                        <button class="close" onclick="fecharModalMultimidia()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-multimidia" class="config-form">
+                            <div class="form-group">
+                                <label for="links-multimidia">LINKS MULTIMÍDIA (um por linha):</label>
+                                <textarea id="links-multimidia" class="form-input" rows="5" placeholder="Cole aqui links de vídeos, áudios, etc. (um por linha)
+
+Exemplo:
+https://youtube.com/video-da-musica
+https://soundcloud.com/audio-da-musica
+https://drive.google.com/link-para-partitura">${dadosAtuais.links || ''}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="info-banda">INFORMAÇÕES INTERNAS DA BANDA:</label>
+                                <textarea id="info-banda" class="form-input" rows="5" placeholder="Anotações privadas, instruções específicas, detalhes de arranjo, etc.">${dadosAtuais.infoBanda || ''}</textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="fecharModalMultimidia()">Cancelar</button>
+                                <button type="submit" class="btn btn-add">💾 Salvar</button>
+                                ${dadosAtuais.links || dadosAtuais.infoBanda ? 
+                                    '<button type="button" class="btn btn-delete" onclick="excluirDadosMultimidia(\'' + nomeMusica.replace(/'/g, "\\'") + '\')">🗑️ Excluir Conteúdo</button>' : 
+                                    ''}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Fechar modal
+            window.fecharModalMultimidia = function() {
+                document.body.removeChild(modal);
+                // Reabrir o gerenciador
+                setTimeout(() => mostrarGerenciadorMultimidia(), 300);
+            };
+
+            // Submeter formulário
+            document.getElementById('form-multimidia').onsubmit = function(e) {
+                e.preventDefault();
+                const links = document.getElementById('links-multimidia').value;
+                const infoBanda = document.getElementById('info-banda').value;
+
+                // Salvar dados
+                multimidiaData[nomeMusica.toUpperCase()] = {
+                    links: links,
+                    infoBanda: infoBanda
+                };
+                salvarDadosMultimidia();
+
+                // Fechar modal e recarregar a visualização
+                fecharModalMultimidia();
+                
+                // Feedback
+                alert(`✅ Conteúdo multimídia para "${nomeMusica}" salvo com sucesso!`);
+            };
+        }
+
+        // Função para excluir dados multimídia
+        function excluirDadosMultimidia(nomeMusica) {
+            if (confirm(`Tem certeza que deseja excluir todo o conteúdo multimídia de "${nomeMusica}"?`)) {
+                delete multimidiaData[nomeMusica.toUpperCase()];
+                salvarDadosMultimidia();
+                fecharModalMultimidia();
+                alert(`✅ Conteúdo multimídia de "${nomeMusica}" excluído com sucesso!`);
+            }
         }
 
         function mostrarAjuda() {
@@ -3467,10 +3636,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Modo Tablet = Visualização em retrato, ideal para tablets e celulares
 • Modo Notebook = Visualização em paisagem com colunas, ideal para notebooks
 
-🎬 MULTIMÍDIA:
-• Área restrita com senha para integrantes da banda
-• Contém links de vídeos, áudios e informações internas
-• Senha: blu3v0x@2025
+🎬 MULTIMÍDIA (ÁREA PROTEGIDA):
+• Acesso com senha: blu3v0x@2025
+• Conteúdo seguro: links e informações aparecem apenas na área protegida
+• Dados codificados no backup XML para segurança
+• Gerenciador dedicado para adicionar/editar conteúdo multimídia
 
 ⭐ SETLIST (REPERTÓRIO DE SHOW):
 • Clique na estrela ☆ para adicionar música ao setlist
