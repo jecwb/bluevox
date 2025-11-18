@@ -195,11 +195,6 @@
             border-color: #0066cc;
         }
         
-        .delete-btn {
-            background: #660000;
-            border-color: #ff4444;
-        }
-        
         .controls {
             display: flex;
             flex-direction: column;
@@ -240,6 +235,16 @@
         .btn-secondary {
             background: #333333;
             border-color: #666666;
+        }
+        
+        .btn-delete {
+            background: #660000;
+            border-color: #ff4444;
+            color: #ff8888;
+        }
+        
+        .btn-delete:hover {
+            background: #770000;
         }
         
         .btn-install {
@@ -420,6 +425,27 @@
             color: var(--cor-fundo);
         }
         
+        .view-mode-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+        
+        .view-mode-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .view-mode-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
         .close {
             color: var(--cor-primaria);
             font-size: 16px;
@@ -453,7 +479,21 @@
             margin: 0;
             box-sizing: border-box;
             color: var(--cor-texto);
-            transition: font-size 0.3s ease;
+            transition: all 0.3s ease;
+        }
+
+        /* Modo Paisagem - Colunas */
+        .lyrics-content.landscape {
+            column-count: 2;
+            column-gap: 40px;
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        .lyrics-content.landscape .yellow-line,
+        .lyrics-content.landscape .normal-line {
+            break-inside: avoid;
+            margin-bottom: 15px;
         }
 
         .yellow-line {
@@ -522,6 +562,7 @@
         
         .form-actions {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             justify-content: flex-end;
             margin-top: 25px;
@@ -843,11 +884,12 @@
             .controls { flex-direction: column; }
             .btn { width: 100%; padding: 14px 16px; }
             .modal-header { padding: 5px 8px; }
-            .font-btn, .scroll-btn, .speed-btn { transform: scale(0.9); }
+            .font-btn, .scroll-btn, .speed-btn, .view-mode-btn { transform: scale(0.9); }
             .backup-options { flex-direction: column; }
             .setlist-controls { flex-direction: column; }
             .navigation-controls { flex-direction: column; }
             .nav-btn { max-width: none; }
+            .lyrics-content.landscape { column-count: 1; }
         }
         
         @media (max-width: 600px) {
@@ -866,7 +908,7 @@
         
         @media (max-width: 400px) {
             .modal-header { padding: 5px 5px; }
-            .font-controls-header, .scroll-controls, .scroll-speed-controls { 
+            .font-controls-header, .scroll-controls, .scroll-speed-controls, .view-mode-controls { 
                 transform: scale(0.8); 
             }
             .btn { padding: 18px 16px; font-size: 0.95rem; }
@@ -887,6 +929,33 @@
             text-align: center;
             border-bottom: 1px solid var(--cor-secundaria);
             padding-bottom: 5px;
+        }
+
+        /* Estilos para os modos de visualização */
+        .view-mode-controls {
+            display: flex;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .view-mode-option {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-mode-option:hover {
+            background: var(--cor-hover);
+        }
+
+        .view-mode-option.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
         }
     </style>
 </head>
@@ -985,6 +1054,17 @@
                 </button>
             </div>
 
+            <div class="section-title">VISUALIZAÇÃO</div>
+            
+            <div class="backup-options">
+                <button class="btn" onclick="aplicarModoVisualizacao('tablet')" id="modo-tablet-btn">
+                    📱 Modo Tablet
+                </button>
+                <button class="btn" onclick="aplicarModoVisualizacao('notebook')" id="modo-notebook-btn">
+                    💻 Modo Notebook
+                </button>
+            </div>
+
             <div class="section-title">BACKUP E DADOS</div>
             
             <div class="backup-options">
@@ -1057,6 +1137,9 @@
                         <button class="speed-btn" onclick="setScrollSpeed(5)" title="Normal">🚶</button>
                         <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
                         <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
+                    </div>
+                    <div class="view-mode-controls">
+                        <button class="view-mode-btn" id="view-mode-toggle" onclick="toggleViewMode()" title="Alternar modo de visualização">🔄 Visualização</button>
                     </div>
                 </div>
                 <button class="close" onclick="fecharModal()">&times;</button>
@@ -1169,6 +1252,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" onclick="fecharEditModal()">Cancelar</button>
                         <button type="submit" class="btn btn-add">💾 Atualizar Música</button>
+                        <button type="button" class="btn btn-delete" onclick="excluirMusicaEdicao()">🗑️ Excluir Música</button>
                     </div>
                 </form>
             </div>
@@ -1376,6 +1460,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let setlist = [];
         let indiceMusicaAtual = -1;
 
+        // Variáveis para modos de visualização
+        let modoVisualizacaoAtual = 'retrato'; // 'retrato' ou 'paisagem'
+        let modoDispositivo = 'tablet'; // 'tablet' ou 'notebook'
+
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
 
@@ -1462,6 +1550,19 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const indiceSalvo = localStorage.getItem('indiceMusicaAtual');
             if (indiceSalvo !== null) {
                 indiceMusicaAtual = parseInt(indiceSalvo);
+            }
+
+            // Carregar modo de visualização
+            const modoVisualizacaoSalvo = localStorage.getItem('modoVisualizacao');
+            if (modoVisualizacaoSalvo) {
+                modoVisualizacaoAtual = modoVisualizacaoSalvo;
+            }
+
+            // Carregar modo de dispositivo
+            const modoDispositivoSalvo = localStorage.getItem('modoDispositivo');
+            if (modoDispositivoSalvo) {
+                modoDispositivo = modoDispositivoSalvo;
+                atualizarBotoesModoDispositivo();
             }
 
             // Configurar eventos GLOBAIS (só uma vez)
@@ -1921,7 +2022,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                             ${musica.noSetlist ? '⭐' : '☆'}
                         </button>
                         <button class="action-btn edit-btn" onclick="event.stopPropagation(); editarMusicaForm(${index})" title="Editar música">✏️</button>
-                        <button class="action-btn delete-btn" onclick="event.stopPropagation(); removerMusica(${index})" title="Remover música">×</button>
                     </div>
                 </div>
             `).join('');
@@ -2061,11 +2161,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             fecharEditModal();
         }
 
-        function removerMusica(index) {
+        // NOVA FUNÇÃO PARA EXCLUIR MÚSICA DA TELA DE EDIÇÃO
+        function excluirMusicaEdicao() {
+            const index = document.getElementById('edit-index').value;
             const nomeMusica = musicas[index].nome;
-            if (confirm(`Tem certeza que deseja remover "${nomeMusica}"?`)) {
+            
+            if (confirm(`Tem certeza que deseja excluir permanentemente a música "${nomeMusica}"?`)) {
                 // Remover do setlist se estiver lá
-                const setlistIndex = setlist.indexOf(index);
+                const setlistIndex = setlist.indexOf(parseInt(index));
                 if (setlistIndex !== -1) {
                     setlist.splice(setlistIndex, 1);
                     if (indiceMusicaAtual >= setlistIndex) {
@@ -2077,12 +2180,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 salvarMusicas();
                 exibirListaMusicas();
                 exibirSetlist();
+                fecharEditModal();
                 
                 // Feedback visual
                 const lista = document.getElementById('music-list');
                 const successMsg = document.createElement('div');
                 successMsg.className = 'success';
-                successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" removida com sucesso!`;
+                successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" excluída com sucesso!`;
                 lista.insertBefore(successMsg, lista.firstChild);
                 setTimeout(() => successMsg.remove(), 3000);
             }
@@ -2093,6 +2197,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('modal-title').textContent = musica.nome;
             document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
             document.getElementById('music-modal').style.display = 'block';
+            
+            // Aplicar modo de visualização salvo
+            aplicarModoVisualizacaoAtual();
             
             // Verificar se a música está no setlist para mostrar os controles de navegação
             const setlistIndex = setlist.indexOf(index);
@@ -2177,6 +2284,80 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function fecharNotesModal() {
             document.getElementById('notes-modal').style.display = 'none';
+        }
+
+        // FUNÇÕES DE MODOS DE VISUALIZAÇÃO
+        function toggleViewMode() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const botao = document.getElementById('view-mode-toggle');
+            
+            if (modoVisualizacaoAtual === 'retrato') {
+                modoVisualizacaoAtual = 'paisagem';
+                lyricsContent.classList.add('landscape');
+                botao.classList.add('active');
+                botao.innerHTML = '📱 Retrato';
+            } else {
+                modoVisualizacaoAtual = 'retrato';
+                lyricsContent.classList.remove('landscape');
+                botao.classList.remove('active');
+                botao.innerHTML = '🔄 Paisagem';
+            }
+            
+            localStorage.setItem('modoVisualizacao', modoVisualizacaoAtual);
+        }
+
+        function aplicarModoVisualizacaoAtual() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const botao = document.getElementById('view-mode-toggle');
+            
+            if (modoVisualizacaoAtual === 'paisagem') {
+                lyricsContent.classList.add('landscape');
+                botao.classList.add('active');
+                botao.innerHTML = '📱 Retrato';
+            } else {
+                lyricsContent.classList.remove('landscape');
+                botao.classList.remove('active');
+                botao.innerHTML = '🔄 Paisagem';
+            }
+        }
+
+        function aplicarModoVisualizacao(modo) {
+            modoDispositivo = modo;
+            localStorage.setItem('modoDispositivo', modo);
+            
+            // Aplicar configurações específicas do modo
+            if (modo === 'notebook') {
+                // Modo Notebook - padrão para paisagem
+                modoVisualizacaoAtual = 'paisagem';
+                localStorage.setItem('modoVisualizacao', 'paisagem');
+            } else {
+                // Modo Tablet - padrão para retrato
+                modoVisualizacaoAtual = 'retrato';
+                localStorage.setItem('modoVisualizacao', 'retrato');
+            }
+            
+            // Aplicar visualização se o modal estiver aberto
+            if (document.getElementById('music-modal').style.display === 'block') {
+                aplicarModoVisualizacaoAtual();
+            }
+            
+            atualizarBotoesModoDispositivo();
+            
+            // Feedback visual
+            alert(`✅ Modo ${modo === 'notebook' ? 'Notebook' : 'Tablet'} ativado!`);
+        }
+
+        function atualizarBotoesModoDispositivo() {
+            const tabletBtn = document.getElementById('modo-tablet-btn');
+            const notebookBtn = document.getElementById('modo-notebook-btn');
+            
+            if (modoDispositivo === 'tablet') {
+                tabletBtn.classList.add('active');
+                notebookBtn.classList.remove('active');
+            } else {
+                notebookBtn.classList.add('active');
+                tabletBtn.classList.remove('active');
+            }
         }
 
         // FUNÇÕES DE BACKUP EM XML
@@ -2966,6 +3147,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões grandes no rodapé)
+• 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
 
 ➕ ADICIONAR MÚSICA:
 • Clique em "Adicionar Música"
@@ -2977,20 +3159,22 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Clique no ícone ✏️ ao lado da música
 • Altere o nome, BPM, notas e/ou letra
 • Salve as alterações
+• Use o botão "🗑️ Excluir Música" para remover a música
 
 📝 NOTAS DE EXECUÇÃO:
 • Clique no ícone 📝 ao lado do BPM para ver as instruções de execução
 • As notas são exibidas em um modal separado
 • Útil para instruções específicas da banda
 
+📱💻 MODOS DE VISUALIZAÇÃO:
+• Modo Tablet = Visualização em retrato, ideal para tablets e celulares
+• Modo Notebook = Visualização em paisagem com colunas, ideal para notebooks
+
 ⭐ SETLIST (REPERTÓRIO DE SHOW):
 • Clique na estrela ☆ para adicionar música ao setlist
 • A estrela ficará ⭐ quando a música estiver no setlist
 • Use os botões ⏮️ e ⏭️ para navegar durante o show
 • Use "Limpar Setlist" para remover todas as músicas
-
-🗑️ REMOVER MÚSICA:
-• Clique no × vermelho ao lado da música
 
 💾 BACKUP:
 • EXPORTAR: Gera arquivo XML universal
