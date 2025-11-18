@@ -762,9 +762,9 @@
             flex: 1;
         }
         
-        /* NOVOS ESTILOS PARA OS BOTÕES DE NAVEGAÇÃO NO MODAL */
+        /* BOTÕES DE NAVEGAÇÃO NO MODAL - COMPACTOS */
         .modal-footer {
-            padding: 15px;
+            padding: 10px;
             background: #111;
             border-top: 1px solid var(--cor-primaria);
             display: none;
@@ -772,8 +772,9 @@
         
         .navigation-controls {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
+            align-items: center;
             width: 100%;
         }
         
@@ -781,24 +782,24 @@
             background: var(--cor-botao);
             color: var(--cor-primaria);
             border: 2px solid var(--cor-primaria);
-            padding: 15px 25px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s ease;
             flex: 1;
-            max-width: 200px;
+            max-width: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .nav-btn:hover {
             background: var(--cor-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 255, 0, 0.3);
         }
         
         .nav-btn:active {
@@ -813,6 +814,22 @@
         .nav-btn-next {
             background: #006600;
             border-color: #00ff00;
+        }
+        
+        /* Esconder o texto e deixar apenas as setas */
+        .nav-btn::after {
+            content: "";
+            display: none;
+        }
+        
+        .nav-btn-prev::before {
+            content: "⏮️";
+            font-size: 1.2rem;
+        }
+        
+        .nav-btn-next::before {
+            content: "⏭️";
+            font-size: 1.2rem;
         }
         
         /* Estilos para o modal de notas */
@@ -888,11 +905,31 @@
             .font-btn, .scroll-btn, .speed-btn, .view-mode-btn { transform: scale(0.9); }
             .backup-options { flex-direction: column; }
             .setlist-controls { flex-direction: column; }
-            .navigation-controls { flex-direction: column; }
-            .nav-btn { max-width: none; }
             .lyrics-content.landscape { 
                 column-count: 1; 
                 font-size: 28px !important; /* Tamanho ajustado para mobile em paisagem */
+            }
+            
+            /* Ajustes para botões de navegação em tablets */
+            .modal-footer {
+                padding: 8px;
+            }
+            
+            .navigation-controls {
+                gap: 8px;
+                flex-direction: row; /* Garantir que fique na horizontal */
+            }
+            
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                max-width: 120px;
+                min-height: 44px; /* Tamanho mínimo para touch */
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 1.1rem;
             }
         }
         
@@ -907,7 +944,33 @@
             .modal-header { flex-wrap: wrap; gap: 5px; }
             .modal-title-container { min-width: 100px; }
             .btn { padding: 16px 20px; font-size: 1rem; }
-            .nav-btn { padding: 12px 20px; font-size: 1rem; }
+            
+            /* Ajustes para botões de navegação em celulares */
+            .modal-footer {
+                padding: 6px;
+            }
+            
+            .navigation-controls {
+                gap: 6px;
+            }
+            
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0;
+                max-width: 100px;
+                min-height: 40px;
+            }
+            
+            /* Remover completamente o texto em telas muito pequenas */
+            .nav-btn {
+                font-size: 0;
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 1rem;
+                margin: 0;
+            }
         }
         
         @media (max-width: 400px) {
@@ -916,6 +979,22 @@
                 transform: scale(0.8); 
             }
             .btn { padding: 18px 16px; font-size: 0.95rem; }
+            
+            /* Ajustes finos para botões de navegação em telas muito pequenas */
+            .navigation-controls {
+                gap: 5px;
+            }
+            
+            .nav-btn {
+                padding: 6px 10px;
+                max-width: 80px;
+                min-height: 36px;
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 0.9rem;
+            }
         }
 
         /* Novos estilos para layout melhorado */
@@ -947,7 +1026,7 @@
             color: var(--cor-primaria);
             border: 1px solid var(--cor-secundaria);
             padding: 8px 12px;
-            borderRadius: 5px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 0.8rem;
             transition: all 0.3s ease;
@@ -1151,13 +1230,13 @@
             <div class="modal-body">
                 <div id="lyrics-content" class="lyrics-content"></div>
             </div>
-            <!-- NOVO FOOTER COM BOTÕES DE NAVEGAÇÃO -->
+            <!-- NOVO FOOTER COM BOTÕES DE NAVEGAÇÃO COMPACTOS -->
             <div class="modal-footer" id="setlist-navigation">
                 <div class="navigation-controls">
-                    <button class="nav-btn nav-btn-prev" onclick="musicaAnterior()">
+                    <button class="nav-btn nav-btn-prev" onclick="musicaAnterior()" title="Música anterior">
                         ⏮️
                     </button>
-                    <button class="nav-btn nav-btn-next" onclick="proximaMusica()">
+                    <button class="nav-btn nav-btn-next" onclick="proximaMusica()" title="Próxima música">
                         ⏭️
                     </button>
                 </div>
@@ -3150,7 +3229,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • A- A A+ = Controles de tamanho da fonte
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
-• ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões grandes no rodapé)
+• ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
 • 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
 
 ➕ ADICIONAR MÚSICA:
