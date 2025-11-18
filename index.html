@@ -482,19 +482,19 @@
             transition: all 0.3s ease;
         }
 
-        /* Modo Paisagem - Colunas - FONTE MAIOR PARA TODO O TEXTO */
+        /* Modo Paisagem - Colunas - CORRIGIDO: Removido !important para permitir controle de fonte */
         .lyrics-content.landscape {
             column-count: 2;
             column-gap: 40px;
             text-align: left;
-            font-size: 32px !important; /* DOBRO DO TAMANHO ORIGINAL */
+            font-size: 32px; /* DOBRO DO TAMANHO ORIGINAL - SEM !important */
         }
         
         .lyrics-content.landscape .yellow-line,
         .lyrics-content.landscape .normal-line {
             break-inside: avoid;
             margin-bottom: 15px;
-            font-size: 32px !important; /* GARANTIR QUE TODAS AS LINHAS TENHAM TAMANHO MAIOR */
+            font-size: inherit; /* HERDAR DO ELEMENTO PAI */
         }
 
         .yellow-line {
@@ -907,7 +907,7 @@
             .setlist-controls { flex-direction: column; }
             .lyrics-content.landscape { 
                 column-count: 1; 
-                font-size: 28px !important; /* Tamanho ajustado para mobile em paisagem */
+                font-size: 28px; /* Tamanho ajustado para mobile em paisagem - SEM !important */
             }
             
             /* Ajustes para botões de navegação em tablets */
@@ -1840,7 +1840,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             aplicarTema('green');
         }
 
-        // CONTROLES DE FONTE E SCROLL
+        // CONTROLES DE FONTE E SCROLL - CORRIGIDO
         function ajustarFonte(mudanca) {
             const elemento = document.getElementById('lyrics-content');
             if (!elemento) return;
@@ -1848,14 +1848,21 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
             
             if (mudanca === 0) {
-                // Reset para tamanho base
-                elemento.style.fontSize = tamanhoFonteBase + 'px';
+                // Reset para tamanho base baseado no modo atual
+                if (modoVisualizacaoAtual === 'paisagem') {
+                    elemento.style.fontSize = '32px';
+                    tamanhoFonteBase = 32;
+                } else {
+                    elemento.style.fontSize = '16px';
+                    tamanhoFonteBase = 16;
+                }
             } else {
-                const novoTamanho = Math.max(10, Math.min(30, tamanhoAtual + mudanca));
+                const novoTamanho = Math.max(10, Math.min(40, tamanhoAtual + mudanca));
                 elemento.style.fontSize = novoTamanho + 'px';
+                tamanhoFonteBase = novoTamanho;
                 
                 // Se estiver aumentando muito, ajustar automaticamente
-                if (novoTamanho > 24) {
+                if (novoTamanho > 30) {
                     ajustarFonteAuto();
                 }
             }
@@ -2310,7 +2317,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             setTimeout(() => {
                 configurarEventosModal();
                 document.querySelector('.modal-body').scrollTop = 0;
-                ajustarFonteAuto();
+                // Ajustar fonte baseada no modo atual
+                if (modoVisualizacaoAtual === 'paisagem') {
+                    document.getElementById('lyrics-content').style.fontSize = '32px';
+                    tamanhoFonteBase = 32;
+                } else {
+                    document.getElementById('lyrics-content').style.fontSize = '16px';
+                    tamanhoFonteBase = 16;
+                }
             }, 100);
             
             // Tela cheia automática ao abrir música
@@ -2369,7 +2383,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('notes-modal').style.display = 'none';
         }
 
-        // FUNÇÕES DE MODOS DE VISUALIZAÇÃO
+        // FUNÇÕES DE MODOS DE VISUALIZAÇÃO - CORRIGIDAS
         function toggleViewMode() {
             const lyricsContent = document.getElementById('lyrics-content');
             const botao = document.getElementById('view-mode-toggle');
@@ -2379,11 +2393,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.add('landscape');
                 botao.classList.add('active');
                 botao.innerHTML = '📱 Retrato';
+                // Ajustar fonte para modo paisagem
+                lyricsContent.style.fontSize = '32px';
+                tamanhoFonteBase = 32;
             } else {
                 modoVisualizacaoAtual = 'retrato';
                 lyricsContent.classList.remove('landscape');
                 botao.classList.remove('active');
                 botao.innerHTML = '🔄 Paisagem';
+                // Ajustar fonte para modo retrato
+                lyricsContent.style.fontSize = '16px';
+                tamanhoFonteBase = 16;
             }
             
             localStorage.setItem('modoVisualizacao', modoVisualizacaoAtual);
@@ -2397,10 +2417,16 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.add('landscape');
                 botao.classList.add('active');
                 botao.innerHTML = '📱 Retrato';
+                // Ajustar fonte para modo paisagem
+                lyricsContent.style.fontSize = '32px';
+                tamanhoFonteBase = 32;
             } else {
                 lyricsContent.classList.remove('landscape');
                 botao.classList.remove('active');
                 botao.innerHTML = '🔄 Paisagem';
+                // Ajustar fonte para modo retrato
+                lyricsContent.style.fontSize = '16px';
+                tamanhoFonteBase = 16;
             }
         }
 
@@ -3226,7 +3252,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             alert(`🎵 AJUDA - REPERTÓRIO BLUEVOX
 
 👁️ VISUALIZAR MÚSICA:
-• A- A A+ = Controles de tamanho da fonte
+• A- A A+ = Controles de tamanho da fonte (agora funcionam em ambos os modos)
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
