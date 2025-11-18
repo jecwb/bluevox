@@ -487,7 +487,8 @@
             column-count: 2;
             column-gap: 40px;
             text-align: left;
-            font-size: 14px;
+            font-size: 32px; /* Dobro do tamanho padrão para modo notebook */
+            line-height: 1.8;
         }
         
         .lyrics-content.landscape .yellow-line,
@@ -513,6 +514,11 @@
             color: #ff8800 !important;
             font-weight: bold;
             text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
+        }
+
+        /* Garantir que as cifras também fiquem maiores */
+        .lyrics-content.landscape .orange-chord {
+            font-size: 28px;
         }
         
         .add-form, .edit-form, .config-form {
@@ -870,6 +876,36 @@
             justify-content: flex-end;
         }
         
+        /* Estilos para a área multimídia */
+        .multimidia-container {
+            max-width: 100%;
+        }
+
+        .multimidia-container .music-item {
+            background: #1a1a1a;
+            border: 2px solid var(--cor-primaria);
+        }
+
+        /* Melhorar a aparência dos links */
+        .multimidia-container a {
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px;
+            border-radius: 5px;
+            background: #002244;
+            border: 1px solid #0088ff;
+            color: #00ccff;
+            text-decoration: none;
+            word-break: break-all;
+            margin: 5px 0;
+        }
+
+        .multimidia-container a:hover {
+            background: #003366;
+            transform: translateX(5px);
+            text-decoration: underline;
+        }
+        
         @keyframes pulse {
             0% { border-color: var(--cor-primaria); }
             50% { border-color: var(--cor-destaque); }
@@ -889,7 +925,13 @@
             .setlist-controls { flex-direction: column; }
             .navigation-controls { flex-direction: column; }
             .nav-btn { max-width: none; }
-            .lyrics-content.landscape { column-count: 1; }
+            .lyrics-content.landscape { 
+                column-count: 1; 
+                font-size: 18px;
+            }
+            .lyrics-content.landscape .orange-chord {
+                font-size: 16px;
+            }
         }
         
         @media (max-width: 600px) {
@@ -1065,6 +1107,14 @@
                 </button>
             </div>
 
+            <div class="section-title">MULTIMÍDIA</div>
+
+            <div class="backup-options">
+                <button class="btn" onclick="mostrarLoginMultimidia()">
+                    🎬 Multimídia
+                </button>
+            </div>
+
             <div class="section-title">BACKUP E DADOS</div>
             
             <div class="backup-options">
@@ -1186,6 +1236,29 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="links-multimidia">LINKS MULTIMÍDIA (opcional):</label>
+                        <textarea id="links-multimidia" class="form-input" 
+                                  placeholder="Cole aqui links de vídeos, áudios, etc. (um por linha)
+
+Exemplo:
+https://youtube.com/video-da-musica
+https://soundcloud.com/audio-da-musica
+https://drive.google.com/link-para-partitura
+
+💡 Um link por linha. Serão exibidos na área multimídia protegida por senha." 
+                                  rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="info-banda">INFORMAÇÕES INTERNAS DA BANDA (opcional):</label>
+                        <textarea id="info-banda" class="form-input" 
+                                  placeholder="Anotações privadas, instruções específicas, detalhes de arranjo, etc.
+
+💡 Estas informações só aparecem na área multimídia protegida por senha." 
+                                  rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="letra-musica">LETRA DA MÚSICA:</label>
                         <textarea id="letra-musica" class="form-input form-textarea" required 
                                   placeholder="Cole aqui a letra completa...
@@ -1232,6 +1305,29 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="form-group">
                         <label for="edit-notas-musica">NOTAS (opcional):</label>
                         <textarea id="edit-notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-links-multimidia">LINKS MULTIMÍDIA (opcional):</label>
+                        <textarea id="edit-links-multimidia" class="form-input" 
+                                  placeholder="Cole aqui links de vídeos, áudios, etc. (um por linha)
+
+Exemplo:
+https://youtube.com/video-da-musica
+https://soundcloud.com/audio-da-musica
+https://drive.google.com/link-para-partitura
+
+💡 Um link por linha. Serão exibidos na área multimídia protegida por senha." 
+                                  rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-info-banda">INFORMAÇÕES INTERNAS DA BANDA (opcional):</label>
+                        <textarea id="edit-info-banda" class="form-input" 
+                                  placeholder="Anotações privadas, instruções específicas, detalhes de arranjo, etc.
+
+💡 Estas informações só aparecem na área multimídia protegida por senha." 
+                                  rows="3"></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -1442,6 +1538,49 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         </div>
     </div>
 
+    <!-- MODAL LOGIN MULTIMÍDIA -->
+    <div id="login-multimidia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔒 ACESSO MULTIMÍDIA</h2>
+                <button class="close" onclick="fecharLoginMultimidiaModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="config-form" onsubmit="verificarSenhaMultimidia(event)">
+                    <div class="form-group">
+                        <label for="senha-multimidia">SENHA DE ACESSO:</label>
+                        <input type="password" id="senha-multimidia" class="form-input" required 
+                               placeholder="Digite a senha para acessar a área multimídia">
+                        <p style="color: var(--cor-secundaria); margin-top: 8px; font-size: 0.8rem;">
+                            💡 Área restrita para integrantes da banda
+                        </p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharLoginMultimidiaModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">🔓 Acessar Multimídia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MULTIMÍDIA -->
+    <div id="multimidia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎬 MULTIMÍDIA - BLUEVOX</h2>
+                <button class="close" onclick="fecharMultimidiaModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                    <div id="conteudo-multimidia"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CONFIGURAÇÃO
         let musicas = [];
@@ -1466,6 +1605,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
+
+        // Configurações de multimídia
+        const SENHA_MULTIMIDIA = "Ymx1M3YweEAyMDI1"; // blu3v0x@2025 em base64
 
         const temas = {
             green: {
@@ -1765,14 +1907,16 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
             
             if (mudanca === 0) {
-                // Reset para tamanho base
-                elemento.style.fontSize = tamanhoFonteBase + 'px';
+                // Reset para tamanho base - considerar modo notebook
+                const baseSize = (modoDispositivo === 'notebook') ? 32 : 16;
+                elemento.style.fontSize = baseSize + 'px';
             } else {
-                const novoTamanho = Math.max(10, Math.min(30, tamanhoAtual + mudanca));
+                // Aumentar limite máximo para 40px (era 30px)
+                const novoTamanho = Math.max(10, Math.min(40, tamanhoAtual + mudanca));
                 elemento.style.fontSize = novoTamanho + 'px';
                 
                 // Se estiver aumentando muito, ajustar automaticamente
-                if (novoTamanho > 24) {
+                if (novoTamanho > 32) {
                     ajustarFonteAuto();
                 }
             }
@@ -1926,6 +2070,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
+                    fecharLoginMultimidiaModal();
+                    fecharMultimidiaModal();
                 }
             });
 
@@ -1940,6 +2086,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
+                    fecharLoginMultimidiaModal();
+                    fecharMultimidiaModal();
                 }
             });
 
@@ -2058,9 +2206,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const letra = document.getElementById('letra-musica').value;
             const bpm = document.getElementById('bpm-musica').value.trim();
             const notas = document.getElementById('notas-musica').value.trim();
+            const linksMultimidia = document.getElementById('links-multimidia').value.trim();
+            const infoBanda = document.getElementById('info-banda').value.trim();
 
             if (!nome || !letra.trim()) {
-                alert('❌ Preencha todos os campos!');
+                alert('❌ Preencha todos os campos obrigatórios!');
                 return;
             }
 
@@ -2074,6 +2224,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 letra: letra,
                 bpm: bpm || null,
                 notas: notas || null,
+                linksMultimidia: linksMultimidia || null,
+                infoBanda: infoBanda || null,
                 noSetlist: false,
                 dataCriacao: new Date().toISOString()
             };
@@ -2105,6 +2257,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('edit-letra-musica').value = musica.letra;
             document.getElementById('edit-bpm-musica').value = musica.bpm || '';
             document.getElementById('edit-notas-musica').value = musica.notas || '';
+            document.getElementById('edit-links-multimidia').value = musica.linksMultimidia || '';
+            document.getElementById('edit-info-banda').value = musica.infoBanda || '';
             document.getElementById('edit-modal').style.display = 'block';
             setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
         }
@@ -2120,9 +2274,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const letra = document.getElementById('edit-letra-musica').value;
             const bpm = document.getElementById('edit-bpm-musica').value.trim();
             const notas = document.getElementById('edit-notas-musica').value.trim();
+            const linksMultimidia = document.getElementById('edit-links-multimidia').value.trim();
+            const infoBanda = document.getElementById('edit-info-banda').value.trim();
 
             if (!nome || !letra.trim()) {
-                alert('❌ Preencha todos os campos!');
+                alert('❌ Preencha todos os campos obrigatórios!');
                 return;
             }
 
@@ -2143,6 +2299,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 letra: letra,
                 bpm: bpm || null,
                 notas: notas || null,
+                linksMultimidia: linksMultimidia || null,
+                infoBanda: infoBanda || null,
                 dataModificacao: new Date().toISOString()
             };
 
@@ -2327,24 +2485,32 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Aplicar configurações específicas do modo
             if (modo === 'notebook') {
-                // Modo Notebook - padrão para paisagem
+                // Modo Notebook - padrão para paisagem com fonte maior
                 modoVisualizacaoAtual = 'paisagem';
                 localStorage.setItem('modoVisualizacao', 'paisagem');
+                
+                // Ajustar fonte base para o dobro no modo notebook
+                tamanhoFonteBase = 32;
             } else {
                 // Modo Tablet - padrão para retrato
                 modoVisualizacaoAtual = 'retrato';
                 localStorage.setItem('modoVisualizacao', 'retrato');
+                
+                // Voltar para fonte padrão
+                tamanhoFonteBase = 16;
             }
             
             // Aplicar visualização se o modal estiver aberto
             if (document.getElementById('music-modal').style.display === 'block') {
                 aplicarModoVisualizacaoAtual();
+                // Resetar fonte para o tamanho base do modo
+                ajustarFonte(0);
             }
             
             atualizarBotoesModoDispositivo();
             
             // Feedback visual
-            alert(`✅ Modo ${modo === 'notebook' ? 'Notebook' : 'Tablet'} ativado!`);
+            alert(`✅ Modo ${modo === 'notebook' ? 'Notebook' : 'Tablet'} ativado!${modo === 'notebook' ? '\n📝 Fonte ajustada para visualização em duas colunas.' : ''}`);
         }
 
         function atualizarBotoesModoDispositivo() {
@@ -2383,6 +2549,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 }
                 if (musica.notas) {
                     xml += `      <notas><![CDATA[${musica.notas}]]></notas>\n`;
+                }
+                if (musica.linksMultimidia) {
+                    xml += `      <linksMultimidia><![CDATA[${musica.linksMultimidia}]]></linksMultimidia>\n`;
+                }
+                if (musica.infoBanda) {
+                    xml += `      <infoBanda><![CDATA[${musica.infoBanda}]]></infoBanda>\n`;
                 }
                 xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
                 if (musica.dataModificacao) {
@@ -2528,6 +2700,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
+                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
                     const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
                     
                     if (nome && letra) {
@@ -2536,6 +2710,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                             letra: letra,
                             bpm: bpm || null,
                             notas: notas || null,
+                            linksMultimidia: linksMultimidia || null,
+                            infoBanda: infoBanda || null,
                             noSetlist: false,
                             dataCriacao: dataCriacao,
                             fonte: fonte
@@ -2678,6 +2854,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                 letra: musicaBackup.letra,
                                 bpm: musicaBackup.bpm || musicaExistente.bpm,
                                 notas: musicaBackup.notas || musicaExistente.notas,
+                                linksMultimidia: musicaBackup.linksMultimidia || musicaExistente.linksMultimidia,
+                                infoBanda: musicaBackup.infoBanda || musicaExistente.infoBanda,
                                 dataModificacao: new Date().toISOString()
                             });
                             musicasAtualizadas++;
@@ -2742,13 +2920,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
+                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
                             bpm: bpm || null,
-                            notas: notas || null
+                            notas: notas || null,
+                            linksMultimidia: linksMultimidia || null,
+                            infoBanda: infoBanda || null
                         });
                     }
                 });
@@ -2781,7 +2963,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function calcularHash(musicasArray) {
             // Criar uma string única baseada nas músicas para comparação
-            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}`).join('');
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}${m.linksMultimidia || ''}${m.infoBanda || ''}`).join('');
             let hash = 0;
             for (let i = 0; i < dados.length; i++) {
                 const char = dados.charCodeAt(i);
@@ -2855,13 +3037,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
                     const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    const linksMultimidia = musicaNode.querySelector('linksMultimidia')?.textContent || '';
+                    const infoBanda = musicaNode.querySelector('infoBanda')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
                             letra: letra,
                             bpm: bpm || null,
-                            notas: notas || null
+                            notas: notas || null,
+                            linksMultimidia: linksMultimidia || null,
+                            infoBanda: infoBanda || null
                         });
                     }
                 });
@@ -2948,6 +3134,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                                     letra: musicaOnline.letra,
                                     bpm: musicaOnline.bpm || musicaExistente.bpm,
                                     notas: musicaOnline.notas || musicaExistente.notas,
+                                    linksMultimidia: musicaOnline.linksMultimidia || musicaExistente.linksMultimidia,
+                                    infoBanda: musicaOnline.infoBanda || musicaExistente.infoBanda,
                                     dataModificacao: new Date().toISOString()
                                 });
                                 musicasAtualizadas++;
@@ -3139,6 +3327,115 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
+        // FUNÇÕES DE MULTIMÍDIA
+        function mostrarLoginMultimidia() {
+            document.getElementById('login-multimidia-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('senha-multimidia').focus(), 100);
+        }
+
+        function fecharLoginMultimidiaModal() {
+            document.getElementById('login-multimidia-modal').style.display = 'none';
+            document.getElementById('senha-multimidia').value = '';
+        }
+
+        function verificarSenhaMultimidia(event) {
+            event.preventDefault();
+            
+            const senhaDigitada = document.getElementById('senha-multimidia').value;
+            
+            // Converter para base64 para comparar
+            const senhaBase64 = btoa(unescape(encodeURIComponent(senhaDigitada)));
+            
+            if (senhaBase64 === SENHA_MULTIMIDIA) {
+                fecharLoginMultimidiaModal();
+                setTimeout(() => mostrarMultimidia(), 300);
+            } else {
+                alert('❌ Senha incorreta! Acesso negado.');
+                document.getElementById('senha-multimidia').value = '';
+                document.getElementById('senha-multimidia').focus();
+            }
+        }
+
+        function mostrarMultimidia() {
+            const conteudo = document.getElementById('conteudo-multimidia');
+            
+            // Coletar todas as músicas com conteúdo multimídia
+            const musicasComMultimidia = musicas.filter(musica => 
+                musica.linksMultimidia || musica.infoBanda
+            );
+            
+            if (musicasComMultimidia.length === 0) {
+                conteudo.innerHTML = `
+                    <div class="empty-state">
+                        <h2>🎵 Nenhum conteúdo multimídia encontrado</h2>
+                        <p>Adicione links e informações internas nas músicas para vê-los aqui.</p>
+                        <button class="btn" onclick="fecharMultimidiaModal()">
+                            Fechar
+                        </button>
+                    </div>
+                `;
+            } else {
+                let html = '<div class="multimidia-container">';
+                
+                musicasComMultimidia.forEach((musica, index) => {
+                    html += `
+                        <div class="music-item" style="margin-bottom: 20px;">
+                            <div class="music-info">
+                                <div class="music-name">${musica.nome}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Links de multimídia
+                    if (musica.linksMultimidia) {
+                        const links = musica.linksMultimidia.split('\n').filter(link => link.trim());
+                        if (links.length > 0) {
+                            html += '<div style="margin: 10px 0 15px 20px;">';
+                            html += '<strong style="color: var(--cor-primaria);">🔗 Links:</strong>';
+                            links.forEach(link => {
+                                if (link.trim()) {
+                                    html += `
+                                        <div style="margin: 5px 0;">
+                                            <a href="${link.trim()}" target="_blank" 
+                                               style="color: #00ccff; text-decoration: none; word-break: break-all;"
+                                               onmouseover="this.style.textDecoration='underline'" 
+                                               onmouseout="this.style.textDecoration='none'">
+                                               📹 ${link.trim()}
+                                            </a>
+                                        </div>
+                                    `;
+                                }
+                            });
+                            html += '</div>';
+                        }
+                    }
+                    
+                    // Informações da banda
+                    if (musica.infoBanda) {
+                        html += `
+                            <div style="margin: 10px 0 15px 20px;">
+                                <strong style="color: var(--cor-primaria);">📝 Informações Internas:</strong>
+                                <div style="background: #111; padding: 10px; border-radius: 5px; margin-top: 5px; border: 1px solid var(--cor-secundaria);">
+                                    ${musica.infoBanda.replace(/\n/g, '<br>')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '<hr style="border: none; border-top: 1px solid var(--cor-secundaria); margin: 20px 0;">';
+                });
+                
+                html += '</div>';
+                conteudo.innerHTML = html;
+            }
+            
+            document.getElementById('multimidia-modal').style.display = 'block';
+        }
+
+        function fecharMultimidiaModal() {
+            document.getElementById('multimidia-modal').style.display = 'none';
+        }
+
         function mostrarAjuda() {
             alert(`🎵 AJUDA - REPERTÓRIO BLUEVOX
 
@@ -3169,6 +3466,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 📱💻 MODOS DE VISUALIZAÇÃO:
 • Modo Tablet = Visualização em retrato, ideal para tablets e celulares
 • Modo Notebook = Visualização em paisagem com colunas, ideal para notebooks
+
+🎬 MULTIMÍDIA:
+• Área restrita com senha para integrantes da banda
+• Contém links de vídeos, áudios e informações internas
+• Senha: blu3v0x@2025
 
 ⭐ SETLIST (REPERTÓRIO DE SHOW):
 • Clique na estrela ☆ para adicionar música ao setlist
