@@ -446,6 +446,45 @@
             color: var(--cor-fundo);
         }
         
+        /* Estilos para o metrônomo */
+        .metronome-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .metronome-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .metronome-btn:hover {
+            background: var(--cor-hover);
+            transform: scale(1.05);
+        }
+        
+        .metronome-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+            animation: pulseMetronome 0.5s infinite alternate;
+        }
+        
+        @keyframes pulseMetronome {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
         .close {
             color: var(--cor-primaria);
             font-size: 16px;
@@ -902,7 +941,7 @@
             .controls { flex-direction: column; }
             .btn { width: 100%; padding: 14px 16px; }
             .modal-header { padding: 5px 8px; }
-            .font-btn, .scroll-btn, .speed-btn, .view-mode-btn { transform: scale(0.9); }
+            .font-btn, .scroll-btn, .speed-btn, .view-mode-btn, .metronome-btn { transform: scale(0.9); }
             .backup-options { flex-direction: column; }
             .setlist-controls { flex-direction: column; }
             .lyrics-content.landscape { 
@@ -975,7 +1014,7 @@
         
         @media (max-width: 400px) {
             .modal-header { padding: 5px 5px; }
-            .font-controls-header, .scroll-controls, .scroll-speed-controls, .view-mode-controls { 
+            .font-controls-header, .scroll-controls, .scroll-speed-controls, .view-mode-controls, .metronome-controls { 
                 transform: scale(0.8); 
             }
             .btn { padding: 18px 16px; font-size: 0.95rem; }
@@ -1220,6 +1259,10 @@
                         <button class="speed-btn" onclick="setScrollSpeed(5)" title="Normal">🚶</button>
                         <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
                         <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
+                    </div>
+                    <!-- BOTÃO DO METRÔNOMO ADICIONADO AQUI -->
+                    <div class="metronome-controls">
+                        <button class="metronome-btn" id="metronome-toggle" onclick="toggleMetronome()" title="Metrônomo">♫</button>
                     </div>
                     <div class="view-mode-controls">
                         <button class="view-mode-btn" id="view-mode-toggle" onclick="toggleViewMode()" title="Alternar modo de visualização">🔄 Visualização</button>
@@ -1546,6 +1589,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         // Variáveis para modos de visualização
         let modoVisualizacaoAtual = 'retrato'; // 'retrato' ou 'paisagem'
         let modoDispositivo = 'tablet'; // 'tablet' ou 'notebook'
+
+        // Variáveis do metrônomo
+        let metronomeAtivo = false;
+        let metronomeInterval = null;
+        let audioContext = null;
+        let currentBPM = 120;
+        let indiceMusicaAberta = -1;
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
@@ -2003,6 +2053,75 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
+        // FUNÇÕES DO METRÔNOMO
+        function toggleMetronome() {
+            const botao = document.getElementById('metronome-toggle');
+            const musicaAtual = musicas[indiceMusicaAberta];
+            
+            if (!musicaAtual || !musicaAtual.bpm) {
+                alert('❌ Esta música não tem BPM definido!');
+                return;
+            }
+
+            if (metronomeAtivo) {
+                pararMetronome();
+                botao.classList.remove('active');
+            } else {
+                currentBPM = parseInt(musicaAtual.bpm);
+                iniciarMetronome();
+                botao.classList.add('active');
+            }
+        }
+
+        function iniciarMetronome() {
+            if (metronomeAtivo) return;
+            
+            metronomeAtivo = true;
+            const intervalo = 60000 / currentBPM; // ms por batida
+            
+            // Criar contexto de áudio se não existir
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            let contador = 0;
+            
+            metronomeInterval = setInterval(() => {
+                playMetronomeSound(contador === 0); // Destaque na primeira batida
+                contador = (contador + 1) % 4; // Padrão 4/4
+            }, intervalo);
+        }
+
+        function playMetronomeSound(accent) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Configurar o som
+            oscillator.frequency.value = accent ? 800 : 400; // Hz - mais agudo na primeira batida
+            oscillator.type = 'square';
+            
+            // Configurar o volume
+            gainNode.gain.value = accent ? 0.3 : 0.2;
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+            
+            // Tocar o som
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function pararMetronome() {
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+            metronomeAtivo = false;
+        }
+
         // EVENTOS GLOBAIS - executados apenas uma vez
         function configurarEventosGlobais() {
             // Fechar modais ao clicar fora
@@ -2283,6 +2402,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         }
 
         function abrirMusica(index) {
+            indiceMusicaAberta = index;
             const musica = musicas[index];
             document.getElementById('modal-title').textContent = musica.nome;
             document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
@@ -2312,6 +2432,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
             const speedControls = document.getElementById('speed-controls');
             if (speedControls) speedControls.style.display = 'none';
+            
+            // Resetar metrônomo
+            if (metronomeAtivo) {
+                pararMetronome();
+                const metronomeBtn = document.getElementById('metronome-toggle');
+                if (metronomeBtn) metronomeBtn.classList.remove('active');
+            }
             
             // Configurar eventos do modal
             setTimeout(() => {
@@ -2369,6 +2496,14 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 pararAutoScroll();
                 autoScrollAtivo = false;
             }
+            
+            // Parar metrônomo se estiver ativo
+            if (metronomeAtivo) {
+                pararMetronome();
+                const metronomeBtn = document.getElementById('metronome-toggle');
+                if (metronomeBtn) metronomeBtn.classList.remove('active');
+            }
+            
             document.getElementById('music-modal').style.display = 'none';
         }
 
@@ -3255,6 +3390,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • A- A A+ = Controles de tamanho da fonte (agora funcionam em ambos os modos)
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
+• ♫ Metrônomo = Inicia/para metrônomo no BPM da música (requer BPM definido)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
 • 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
 
@@ -3274,6 +3410,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Clique no ícone 📝 ao lado do BPM para ver as instruções de execução
 • As notas são exibidas em um modal separado
 • Útil para instruções específicas da banda
+
+♫ METRÔNOMO:
+• Clique no botão ♫ para iniciar/parar
+• Usa o BPM definido na música
+• Som com batida forte na primeira de cada 4 tempos
+• Funciona apenas se a música tiver BPM definido
 
 📱💻 MODOS DE VISUALIZAÇÃO:
 • Modo Tablet = Visualização em retrato, ideal para tablets e celulares
