@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-11-18T13:08:15.902Z</dataExportacao>
+    <dataExportacao>2025-11-18T13:56:06.695Z</dataExportacao>
     <totalMusicas>10</totalMusicas>
   </info>
   <musicas>
@@ -37,9 +37,11 @@ Desvie o olhar
 Tá tudo errado
 Então deixa eu dançar
 
-[R]REFRÃO]]></letra>
-      <dataCriacao>2025-11-18T13:05:03.807Z</dataCriacao>
-      <dataModificacao>2025-11-18T13:07:28.774Z</dataModificacao>
+[R]REFRÃO
+
+[|BPM.: 150|]]]></letra>
+      <dataCriacao></dataCriacao>
+      <dataModificacao>2025-11-18T13:55:54.174Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DEIXA PRA LÁ]]></nome>
