@@ -101,6 +101,13 @@
             transform: translateX(5px);
         }
         
+        .music-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+        }
+        
         .music-name {
             color: var(--cor-primaria);
             font-size: 1.1rem;
@@ -110,6 +117,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
             padding-right: 15px;
+        }
+        
+        .music-bpm {
+            color: var(--cor-destaque);
+            font-size: 0.8rem;
+            margin-right: 10px;
+            white-space: nowrap;
+            background: #003300;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--cor-primaria);
         }
         
         .music-actions {
@@ -137,6 +155,21 @@
         .action-btn:hover {
             background: var(--cor-hover);
             transform: scale(1.1);
+        }
+        
+        .setlist-btn {
+            background: #663300;
+            border-color: #ff8800;
+        }
+        
+        .setlist-btn.active {
+            background: #ffaa00;
+            color: #000000;
+            border-color: #ffff00;
+        }
+        
+        .setlist-btn:hover {
+            background: #884400;
         }
         
         .edit-btn {
@@ -365,6 +398,12 @@
         .speed-btn.active {
             background: var(--cor-primaria);
             color: var(--cor-fundo);
+        }
+        
+        .setlist-modal-controls {
+            display: flex;
+            gap: 5px;
+            margin-left: 10px;
         }
         
         .close {
@@ -600,6 +639,73 @@
             margin: 0;
         }
         
+        /* Estilos para o setlist */
+        .setlist-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+        }
+        
+        .setlist-musicas {
+            margin: 15px 0;
+        }
+        
+        .setlist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #000;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .setlist-item:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+        }
+        
+        .setlist-item.active {
+            background: #003300;
+            border-color: var(--cor-destaque);
+        }
+        
+        .setlist-pos {
+            color: var(--cor-primaria);
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 30px;
+        }
+        
+        .setlist-name {
+            flex: 1;
+            color: var(--cor-texto);
+        }
+        
+        .setlist-bpm {
+            color: var(--cor-destaque);
+            font-size: 0.8rem;
+            margin-right: 10px;
+            background: #003300;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-primaria);
+        }
+        
+        .setlist-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .setlist-controls .btn {
+            flex: 1;
+        }
+        
         @keyframes pulse {
             0% { border-color: var(--cor-primaria); }
             50% { border-color: var(--cor-destaque); }
@@ -616,12 +722,14 @@
             .modal-header { padding: 5px 8px; }
             .font-btn, .scroll-btn, .speed-btn { transform: scale(0.9); }
             .backup-options { flex-direction: column; }
+            .setlist-controls { flex-direction: column; }
         }
         
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .music-item { padding: 10px 12px; }
             .music-name { font-size: 0.9rem; }
+            .music-bpm { font-size: 0.7rem; margin-right: 5px; }
             .action-btn { width: 30px; height: 30px; font-size: 0.75rem; }
             .form-actions { flex-direction: column; }
             .lyrics-content { font-size: 14px; padding: 15px 10px; }
@@ -731,6 +839,19 @@
         
         <div id="music-list" class="music-list" style="display: none;"></div>
         
+        <!-- SETLIST PARA SHOW -->
+        <div id="setlist-container" class="setlist-container" style="display: none;">
+            <div class="section-title">🎵 SETLIST DO SHOW</div>
+            
+            <div id="setlist-musicas" class="setlist-musicas"></div>
+            
+            <div class="setlist-controls">
+                <button class="btn" onclick="musicaAnterior()">⏮️ Anterior</button>
+                <button class="btn btn-add" onclick="proximaMusica()">⏭️ Próxima Música</button>
+                <button class="btn btn-secondary" onclick="limparSetlist()">🗑️ Limpar Setlist</button>
+            </div>
+        </div>
+        
         <div id="controls" class="controls" style="display: none;">
             <div class="controls-section">
                 <button class="btn btn-add" onclick="mostrarFormulario()">
@@ -811,6 +932,10 @@
                         <button class="speed-btn" onclick="setScrollSpeed(6)" title="Rápido">🏃</button>
                         <button class="speed-btn" onclick="setScrollSpeed(7)" title="Muito Rápido">⚡</button>
                     </div>
+                    <div class="setlist-modal-controls">
+                        <button class="scroll-btn" onclick="musicaAnterior()" title="Música anterior">⏮️</button>
+                        <button class="scroll-btn" onclick="proximaMusica()" title="Próxima música">⏭️</button>
+                    </div>
                 </div>
                 <button class="close" onclick="fecharModal()">&times;</button>
             </div>
@@ -832,6 +957,11 @@
                     <div class="form-group">
                         <label for="nome-musica">NOME DA MÚSICA:</label>
                         <input type="text" id="nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bpm-musica">BPM (opcional):</label>
+                        <input type="number" id="bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
                     </div>
                     
                     <div class="form-group">
@@ -871,6 +1001,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="form-group">
                         <label for="edit-nome-musica">NOME DA MÚSICA:</label>
                         <input type="text" id="edit-nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-bpm-musica">BPM (opcional):</label>
+                        <input type="number" id="edit-bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
                     </div>
                     
                     <div class="form-group">
@@ -1078,6 +1213,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let opcaoImportSelecionada = null;
         let importacaoURLEmAndamento = false;
 
+        // Variáveis para o setlist
+        let setlist = [];
+        let indiceMusicaAtual = -1;
+
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
 
@@ -1151,6 +1290,19 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     console.error('Erro ao carregar músicas:', e);
                     musicas = [];
                 }
+            }
+
+            // Carregar setlist
+            const setlistSalvo = localStorage.getItem('setlistRepertorio');
+            if (setlistSalvo) {
+                setlist = JSON.parse(setlistSalvo);
+                exibirSetlist();
+            }
+
+            // Carregar índice atual
+            const indiceSalvo = localStorage.getItem('indiceMusicaAtual');
+            if (indiceSalvo !== null) {
+                indiceMusicaAtual = parseInt(indiceSalvo);
             }
 
             // Configurar eventos GLOBAIS (só uma vez)
@@ -1596,8 +1748,16 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             lista.innerHTML = musicas.map((musica, index) => `
                 <div class="music-item" onclick="abrirMusica(${index})">
-                    <div class="music-name">${musica.nome}</div>
+                    <div class="music-info">
+                        <div class="music-name">${musica.nome}</div>
+                        ${musica.bpm ? `<div class="music-bpm" onclick="event.stopPropagation();" title="BPM da música">BPM: ${musica.bpm}</div>` : ''}
+                    </div>
                     <div class="music-actions">
+                        <button class="action-btn setlist-btn ${musica.noSetlist ? 'active' : ''}" 
+                                onclick="event.stopPropagation(); toggleSetlist(${index})" 
+                                title="${musica.noSetlist ? 'Remover do setlist' : 'Adicionar ao setlist'}">
+                            ${musica.noSetlist ? '⭐' : '☆'}
+                        </button>
                         <button class="action-btn edit-btn" onclick="event.stopPropagation(); editarMusicaForm(${index})" title="Editar música">✏️</button>
                         <button class="action-btn delete-btn" onclick="event.stopPropagation(); removerMusica(${index})" title="Remover música">×</button>
                     </div>
@@ -1615,6 +1775,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function salvarMusicas() {
             localStorage.setItem('catalogoMusicas', JSON.stringify(musicas));
+            localStorage.setItem('setlistRepertorio', JSON.stringify(setlist));
+            localStorage.setItem('indiceMusicaAtual', indiceMusicaAtual.toString());
             atualizarContador();
         }
 
@@ -1632,6 +1794,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             event.preventDefault();
             const nome = document.getElementById('nome-musica').value.trim();
             const letra = document.getElementById('letra-musica').value;
+            const bpm = document.getElementById('bpm-musica').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos!');
@@ -1646,6 +1809,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const novaMusica = {
                 nome: nome.toUpperCase(),
                 letra: letra,
+                bpm: bpm || null,
+                noSetlist: false,
                 dataCriacao: new Date().toISOString()
             };
 
@@ -1674,6 +1839,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('edit-index').value = index;
             document.getElementById('edit-nome-musica').value = musica.nome;
             document.getElementById('edit-letra-musica').value = musica.letra;
+            document.getElementById('edit-bpm-musica').value = musica.bpm || '';
             document.getElementById('edit-modal').style.display = 'block';
             setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
         }
@@ -1687,6 +1853,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const index = document.getElementById('edit-index').value;
             const nome = document.getElementById('edit-nome-musica').value.trim();
             const letra = document.getElementById('edit-letra-musica').value;
+            const bpm = document.getElementById('edit-bpm-musica').value.trim();
 
             if (!nome || !letra.trim()) {
                 alert('❌ Preencha todos os campos!');
@@ -1708,11 +1875,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 ...musicas[index],
                 nome: nome.toUpperCase(),
                 letra: letra,
+                bpm: bpm || null,
                 dataModificacao: new Date().toISOString()
             };
 
             salvarMusicas();
             exibirListaMusicas();
+            exibirSetlist();
 
             // Feedback visual
             const lista = document.getElementById('music-list');
@@ -1728,9 +1897,19 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         function removerMusica(index) {
             const nomeMusica = musicas[index].nome;
             if (confirm(`Tem certeza que deseja remover "${nomeMusica}"?`)) {
+                // Remover do setlist se estiver lá
+                const setlistIndex = setlist.indexOf(index);
+                if (setlistIndex !== -1) {
+                    setlist.splice(setlistIndex, 1);
+                    if (indiceMusicaAtual >= setlistIndex) {
+                        indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+                    }
+                }
+                
                 musicas.splice(index, 1);
                 salvarMusicas();
                 exibirListaMusicas();
+                exibirSetlist();
                 
                 // Feedback visual
                 const lista = document.getElementById('music-list');
@@ -1829,6 +2008,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 xml += `    <musica>\n`;
                 xml += `      <nome><![CDATA[${musica.nome}]]></nome>\n`;
                 xml += `      <letra><![CDATA[${musica.letra}]]></letra>\n`;
+                if (musica.bpm) {
+                    xml += `      <bpm>${musica.bpm}</bpm>\n`;
+                }
                 xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
                 if (musica.dataModificacao) {
                     xml += `      <dataModificacao>${musica.dataModificacao}</dataModificacao>\n`;
@@ -1971,12 +2153,15 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 musicasNodes.forEach(musicaNode => {
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
                     
                     if (nome && letra) {
                         musicasImportadas.push({
                             nome: nome,
                             letra: letra,
+                            bpm: bpm || null,
+                            noSetlist: false,
                             dataCriacao: dataCriacao,
                             fonte: fonte
                         });
@@ -2075,6 +2260,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 case 'substituir':
                     // Substituir tudo
                     musicas = dadosImportacao;
+                    setlist = [];
+                    indiceMusicaAtual = -1;
                     mensagem = `✅ Backup importado! ${musicas.length} música(s) carregadas.`;
                     break;
                     
@@ -2110,9 +2297,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                         const chave = musicaBackup.nome.toUpperCase();
                         if (mapaMusicas.has(chave)) {
                             // Atualizar música existente
+                            const musicaExistente = mapaMusicas.get(chave);
                             mapaMusicas.set(chave, {
-                                ...mapaMusicas.get(chave),
+                                ...musicaExistente,
                                 letra: musicaBackup.letra,
+                                bpm: musicaBackup.bpm || musicaExistente.bpm,
                                 dataModificacao: new Date().toISOString()
                             });
                             musicasAtualizadas++;
@@ -2131,6 +2320,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
             salvarMusicas();
             exibirListaMusicas();
+            exibirSetlist();
             
             if (musicas.length > 0) {
                 mostrarInterfaceComMusicas();
@@ -2174,11 +2364,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 musicasNodes.forEach(musicaNode => {
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
-                            letra: letra
+                            letra: letra,
+                            bpm: bpm || null
                         });
                     }
                 });
@@ -2211,7 +2403,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 
         function calcularHash(musicasArray) {
             // Criar uma string única baseada nas músicas para comparação
-            const dados = musicasArray.map(m => `${m.nome}${m.letra}`).join('');
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}`).join('');
             let hash = 0;
             for (let i = 0; i < dados.length; i++) {
                 const char = dados.charCodeAt(i);
@@ -2283,11 +2475,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 musicasNodes.forEach(musicaNode => {
                     const nome = musicaNode.querySelector('nome')?.textContent || '';
                     const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
                     
                     if (nome && letra) {
                         musicasOnline.push({
                             nome: nome,
-                            letra: letra
+                            letra: letra,
+                            bpm: bpm || null
                         });
                     }
                 });
@@ -2349,6 +2543,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     case 'substituir':
                         // Substituir tudo
                         musicas = musicasOnline;
+                        setlist = [];
+                        indiceMusicaAtual = -1;
                         mensagem = `✅ Repertório atualizado! ${musicas.length} música(s) carregadas.`;
                         break;
                         
@@ -2366,9 +2562,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                             const chave = musicaOnline.nome.toUpperCase();
                             if (mapaMusicas.has(chave)) {
                                 // Atualizar música existente
+                                const musicaExistente = mapaMusicas.get(chave);
                                 mapaMusicas.set(chave, {
-                                    ...mapaMusicas.get(chave),
+                                    ...musicaExistente,
                                     letra: musicaOnline.letra,
+                                    bpm: musicaOnline.bpm || musicaExistente.bpm,
                                     dataModificacao: new Date().toISOString()
                                 });
                                 musicasAtualizadas++;
@@ -2394,6 +2592,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 
                 salvarMusicas();
                 exibirListaMusicas();
+                exibirSetlist();
                 
                 if (musicas.length > 0) {
                     mostrarInterfaceComMusicas();
@@ -2415,9 +2614,139 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
+        // FUNÇÕES DO SETLIST
+        function toggleSetlist(index) {
+            const musica = musicas[index];
+            
+            if (musica.noSetlist) {
+                // Remover do setlist
+                musica.noSetlist = false;
+                const setlistIndex = setlist.indexOf(index);
+                if (setlistIndex !== -1) {
+                    setlist.splice(setlistIndex, 1);
+                    // Ajustar índice atual se necessário
+                    if (indiceMusicaAtual >= setlistIndex) {
+                        indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+                    }
+                }
+            } else {
+                // Adicionar ao setlist
+                musica.noSetlist = true;
+                setlist.push(index);
+            }
+            
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+        }
+
+        function exibirSetlist() {
+            const setlistContainer = document.getElementById('setlist-container');
+            if (!setlistContainer) return;
+            
+            if (setlist.length === 0) {
+                setlistContainer.style.display = 'none';
+                return;
+            }
+            
+            setlistContainer.style.display = 'block';
+            const setlistElement = document.getElementById('setlist-musicas');
+            
+            setlistElement.innerHTML = setlist.map((index, posicao) => {
+                const musica = musicas[index];
+                return `
+                    <div class="setlist-item ${posicao === indiceMusicaAtual ? 'active' : ''}" 
+                         onclick="abrirMusicaSetlist(${index}, ${posicao})">
+                        <div class="setlist-pos">${posicao + 1}</div>
+                        <div class="setlist-name">${musica.nome}</div>
+                        ${musica.bpm ? `<div class="setlist-bpm">BPM: ${musica.bpm}</div>` : ''}
+                        <button class="action-btn delete-btn" onclick="event.stopPropagation(); removerDoSetlist(${posicao})" title="Remover do setlist">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function abrirMusicaSetlist(index, posicao) {
+            indiceMusicaAtual = posicao;
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function removerDoSetlist(posicao) {
+            const index = setlist[posicao];
+            if (musicas[index]) {
+                musicas[index].noSetlist = false;
+            }
+            setlist.splice(posicao, 1);
+            
+            // Ajustar índice atual se necessário
+            if (indiceMusicaAtual >= posicao) {
+                indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+            }
+            
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+        }
+
+        function proximaMusica() {
+            if (setlist.length === 0) {
+                alert('Nenhuma música no setlist!');
+                return;
+            }
+            
+            if (indiceMusicaAtual === -1) {
+                // Começar do início
+                indiceMusicaAtual = 0;
+            } else {
+                // Próxima música
+                indiceMusicaAtual = (indiceMusicaAtual + 1) % setlist.length;
+            }
+            
+            const index = setlist[indiceMusicaAtual];
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function musicaAnterior() {
+            if (setlist.length === 0) {
+                alert('Nenhuma música no setlist!');
+                return;
+            }
+            
+            if (indiceMusicaAtual === -1) {
+                // Começar do final
+                indiceMusicaAtual = setlist.length - 1;
+            } else {
+                // Música anterior
+                indiceMusicaAtual = (indiceMusicaAtual - 1 + setlist.length) % setlist.length;
+            }
+            
+            const index = setlist[indiceMusicaAtual];
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function limparSetlist() {
+            if (confirm('Tem certeza que deseja limpar todo o setlist?')) {
+                // Remover flag de todas as músicas
+                setlist.forEach(index => {
+                    if (musicas[index]) {
+                        musicas[index].noSetlist = false;
+                    }
+                });
+                
+                setlist = [];
+                indiceMusicaAtual = -1;
+                salvarMusicas();
+                exibirListaMusicas();
+                exibirSetlist();
+            }
+        }
+
         // FUNÇÃO PARA RESETAR O APLICATIVO
         function resetarAplicativo() {
-            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n\nTem certeza que deseja resetar o aplicativo?')) {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n• Setlist atual\n\nTem certeza que deseja resetar o aplicativo?')) {
                 // Limpar todos os dados do localStorage
                 localStorage.clear();
                 
@@ -2436,17 +2765,24 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • A- A A+ = Controles de tamanho da fonte
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • 🐌🐢🐢🚶🐢🏃⚡ = 7 velocidades de scroll (4 lentas, 3 rápidas)
+• ⏮️ ⏭️ = Navegação no setlist durante apresentação
 
 ➕ ADICIONAR MÚSICA:
 • Clique em "Adicionar Música"
-• Digite o nome e cole a letra
+• Digite o nome, BPM (opcional) e cole a letra
 • Use [R] para linhas em AMARELO
 • Use |D|, |G|, |C#m| para cifras em LARANJA
 
 ✏️ EDITAR MÚSICA:
 • Clique no ícone ✏️ ao lado da música
-• Altere o nome e/ou letra
+• Altere o nome, BPM e/ou letra
 • Salve as alterações
+
+⭐ SETLIST (REPERTÓRIO DE SHOW):
+• Clique na estrela ☆ para adicionar música ao setlist
+• A estrela ficará ⭐ quando a música estiver no setlist
+• Use os botões ⏮️ e ⏭️ para navegar durante o show
+• Use "Limpar Setlist" para remover todas as músicas
 
 🗑️ REMOVER MÚSICA:
 • Clique no × vermelho ao lado da música
