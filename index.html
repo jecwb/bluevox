@@ -41,19 +41,7 @@
             width: 100%;
         }
         
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--cor-primaria);
-        }
-        
-        h1 {
-            font-size: 1.25rem; /* REDUZIDO PELA METADE (era 2.5rem) */
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px var(--cor-primaria);
-            color: var(--cor-primaria);
-        }
+        /* REMOVIDO: header completo */
         
         .empty-state {
             text-align: center;
@@ -1010,8 +998,106 @@
             font-weight: bold;
         }
         
+        /* ESTILOS PARA OS AFINADORES */
+        .tuner-container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tuner-title {
+            text-align: center;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .tuner-strings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .string-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 2px solid var(--cor-secundaria);
+            padding: 20px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        
+        .string-btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-3px);
+        }
+        
+        .string-btn.playing {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+            border-color: var(--cor-destaque);
+            animation: pulseString 0.5s infinite alternate;
+        }
+        
+        .string-note {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .string-name {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .tuner-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .tuner-type-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tuner-type-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tuner-type-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .tuner-type-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        @keyframes pulseString {
+            from { transform: scale(1); box-shadow: 0 0 5px var(--cor-primaria); }
+            to { transform: scale(1.05); box-shadow: 0 0 15px var(--cor-primaria); }
+        }
+        
         @media (max-width: 768px) {
-            h1 { font-size: 1.1rem; } /* REDUZIDO PARA MOBILE */
             .music-item { padding: 12px 15px; }
             .music-name { font-size: 1rem; }
             .action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
@@ -1066,10 +1152,25 @@
                 flex-direction: column;
                 gap: 5px;
             }
+            
+            /* Ajustes para os afinadores em mobile */
+            .tuner-strings {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .string-btn {
+                padding: 15px 10px;
+                min-height: 80px;
+                font-size: 1rem;
+            }
+            
+            .string-note {
+                font-size: 1.5rem;
+            }
         }
         
         @media (max-width: 600px) {
-            h1 { font-size: 1rem; } /* REDUZIDO PARA CELULAR */
             .music-item { padding: 10px 12px; }
             .music-name { font-size: 0.9rem; }
             .music-bpm, .music-notes { font-size: 0.7rem; margin-right: 5px; }
@@ -1106,6 +1207,16 @@
                 font-size: 1rem;
                 margin: 0;
             }
+            
+            /* Ajustes para os afinadores em celulares */
+            .tuner-strings {
+                grid-template-columns: 1fr;
+            }
+            
+            .string-btn {
+                padding: 12px 8px;
+                min-height: 70px;
+            }
         }
         
         @media (max-width: 400px) {
@@ -1135,9 +1246,7 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>BLUEVOX</h1> <!-- TÍTULO ALTERADO DE "REPERTÓRIO BLUEVOX" PARA "BLUEVOX" -->
-        </header>
+        <!-- REMOVIDO: Header completo com título BLUEVOX -->
         
         <div id="update-alert" class="update-alert" style="display: none;">
             <h3>🔄 ATUALIZAÇÃO DISPONÍVEL!</h3>
@@ -1241,6 +1350,24 @@
                         </button>
                         <button class="btn" onclick="aplicarModoVisualizacao('notebook')" id="modo-notebook-btn">
                             💻 Modo Notebook
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOVO MENU UTILITÁRIOS EXPANSÍVEL -->
+            <div class="expandable-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>🛠️ UTILITÁRIOS</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="backup-options">
+                        <button class="btn" onclick="abrirTuner('bass')">
+                            🎸 Afinador de Baixo
+                        </button>
+                        <button class="btn" onclick="abrirTuner('guitar')">
+                            🎶 Afinador de Guitarra
                         </button>
                     </div>
                 </div>
@@ -1355,6 +1482,84 @@
                     <button class="nav-btn nav-btn-next" onclick="proximaMusica()" title="Próxima música">
                         ⏭️
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL DO AFINADOR -->
+    <div id="tuner-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="tuner-modal-title">🎸 AFINADOR</h2>
+                <button class="close" onclick="fecharTunerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tuner-container">
+                    <div class="tuner-type-selector">
+                        <button class="tuner-type-btn active" id="tuner-bass-btn" onclick="mudarTipoTuner('bass')">🎸 Baixo 4 cordas</button>
+                        <button class="tuner-type-btn" id="tuner-guitar-btn" onclick="mudarTipoTuner('guitar')">🎶 Guitarra 6 cordas</button>
+                    </div>
+                    
+                    <div id="tuner-bass" class="tuner-content">
+                        <h3 class="tuner-title">AFINADOR DE BAIXO - 4 CORDAS</h3>
+                        <div class="tuner-strings">
+                            <button class="string-btn" onclick="tocarNota('E1', 'bass')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(41.20 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('A1', 'bass')">
+                                <div class="string-note">A</div>
+                                <div class="string-name">(55.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('D2', 'bass')">
+                                <div class="string-note">D</div>
+                                <div class="string-name">(73.42 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('G2', 'bass')">
+                                <div class="string-note">G</div>
+                                <div class="string-name">(98.00 Hz)</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="tuner-guitar" class="tuner-content" style="display: none;">
+                        <h3 class="tuner-title">AFINADOR DE GUITARRA - 6 CORDAS</h3>
+                        <div class="tuner-strings">
+                            <button class="string-btn" onclick="tocarNota('E2', 'guitar')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(82.41 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('A2', 'guitar')">
+                                <div class="string-note">A</div>
+                                <div class="string-name">(110.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('D3', 'guitar')">
+                                <div class="string-note">D</div>
+                                <div class="string-name">(146.83 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('G3', 'guitar')">
+                                <div class="string-note">G</div>
+                                <div class="string-name">(196.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('B3', 'guitar')">
+                                <div class="string-note">B</div>
+                                <div class="string-name">(246.94 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('E4', 'guitar')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(329.63 Hz)</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tuner-controls">
+                        <button class="btn btn-secondary" onclick="pararTodasNotas()">⏹️ Parar Todas as Notas</button>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; color: var(--cor-secundaria); font-size: 0.8rem;">
+                        💡 Clique em uma corda para tocar a nota de referência
+                    </div>
                 </div>
             </div>
         </div>
@@ -1648,7 +1853,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let tamanhoFonteBase = 16;
         let autoScrollAtivo = false;
         let scrollInterval = null;
-        let scrollSpeed = 1; // AGORA INICIA NA VELOCIDADE MAIS LENTA (1)
+        let scrollSpeed = 1;
         
         // Variáveis para controle de importação
         let dadosImportacao = null;
@@ -1660,18 +1865,42 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let indiceMusicaAtual = -1;
 
         // Variáveis para modos de visualização
-        let modoVisualizacaoAtual = 'retrato'; // 'retrato' ou 'paisagem'
-        let modoDispositivo = 'tablet'; // 'tablet' ou 'notebook'
+        let modoVisualizacaoAtual = 'retrato';
+        let modoDispositivo = 'tablet';
 
         // Variáveis do metrônomo
         let metronomeAtivo = false;
         let metronomeInterval = null;
-        let audioContext = null;
+        let metronomeAudioContext = null;
         let currentBPM = 120;
         let indiceMusicaAberta = -1;
 
+        // Variáveis para os afinadores
+        let tunerAudioContext = null;
+        let tunerOscillator = null;
+        let notaAtual = null;
+        let tipoTunerAtual = 'bass';
+
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
+
+        // Frequências das notas para os afinadores
+        const frequencias = {
+            'bass': {
+                'E1': 41.20,
+                'A1': 55.00,
+                'D2': 73.42,
+                'G2': 98.00
+            },
+            'guitar': {
+                'E2': 82.41,
+                'A2': 110.00,
+                'D3': 146.83,
+                'G3': 196.00,
+                'B3': 246.94,
+                'E4': 329.63
+            }
+        };
 
         const temas = {
             green: {
@@ -2184,8 +2413,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const intervalo = 60000 / currentBPM; // ms por batida
             
             // Criar contexto de áudio se não existir
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (!metronomeAudioContext) {
+                metronomeAudioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
             
             let contador = 0;
@@ -2197,13 +2426,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         }
 
         function playMetronomeSound(accent) {
-            if (!audioContext) return;
+            if (!metronomeAudioContext) return;
             
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            const oscillator = metronomeAudioContext.createOscillator();
+            const gainNode = metronomeAudioContext.createGain();
             
             oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            gainNode.connect(metronomeAudioContext.destination);
             
             // Configurar o som
             oscillator.frequency.value = accent ? 800 : 400; // Hz - mais agudo na primeira batida
@@ -2211,11 +2440,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Configurar o volume
             gainNode.gain.value = accent ? 0.3 : 0.2;
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, metronomeAudioContext.currentTime + 0.1);
             
             // Tocar o som
             oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.1);
+            oscillator.stop(metronomeAudioContext.currentTime + 0.1);
         }
 
         function pararMetronome() {
@@ -2239,6 +2468,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
+                    fecharTunerModal();
                 }
             });
 
@@ -2253,6 +2483,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportModal();
                     fecharImportURLModal();
                     fecharUpdateModal();
+                    fecharTunerModal();
                 }
             });
 
@@ -2713,6 +2944,97 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 notebookBtn.classList.add('active');
                 tabletBtn.classList.remove('active');
             }
+        }
+
+        // FUNÇÕES DOS AFINADORES
+        function abrirTuner(tipo) {
+            document.getElementById('tuner-modal').style.display = 'block';
+            mudarTipoTuner(tipo);
+        }
+
+        function fecharTunerModal() {
+            document.getElementById('tuner-modal').style.display = 'none';
+            pararTodasNotas();
+        }
+
+        function mudarTipoTuner(tipo) {
+            tipoTunerAtual = tipo;
+            
+            // Atualizar botões de seleção
+            document.getElementById('tuner-bass-btn').classList.remove('active');
+            document.getElementById('tuner-guitar-btn').classList.remove('active');
+            document.getElementById(`tuner-${tipo}-btn`).classList.add('active');
+            
+            // Mostrar/ocultar conteúdo
+            document.getElementById('tuner-bass').style.display = tipo === 'bass' ? 'block' : 'none';
+            document.getElementById('tuner-guitar').style.display = tipo === 'guitar' ? 'block' : 'none';
+            
+            // Atualizar título
+            document.getElementById('tuner-modal-title').textContent = 
+                tipo === 'bass' ? '🎸 AFINADOR DE BAIXO' : '🎶 AFINADOR DE GUITARRA';
+            
+            // Parar notas atuais
+            pararTodasNotas();
+        }
+
+        function tocarNota(nota, tipo) {
+            // Parar nota atual se estiver tocando
+            pararTodasNotas();
+            
+            // Obter frequência da nota
+            const frequencia = frequencias[tipo][nota];
+            
+            if (!frequencia) {
+                console.error('Frequência não encontrada para a nota:', nota);
+                return;
+            }
+            
+            // Criar contexto de áudio se não existir
+            if (!tunerAudioContext) {
+                tunerAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Criar oscilador
+            tunerOscillator = tunerAudioContext.createOscillator();
+            const gainNode = tunerAudioContext.createGain();
+            
+            // Configurar oscilador
+            tunerOscillator.type = 'sine'; // Onda senoidal para som puro
+            tunerOscillator.frequency.setValueAtTime(frequencia, tunerAudioContext.currentTime);
+            
+            // Configurar ganho (volume)
+            gainNode.gain.setValueAtTime(0.3, tunerAudioContext.currentTime); // Volume moderado
+            
+            // Conectar e iniciar
+            tunerOscillator.connect(gainNode);
+            gainNode.connect(tunerAudioContext.destination);
+            tunerOscillator.start();
+            
+            // Salvar nota atual
+            notaAtual = nota;
+            
+            // Atualizar visual do botão
+            const botaoAtual = event.target.closest('.string-btn');
+            if (botaoAtual) {
+                botaoAtual.classList.add('playing');
+            }
+            
+            console.log(`🎵 Tocando nota: ${nota} (${frequencia} Hz)`);
+        }
+
+        function pararTodasNotas() {
+            if (tunerOscillator) {
+                tunerOscillator.stop();
+                tunerOscillator.disconnect();
+                tunerOscillator = null;
+            }
+            
+            // Remover classe playing de todos os botões
+            document.querySelectorAll('.string-btn.playing').forEach(botao => {
+                botao.classList.remove('playing');
+            });
+            
+            notaAtual = null;
         }
 
         // FUNÇÕES DE BACKUP EM XML
@@ -3527,6 +3849,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Usa o BPM definido na música
 • Som com batida forte na primeira de cada 4 tempos
 • Funciona apenas se a música tiver BPM definido
+
+🛠️ UTILITÁRIOS:
+• 🎸 Afinador de Baixo = Notas de referência para baixo 4 cordas (E-A-D-G)
+• 🎶 Afinador de Guitarra = Notas de referência para guitarra 6 cordas (E-A-D-G-B-E)
+• Clique em uma corda para tocar a nota de referência
+• Use "Parar Todas as Notas" para silenciar
 
 📱💻 MODOS DE VISUALIZAÇÃO:
 • Modo Tablet = Visualização em retrato, ideal para tablets e celulares
