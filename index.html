@@ -49,7 +49,7 @@
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 1.25rem; /* REDUZIDO PELA METADE (era 2.5rem) */
             margin-bottom: 5px;
             text-shadow: 0 0 10px var(--cor-primaria);
             color: var(--cor-primaria);
@@ -253,16 +253,7 @@
             font-weight: bold;
         }
         
-        .music-count {
-            text-align: center;
-            color: var(--cor-secundaria);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            padding: 8px;
-            background: #111;
-            border-radius: 5px;
-            border: 1px solid var(--cor-secundaria);
-        }
+        /* REMOVIDO: .music-count - AGORA ESTÁ NO RODAPÉ */
         
         .update-alert {
             background: #003366;
@@ -534,7 +525,7 @@
             column-count: 2;
             column-gap: 40px;
             text-align: left;
-            font-size: 32px; /* DOBRO DO TAMANHO ORIGINAL - SEM !important */
+            font-size: 22px; /* TAMANHO REDUZIDO PARA INICIAR MENOR (era 32px) */
         }
         
         .lyrics-content.landscape .yellow-line,
@@ -996,8 +987,31 @@
             max-height: 1000px;
         }
         
+        /* NOVO RODAPÉ COM CONTADOR DE MÚSICAS */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #00aa00;
+            color: #00cc00;
+        }
+        
+        .footer-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .music-count-footer {
+            color: var(--cor-primaria);
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
+            h1 { font-size: 1.1rem; } /* REDUZIDO PARA MOBILE */
             .music-item { padding: 12px 15px; }
             .music-name { font-size: 1rem; }
             .action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
@@ -1009,7 +1023,7 @@
             .setlist-controls { flex-direction: column; }
             .lyrics-content.landscape { 
                 column-count: 1; 
-                font-size: 28px; /* Tamanho ajustado para mobile em paisagem - SEM !important */
+                font-size: 20px; /* Tamanho ajustado para mobile em paisagem */
             }
             
             /* Ajustes para botões de navegação em tablets */
@@ -1046,10 +1060,16 @@
             .section-content.expanded {
                 padding: 15px;
             }
+            
+            /* Ajustes para o rodapé em mobile */
+            .footer-info {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
         
         @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
+            h1 { font-size: 1rem; } /* REDUZIDO PARA CELULAR */
             .music-item { padding: 10px 12px; }
             .music-name { font-size: 0.9rem; }
             .music-bpm, .music-notes { font-size: 0.7rem; margin-right: 5px; }
@@ -1116,7 +1136,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>REPERTÓRIO BLUEVOX</h1>
+            <h1>BLUEVOX</h1> <!-- TÍTULO ALTERADO DE "REPERTÓRIO BLUEVOX" PARA "BLUEVOX" -->
         </header>
         
         <div id="update-alert" class="update-alert" style="display: none;">
@@ -1138,7 +1158,7 @@
             </div>
         </div>
         
-        <div id="music-count" class="music-count" style="display: none;"></div>
+        <!-- REMOVIDO: music-count daqui (agora está no rodapé) -->
         
         <div id="empty-state" class="empty-state">
             <h2>🎵 Bem-vindo ao Repertório BlueVox!</h2>
@@ -1285,8 +1305,12 @@
         </div>
     </div>
 
-    <footer class="footer" style="text-align: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #00aa00; color: #00cc00;">
-        <div class="copyright">© 2024 BlueVox - Version 1.0 - By Jeferson</div>
+    <!-- NOVO RODAPÉ COM CONTADOR DE MÚSICAS E VERSÃO ATUALIZADA -->
+    <footer class="footer">
+        <div class="footer-info">
+            <span id="music-count-footer" class="music-count-footer"></span>
+            <span class="copyright">© 2025 BlueVox - Version 2.0 - By Jeferson</span>
+        </div>
     </footer>
 
     <!-- MODAL DA LETRA -->
@@ -1752,6 +1776,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Verificar se há atualizações disponíveis
             verificarAtualizacoes();
+            
+            // Atualizar contador no rodapé
+            atualizarContadorRodape();
         });
 
         // FUNÇÃO PARA ALTERNAR SEÇÕES EXPANSÍVEIS
@@ -1967,8 +1994,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             if (mudanca === 0) {
                 // Reset para tamanho base baseado no modo atual
                 if (modoVisualizacaoAtual === 'paisagem') {
-                    elemento.style.fontSize = '32px';
-                    tamanhoFonteBase = 32;
+                    elemento.style.fontSize = '22px'; // TAMANHO REDUZIDO PARA INICIAR MENOR
+                    tamanhoFonteBase = 22;
                 } else {
                     elemento.style.fontSize = '16px';
                     tamanhoFonteBase = 16;
@@ -2277,8 +2304,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('empty-state').style.display = 'none';
             document.getElementById('music-list').style.display = 'block';
             document.getElementById('controls').style.display = 'flex';
-            document.getElementById('music-count').style.display = 'block';
+            // REMOVIDO: music-count daqui (agora está no rodapé)
             exibirListaMusicas();
+            atualizarContadorRodape(); // Atualizar o rodapé
         }
 
         function exibirListaMusicas() {
@@ -2288,7 +2316,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 document.getElementById('empty-state').style.display = 'block';
                 document.getElementById('music-list').style.display = 'none';
                 document.getElementById('controls').style.display = 'none';
-                document.getElementById('music-count').style.display = 'none';
+                // REMOVIDO: music-count daqui (agora está no rodapé)
+                atualizarContadorRodape(); // Atualizar o rodapé mesmo quando vazio
                 return;
             }
             
@@ -2312,11 +2341,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 </div>
             `).join('');
             
-            atualizarContador();
+            atualizarContadorRodape(); // Atualizar o rodapé
         }
 
-        function atualizarContador() {
-            const countElement = document.getElementById('music-count');
+        // NOVA FUNÇÃO PARA ATUALIZAR CONTADOR NO RODAPÉ
+        function atualizarContadorRodape() {
+            const countElement = document.getElementById('music-count-footer');
             const total = musicas.length;
             countElement.textContent = `${total} música${total !== 1 ? 's' : ''} no repertório`;
         }
@@ -2325,7 +2355,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             localStorage.setItem('catalogoMusicas', JSON.stringify(musicas));
             localStorage.setItem('setlistRepertorio', JSON.stringify(setlist));
             localStorage.setItem('indiceMusicaAtual', indiceMusicaAtual.toString());
-            atualizarContador();
+            atualizarContadorRodape(); // Atualizar o rodapé ao salvar
         }
 
         function mostrarFormulario() {
@@ -2527,8 +2557,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 document.querySelector('.modal-body').scrollTop = 0;
                 // Ajustar fonte baseada no modo atual
                 if (modoVisualizacaoAtual === 'paisagem') {
-                    document.getElementById('lyrics-content').style.fontSize = '32px';
-                    tamanhoFonteBase = 32;
+                    document.getElementById('lyrics-content').style.fontSize = '22px'; // TAMANHO REDUZIDO
+                    tamanhoFonteBase = 22;
                 } else {
                     document.getElementById('lyrics-content').style.fontSize = '16px';
                     tamanhoFonteBase = 16;
@@ -2609,9 +2639,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.add('landscape');
                 botao.classList.add('active');
                 botao.innerHTML = '📱 Retrato';
-                // Ajustar fonte para modo paisagem
-                lyricsContent.style.fontSize = '32px';
-                tamanhoFonteBase = 32;
+                // Ajustar fonte para modo paisagem - TAMANHO REDUZIDO
+                lyricsContent.style.fontSize = '22px';
+                tamanhoFonteBase = 22;
             } else {
                 modoVisualizacaoAtual = 'retrato';
                 lyricsContent.classList.remove('landscape');
@@ -2633,9 +2663,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.add('landscape');
                 botao.classList.add('active');
                 botao.innerHTML = '📱 Retrato';
-                // Ajustar fonte para modo paisagem
-                lyricsContent.style.fontSize = '32px';
-                tamanhoFonteBase = 32;
+                // Ajustar fonte para modo paisagem - TAMANHO REDUZIDO
+                lyricsContent.style.fontSize = '22px';
+                tamanhoFonteBase = 22;
             } else {
                 lyricsContent.classList.remove('landscape');
                 botao.classList.remove('active');
@@ -2692,7 +2722,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             xml += '<repertorio>\n';
             xml += `  <info>\n`;
             xml += `    <aplicacao>Repertório BlueVox</aplicacao>\n`;
-            xml += `    <versao>1.0</versao>\n`;
+            xml += `    <versao>2.0</versao>\n`; // ATUALIZADO PARA 2.0
             xml += `    <dataExportacao>${new Date().toISOString()}</dataExportacao>\n`;
             xml += `    <totalMusicas>${musicas.length}</totalMusicas>\n`;
             xml += `  </info>\n`;
