@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-11-18T16:10:16.088Z</dataExportacao>
+    <dataExportacao>2025-11-19T01:07:12.425Z</dataExportacao>
     <totalMusicas>10</totalMusicas>
   </info>
   <musicas>
@@ -24,31 +24,23 @@ Riso na lata
 só pra agradar
 O caos tá na porta
 Mas eu sigo a rodar
-
 [R]REFRÃO
-
 Tá tudo errado
 Não tente mudar
 Mude de lado
 Desvie o olhar
-
 [R]REFRÃO
-
 Tá tudo errado
 Então deixa eu dançar
-
-[R]REFRÃO
-
-[|BPM.: 150|]]]></letra>
+[R]REFRÃO]]></letra>
       <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:17.632Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:01:52.325Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DEIXA PRA LÁ]]></nome>
-      <letra><![CDATA[
-[|G F B♭ AM|]        
+      <letra><![CDATA[[|G F B♭ AM|]        
 VOZES VÊM ATRÁS, NÃO PARAM DE OLHAR
 O GRITO LÁ DO ALTO, NÃO QUERO ESCUTAR
 SE NÃO VALE NADA, NÃO VOU NEM TENTAR
@@ -74,7 +66,7 @@ E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <bpm>144</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:32.960Z</dataModificacao>
+      <dataModificacao>2025-11-19T00:40:09.806Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -82,9 +74,7 @@ E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
 Controlam o pensamento, chamam isso de ideal
 Vendendo o medo em série, moldando a razão
 [|F|] O ouro é o novo deus, [|G|] a fé, manipulação
-
 [R][Refrão]
-
 [|F|] Erga os [|C|] punhos [|G|] contra o [|Em|] véu!
 [|F|] Rasgue o [|C|] falso [|G|] céu!
 [|F|] Somos [|C|]fogo, [|G|] somos [|Em|] fim!
@@ -94,14 +84,11 @@ Vendendo o medo em série, moldando a razão
 Escravos conectados, servindo ao opressor
 O som das multidões, calado em confusão
 [|F|] Enquanto os falsos deuses [|G|] selam a nação
-
 [R][Refrão]
-
 [|A|]Mil vozes invisíveis, prontas pra lutar
 Das ruínas do sistema, a verdade irá chegar
 E os donos do mundo, vão ter que cair!
 [|F|] O sistema opressor, [|G|] deixará de existir
-
 [R][Refrão Final]
 [|F|] Queimem [|G|] tronos, [|Em|]caiam  reis!
 [|F|] Agora é [|C|]nossa [|G|] vez
@@ -112,12 +99,11 @@ E os donos do mundo, vão ter que cair!
       <bpm>130</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:39.304Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:02:32.815Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
-      <letra><![CDATA[
-[|1X D G A - 1X D G A G|]
+      <letra><![CDATA[[|1X D G A - 1X D G A G|]
 MENTE PROFANA,       
 NÃO TENHO NADA A DIZER
 VOCÊ ME ENGANA
@@ -147,48 +133,44 @@ SEM SAÍDA E SEM PERDÃO]]></letra>
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:42.080Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:02:56.912Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
-      <letra><![CDATA[
-[|B E F#|]      
-TANTAS DÍVIDAS QUE ACUMULEI,
-NÃO TENHO COMO PAGAR!
-MEU CARRO TODO ATRASADO,
-IMPOSTO E IPVA!
-[|E F#|] 
-ENTENDA, COMPRENDA,
-O SALÁRIO NÃO VAI DAR...
-[|B G# EM F# - B G# F# EM|] 
-[R]SIGO,
-[R]OLHANDO PRA BAIXO,
-[R]MEU SAPATO TÁ FURADO.
-[R]MAIS UM MÊS,
-[R]AS CONTAS
-[R]VÃO, ATRASAR!
-[|B E F#|] 
-NÃO SEI MAIS O QUE FAZER,
-A LUZ VÃO CORTAR,
-A GELADEIRA TÁ VAZIA,
-NA DISPENSA ECO DÁ.
-[|E F#|] 
-QUE PENA, QUE CENA,
-DÁ VONTADE DE CHORAR...
+      <letra><![CDATA[[|INTRO.: B E F#|]      
+[|B|]TANTAS DÍVIDAS QUE ACUMULEI,
+NÃO [|E|] TENHO COMO [|F#|] PAGAR!
+O [|B|] MEU CARRO TODO ATRASADO,
+[|E|] IMPOSTO E [|F#|] IPVA!
+
+ENTENDA[|E|], COMPREENDA[|F#|],
+O SALÁRIO[|E|] NÃO VAI DAR[|F#|]...
+
+[R][|B|]SIGO! OLHANDO PRA [|G#|]BAIXO,
+[R]MEU SAPATO TÁ [|E|]FURADO.
+[R]MAIS UM MÊS, AS [|F#|]CONTAS
+[R]VÃO, [|B|]ATRAS[|G#|]AR! [|F# E|]
+ 
+[|B|]NÃO SEI MAIS O QUE FAZER,
+A [|E|]LUZ VÃO CORTAR[|F#|],
+A [|B|]GELADEIRA TÁ VAZIA,
+A [|E|]DISPENSA ECO DÁ[|F#|].
+
+QUE PENA[|E|], QUE CENA[|F#|],
+DÁ [|E|]VONTADE DE CHORAR[|F#|]...
 [R] REFRÃO
-[|B E F#|]
-O ALUGUEL JÁ TÁ VENCIDO
-QUAL DESCULPA, EU VOU DAR...
-A PENSÃO DAS CRIANÇAS,
-VAI TER QUE ESPERAR!
-[|E F#|] 
-DILEMA, FRAQUEZA,
-ATÉ QUANDO VOU AGUENTAR.
+O [|B|]ALUGUEL JÁ TÁ VENCIDO
+QUAL [|E|]DESCULPA, EU VOU DAR[|F#|]...
+A [|B|]PENSÃO DAS CRIANÇAS,
+VAI[|E|] TER QUE ESPERAR![|F#|]
+
+DILEMA[|E|], FRAQUEZA[|F#|],
+ATÉ [|E|]QUANDO VOU AGUENTAR[|F#|].
 [R] REFRÃO]]></letra>
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:49.800Z</dataModificacao>
+      <dataModificacao>2025-11-19T00:38:19.315Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
@@ -202,7 +184,6 @@ reclamo do amor,
 to preso num laço
 o porre passou.
 
-[R][REFRÃO]
 [R]Hey, hey não seja arrogante,
 [R]A rua ta torta, a moto capota,o filme acabou. 
 
@@ -215,18 +196,16 @@ Uma porta aberta,
 Minha Vida incerta,
 Desce mais uma dose
 O copo rachou.
-
 [R][REFRÃO]
 ]]></letra>
       <bpm>160</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:53.428Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:04:25.876Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PRESO NO SOFÁ]]></nome>
-      <letra><![CDATA[
-|4X A C#m D E|
+      <letra><![CDATA[|4X A C#m D E|
 O relógio gira, mas eu tô parado
 Pensamento em loop, meu corpo tá largado
 To todo travado, sem propósito e sem razão
@@ -253,12 +232,11 @@ Só quero me deitar, dormir e relaxar!
       <bpm>110</bpm>
       <notas><![CDATA[Após o último refrão repete a base 2x e Retorna p/ o refrão para finalizar a música.]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:02:24.413Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:04:50.428Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[REINO DOS RATOS]]></nome>
-      <letra><![CDATA[
-[|C F|]
+      <letra><![CDATA[[|C F|]
 Na escuridão do porão, o sol não vai entrar
 Cheiro de mofo e lixo, sinto tabaco no ar
 Garrafas vazias, vidas vazias, baratas a voar
@@ -288,11 +266,12 @@ No reino dos ratos, ninguém pode vencer.
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:09:57.337Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:05:37.318Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[RISO DO CAOS]]></nome>
-      <letra><![CDATA[o machado corta o sagrado,
+      <letra><![CDATA[[|E C D B|]
+o machado corta o sagrado,
 O certo e o condenado.
 compromete o próprio destino,
 Um grande erro, permitido!
@@ -302,15 +281,16 @@ som do motor, acelerar!
 vejo os passáros a fugir
 o corte lento a suprimir.
 
-[R]Sou o riso do caos,
-[R][R]O som que ninguém previu.
+[R] [|Em|] Sou o riso do [|C|] caos,
+[R]O som que ninguém [|D|] previu.
 [R]Entre o fogo e a fumaça,
-[R]Eu só quero o que é meu.
-[R]Sou o riso do caos,
-[R]Sem regras, e sem razão
+[R]Eu só quero o que [|Em|] é meu.
+[R]Sou o riso do [|C|] caos,
+[R]Sem regras, e sem [| D|] razão
 [R]Na queda na terra,
-[R]mais um tronco no chão.
+[R]mais um tronco no [|Em|] chão.
 
+[|E C D B|]
 Que o mundo em ruínas caia,
 Do medo que te espalha!
 Com meu machado, mudo o fim,
@@ -320,24 +300,15 @@ Não clamo por salvação,
 Nem temo a condenação!
 Meu altar é a dinheiro,
 o poder é o que desejo!
-
-[R][REFRÃO]
-
-A ordem é um véu de mentira,
-Só a ganancia é quem me inspira!
-Se este mundo é uma ilusão,
-Serei o Fim... a Destruição!
-
 [R][REFRÃO]]]></letra>
       <bpm>100</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:10:00.184Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:01:11.443Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
-      <letra><![CDATA[
-[|EM G C EM D|]        
+      <letra><![CDATA[[|EM G C EM D|]        
 DO YOU CARE WHAT THEY SAY?
 DO YOU LIVE OR FADE AWAY?
 DO YOU FIGHT OR JUST OBEY?
@@ -356,33 +327,11 @@ A MOTHER DREAM YOU SUFFOCATE?
 [R]DO YOU! DO YOU!
 [R]WANNA BREAK THE WALL?
 [R]DO YOU! DO YOU!
-[R]WANNA WATCH IT FALL?
-
-Translate.:
-
-VOCÊ SE IMPORTA COM O QUE DIZEM?
-VOCÊ VIVE OU DESAPARECE?
-VOCÊ LUTA OU APENAS OBEDECE?
-ME DIGA AGORA - NÃO DESVIE O OLHAR!
-
-VOCÊ! VOCÊ!
-QUER QUEBRAR O MURO?
-VOCÊ! VOCÊ!
-QUER VÊ-LO CAIR?
-
-VOCÊ SENTE O QUE EU SINTO?
-OU NADA É REAL?
-VOCÊ DORME SÓ PARA ESCAPAR?
-O SONHO DA MÃE TE SUFOCA?
-
-VOCÊ! VOCÊ!
-QUER QUEBRAR O MURO?
-VOCÊ! VOCÊ!
-QUER VÊ-LO CAIR?]]></letra>
+[R]WANNA WATCH IT FALL?]]></letra>
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-18T16:10:03.928Z</dataModificacao>
+      <dataModificacao>2025-11-19T00:54:34.160Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
