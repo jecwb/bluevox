@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>1.0</versao>
-    <dataExportacao>2025-11-19T01:07:12.425Z</dataExportacao>
+    <dataExportacao>2025-11-19T01:16:49.880Z</dataExportacao>
     <totalMusicas>10</totalMusicas>
   </info>
   <musicas>
@@ -36,7 +36,6 @@ Então deixa eu dançar
       <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:01:52.325Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DEIXA PRA LÁ]]></nome>
@@ -66,7 +65,6 @@ E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <bpm>144</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T00:40:09.806Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -74,11 +72,11 @@ E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
 Controlam o pensamento, chamam isso de ideal
 Vendendo o medo em série, moldando a razão
 [|F|] O ouro é o novo deus, [|G|] a fé, manipulação
-[R][Refrão]
-[|F|] Erga os [|C|] punhos [|G|] contra o [|Em|] véu!
-[|F|] Rasgue o [|C|] falso [|G|] céu!
-[|F|] Somos [|C|]fogo, [|G|] somos [|Em|] fim!
-[|F|] Nada é [|C|] mais forte que o que [|G|] há em mim!
+
+[R][|F|] Erga os [|C|] punhos [|G|] contra o [|Em|] véu!
+[R][|F|] Rasgue o [|C|] falso [|G|] céu!
+[R][|F|] Somos [|C|]fogo, [|G|] somos [|Em|] fim!
+[R][|F|] Nada é [|C|] mais forte que o que [|G|] há em mim!
 
 [|A|]Nas telas, as mentiras, disfarçadas de amor
 Escravos conectados, servindo ao opressor
@@ -89,17 +87,17 @@ O som das multidões, calado em confusão
 Das ruínas do sistema, a verdade irá chegar
 E os donos do mundo, vão ter que cair!
 [|F|] O sistema opressor, [|G|] deixará de existir
-[R][Refrão Final]
-[|F|] Queimem [|G|] tronos, [|Em|]caiam  reis!
-[|F|] Agora é [|C|]nossa [|G|] vez
-[|F|] Nossa luta , [|G|] é sem[|Em|] fim
-[|F|] Nada é [|C|] mais forte que o que [|G|] há em mim!
+
+[R][|F|] Queimem [|G|] tronos, [|Em|]caiam  reis!
+[R][|F|] Agora é [|C|]nossa [|G|] vez
+[R][|F|] Nossa luta , [|G|] é sem[|Em|] fim
+[R][|F|] Nada é [|C|] mais forte que o que [|G|] há em mim!
 
 ]]></letra>
       <bpm>130</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:02:32.815Z</dataModificacao>
+      <dataModificacao>2025-11-19T01:16:36.768Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -133,7 +131,6 @@ SEM SAÍDA E SEM PERDÃO]]></letra>
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:02:56.912Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -170,7 +167,6 @@ ATÉ [|E|]QUANDO VOU AGUENTAR[|F#|].
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T00:38:19.315Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
@@ -201,7 +197,6 @@ O copo rachou.
       <bpm>160</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:04:25.876Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PRESO NO SOFÁ]]></nome>
@@ -232,7 +227,6 @@ Só quero me deitar, dormir e relaxar!
       <bpm>110</bpm>
       <notas><![CDATA[Após o último refrão repete a base 2x e Retorna p/ o refrão para finalizar a música.]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:04:50.428Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[REINO DOS RATOS]]></nome>
@@ -266,7 +260,6 @@ No reino dos ratos, ninguém pode vencer.
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:05:37.318Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[RISO DO CAOS]]></nome>
@@ -304,7 +297,6 @@ o poder é o que desejo!
       <bpm>100</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:01:11.443Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
@@ -331,7 +323,6 @@ A MOTHER DREAM YOU SUFFOCATE?
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T00:54:34.160Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
