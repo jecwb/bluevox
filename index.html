@@ -499,7 +499,7 @@
             font-family: Arial, sans-serif;
             text-transform: uppercase;
             text-align: center;
-            font-size: 16px;
+            font-size: 14px; /* ALTERADO: de 16px para 14px no modo retrato */
             padding: 20px 15px;
             min-height: calc(100vh - 120px);
             margin: 0;
@@ -1096,6 +1096,102 @@
             from { transform: scale(1); box-shadow: 0 0 5px var(--cor-primaria); }
             to { transform: scale(1.05); box-shadow: 0 0 15px var(--cor-primaria); }
         }
+
+        /* ESTILOS PARA O METRÔNOMO INDEPENDENTE */
+        .metronome-container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .bpm-controls {
+            margin-bottom: 20px;
+        }
+
+        .bpm-controls label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--cor-primaria);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .bpm-input-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .bpm-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .bpm-btn:hover {
+            background: var(--cor-hover);
+        }
+
+        .bpm-input {
+            width: 80px;
+            padding: 10px;
+            text-align: center;
+            background: var(--cor-fundo);
+            border: 1px solid var(--cor-primaria);
+            border-radius: 5px;
+            color: var(--cor-texto);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .metronome-options {
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--cor-texto);
+            font-size: 1rem;
+        }
+
+        .checkbox-label input {
+            margin-right: 10px;
+        }
+
+        .metronome-display {
+            margin: 30px 0;
+        }
+
+        .metronome-beat {
+            font-size: 4rem;
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+            transition: all 0.1s ease;
+        }
+
+        .metronome-beat.active {
+            color: var(--cor-destaque);
+            transform: scale(1.2);
+        }
+
+        .metronome-status {
+            color: var(--cor-secundaria);
+            font-size: 1.2rem;
+        }
+
+        .metronome-actions {
+            margin-top: 20px;
+        }
         
         @media (max-width: 768px) {
             .music-item { padding: 12px 15px; }
@@ -1168,6 +1264,25 @@
             .string-note {
                 font-size: 1.5rem;
             }
+
+            /* Ajustes para o metrônomo independente em mobile */
+            .bpm-input-group {
+                gap: 5px;
+            }
+            
+            .bpm-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .bpm-input {
+                width: 70px;
+                font-size: 1.3rem;
+            }
+            
+            .metronome-beat {
+                font-size: 3rem;
+            }
         }
         
         @media (max-width: 600px) {
@@ -1217,6 +1332,28 @@
                 padding: 12px 8px;
                 min-height: 70px;
             }
+
+            /* Ajustes para o metrônomo independente em celulares */
+            .bpm-input-group {
+                flex-wrap: wrap;
+            }
+            
+            .bpm-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .bpm-input {
+                width: 60px;
+                font-size: 1.2rem;
+                order: -1;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .metronome-beat {
+                font-size: 2.5rem;
+            }
         }
         
         @media (max-width: 400px) {
@@ -1240,6 +1377,16 @@
             .nav-btn-prev::before,
             .nav-btn-next::before {
                 font-size: 0.9rem;
+            }
+
+            /* Ajustes finos para o metrônomo independente */
+            .bpm-btn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .metronome-beat {
+                font-size: 2rem;
             }
         }
     </style>
@@ -1369,6 +1516,9 @@
                         <button class="btn" onclick="abrirTuner('guitar')">
                             🎶 Afinador de Guitarra
                         </button>
+                        <button class="btn" onclick="abrirMetronomeModal()">
+                            ♫ Metrônomo Independente
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1482,6 +1632,47 @@
                     <button class="nav-btn nav-btn-next" onclick="proximaMusica()" title="Próxima música">
                         ⏭️
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL DO METRÔNOMO INDEPENDENTE -->
+    <div id="metronome-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>♫ METRÔNOMO INDEPENDENTE</h2>
+                <button class="close" onclick="fecharMetronomeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="metronome-container">
+                    <div class="bpm-controls">
+                        <label for="bpm-input">BPM:</label>
+                        <div class="bpm-input-group">
+                            <button class="bpm-btn" onclick="alterarBPM(-5)">-5</button>
+                            <button class="bpm-btn" onclick="alterarBPM(-1)">-1</button>
+                            <input type="number" id="bpm-input" class="bpm-input" value="100" min="1" max="300">
+                            <button class="bpm-btn" onclick="alterarBPM(1)">+1</button>
+                            <button class="bpm-btn" onclick="alterarBPM(5)">+5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="metronome-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="precount-checkbox">
+                            <span class="checkmark"></span>
+                            Ativar 4 batidas de pré-contagem
+                        </label>
+                    </div>
+                    
+                    <div class="metronome-display">
+                        <div id="metronome-beat" class="metronome-beat">♫</div>
+                        <div id="metronome-status" class="metronome-status">Parado</div>
+                    </div>
+                    
+                    <div class="metronome-actions">
+                        <button id="metronome-play-btn" class="btn btn-add" onclick="toggleMetronomeIndependente()">▶️ Iniciar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1850,7 +2041,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         // CONFIGURAÇÃO
         let musicas = [];
         let deferredPrompt = null;
-        let tamanhoFonteBase = 16;
+        let tamanhoFonteBase = 14; // ALTERADO: de 16 para 14
         let autoScrollAtivo = false;
         let scrollInterval = null;
         let scrollSpeed = 1;
@@ -1880,6 +2071,15 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let tunerOscillator = null;
         let notaAtual = null;
         let tipoTunerAtual = 'bass';
+
+        // Variáveis do metrônomo independente
+        let metronomeBPM = 100;
+        let metronomeRunning = false;
+        let metronomeIntervalIndependente = null;
+        let metronomeAudioContextIndependente = null;
+        let metronomePrecount = false;
+        let metronomePrecountCount = 0;
+        let metronomePrecountInterval = null;
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
@@ -2008,6 +2208,26 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Atualizar contador no rodapé
             atualizarContadorRodape();
+
+            // Configurar eventos do metrônomo independente
+            const bpmInput = document.getElementById('bpm-input');
+            if (bpmInput) {
+                bpmInput.addEventListener('change', function() {
+                    let valor = parseInt(this.value);
+                    if (isNaN(valor) || valor < 1) {
+                        valor = 1;
+                    } else if (valor > 300) {
+                        valor = 300;
+                    }
+                    metronomeBPM = valor;
+                    this.value = metronomeBPM;
+                    // Se o metrônomo estiver rodando, reiniciar com o novo BPM
+                    if (metronomeRunning) {
+                        pararMetronomeIndependente();
+                        iniciarMetronomeIndependente();
+                    }
+                });
+            }
         });
 
         // FUNÇÃO PARA ALTERNAR SEÇÕES EXPANSÍVEIS
@@ -2226,8 +2446,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     elemento.style.fontSize = '22px'; // TAMANHO REDUZIDO PARA INICIAR MENOR
                     tamanhoFonteBase = 22;
                 } else {
-                    elemento.style.fontSize = '16px';
-                    tamanhoFonteBase = 16;
+                    elemento.style.fontSize = '14px'; // ALTERADO: de 16px para 14px
+                    tamanhoFonteBase = 14;
                 }
             } else {
                 const novoTamanho = Math.max(10, Math.min(40, tamanhoAtual + mudanca));
@@ -2455,6 +2675,154 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             metronomeAtivo = false;
         }
 
+        // FUNÇÕES DO METRÔNOMO INDEPENDENTE
+        function abrirMetronomeModal() {
+            document.getElementById('metronome-modal').style.display = 'block';
+            // Parar o metrônomo se estiver rodando
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            }
+            // Atualizar o valor do BPM no input
+            document.getElementById('bpm-input').value = metronomeBPM;
+            document.getElementById('precount-checkbox').checked = metronomePrecount;
+            atualizarDisplayMetronome();
+        }
+
+        function fecharMetronomeModal() {
+            document.getElementById('metronome-modal').style.display = 'none';
+            // Parar o metrônomo ao fechar
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            }
+        }
+
+        function alterarBPM(valor) {
+            metronomeBPM = Math.max(1, Math.min(300, metronomeBPM + valor));
+            document.getElementById('bpm-input').value = metronomeBPM;
+            // Se o metrônomo estiver rodando, reiniciar com o novo BPM
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+                iniciarMetronomeIndependente();
+            }
+        }
+
+        function toggleMetronomeIndependente() {
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            } else {
+                iniciarMetronomeIndependente();
+            }
+        }
+
+        function iniciarMetronomeIndependente() {
+            if (metronomeRunning) return;
+            
+            metronomeRunning = true;
+            metronomePrecount = document.getElementById('precount-checkbox').checked;
+            metronomePrecountCount = 0;
+            
+            // Atualizar interface
+            document.getElementById('metronome-play-btn').textContent = '⏹️ Parar';
+            document.getElementById('metronome-status').textContent = 'Iniciando...';
+            
+            // Verificar se há pré-contagem
+            if (metronomePrecount) {
+                iniciarPrecontagem();
+            } else {
+                iniciarBatidaMetronomo();
+            }
+        }
+
+        function pararMetronomeIndependente() {
+            metronomeRunning = false;
+            
+            // Parar intervalos
+            if (metronomeIntervalIndependente) {
+                clearInterval(metronomeIntervalIndependente);
+                metronomeIntervalIndependente = null;
+            }
+            if (metronomePrecountInterval) {
+                clearInterval(metronomePrecountInterval);
+                metronomePrecountInterval = null;
+            }
+            
+            // Atualizar interface
+            document.getElementById('metronome-play-btn').textContent = '▶️ Iniciar';
+            document.getElementById('metronome-status').textContent = 'Parado';
+            document.getElementById('metronome-beat').classList.remove('active');
+        }
+
+        function iniciarPrecontagem() {
+            let count = 4;
+            document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
+            
+            // Tocar a pré-contagem
+            tocarSomMetronomoIndependente(600); // Som mais agudo para pré-contagem
+            
+            metronomePrecountInterval = setInterval(() => {
+                count--;
+                if (count <= 0) {
+                    clearInterval(metronomePrecountInterval);
+                    metronomePrecountInterval = null;
+                    iniciarBatidaMetronomo();
+                    return;
+                }
+                document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
+                tocarSomMetronomoIndependente(600);
+            }, 60000 / metronomeBPM);
+        }
+
+        function iniciarBatidaMetronomo() {
+            let beatCount = 0;
+            document.getElementById('metronome-status').textContent = 'Tocando...';
+            
+            // Tocar a primeira batida imediatamente
+            tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
+            document.getElementById('metronome-beat').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('metronome-beat').classList.remove('active');
+            }, 100);
+            
+            metronomeIntervalIndependente = setInterval(() => {
+                beatCount = (beatCount + 1) % 4;
+                
+                // Tocar o som
+                tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
+                
+                // Atualizar visual
+                document.getElementById('metronome-beat').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('metronome-beat').classList.remove('active');
+                }, 100);
+                
+            }, 60000 / metronomeBPM);
+        }
+
+        function tocarSomMetronomoIndependente(frequencia) {
+            if (!metronomeAudioContextIndependente) {
+                metronomeAudioContextIndependente = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            const oscillator = metronomeAudioContextIndependente.createOscillator();
+            const gainNode = metronomeAudioContextIndependente.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(metronomeAudioContextIndependente.destination);
+            
+            oscillator.frequency.value = frequencia;
+            oscillator.type = 'square';
+            
+            gainNode.gain.value = 0.3;
+            gainNode.gain.exponentialRampToValueAtTime(0.001, metronomeAudioContextIndependente.currentTime + 0.1);
+            
+            oscillator.start();
+            oscillator.stop(metronomeAudioContextIndependente.currentTime + 0.1);
+        }
+
+        function atualizarDisplayMetronome() {
+            // Atualiza o display do metrônomo (caso necessário)
+        }
+
         // EVENTOS GLOBAIS - executados apenas uma vez
         function configurarEventosGlobais() {
             // Fechar modais ao clicar fora
@@ -2469,6 +2837,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportURLModal();
                     fecharUpdateModal();
                     fecharTunerModal();
+                    fecharMetronomeModal(); // ADICIONADO
                 }
             });
 
@@ -2484,6 +2853,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportURLModal();
                     fecharUpdateModal();
                     fecharTunerModal();
+                    fecharMetronomeModal(); // ADICIONADO
                 }
             });
 
@@ -2791,8 +3161,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     document.getElementById('lyrics-content').style.fontSize = '22px'; // TAMANHO REDUZIDO
                     tamanhoFonteBase = 22;
                 } else {
-                    document.getElementById('lyrics-content').style.fontSize = '16px';
-                    tamanhoFonteBase = 16;
+                    document.getElementById('lyrics-content').style.fontSize = '14px'; // ALTERADO: de 16px para 14px
+                    tamanhoFonteBase = 14;
                 }
             }, 100);
             
@@ -2878,9 +3248,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.remove('landscape');
                 botao.classList.remove('active');
                 botao.innerHTML = '🔄 Paisagem';
-                // Ajustar fonte para modo retrato
-                lyricsContent.style.fontSize = '16px';
-                tamanhoFonteBase = 16;
+                // Ajustar fonte para modo retrato - ALTERADO: de 16px para 14px
+                lyricsContent.style.fontSize = '14px';
+                tamanhoFonteBase = 14;
             }
             
             localStorage.setItem('modoVisualizacao', modoVisualizacaoAtual);
@@ -2901,9 +3271,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 lyricsContent.classList.remove('landscape');
                 botao.classList.remove('active');
                 botao.innerHTML = '🔄 Paisagem';
-                // Ajustar fonte para modo retrato
-                lyricsContent.style.fontSize = '16px';
-                tamanhoFonteBase = 16;
+                // Ajustar fonte para modo retrato - ALTERADO: de 16px para 14px
+                lyricsContent.style.fontSize = '14px';
+                tamanhoFonteBase = 14;
             }
         }
 
@@ -3853,6 +4223,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 🛠️ UTILITÁRIOS:
 • 🎸 Afinador de Baixo = Notas de referência para baixo 4 cordas (E-A-D-G)
 • 🎶 Afinador de Guitarra = Notas de referência para guitarra 6 cordas (E-A-D-G-B-E)
+• ♫ Metrônomo Independente = Metrônomo com BPM ajustável e pré-contagem
 • Clique em uma corda para tocar a nota de referência
 • Use "Parar Todas as Notas" para silenciar
 
