@@ -2,9 +2,9 @@
 <repertorio>
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
-    <versao>1.0</versao>
-    <dataExportacao>2025-11-19T01:16:49.880Z</dataExportacao>
-    <totalMusicas>10</totalMusicas>
+    <versao>2.0</versao>
+    <dataExportacao>2025-11-24T12:37:56.686Z</dataExportacao>
+    <totalMusicas>11</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -97,7 +97,6 @@ E os donos do mundo, vão ter que cair!
       <bpm>130</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-11-19T01:16:36.768Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -131,6 +130,42 @@ SEM SAÍDA E SEM PERDÃO]]></letra>
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+    </musica>
+    <musica>
+      <nome><![CDATA[MEUS FANTASMAS]]></nome>
+      <letra><![CDATA[CARREGO MONSTROS ANTIGOS
+QUE INSISTO EM EXISTIR
+EM CADA PASSO QUE EU DOU
+OUÇO VOZES ATRÁS DE MIM
+
+MESMO NA TEMPESTADE
+NÃO VÃO ME DEFINIR
+OS LEÕES RUGEM ALTO
+MAS NÃO VÃO ME DESTRUIR
+
+QUANDO O MEDO VOLTAR
+DEIXO O SILENCIO ME GUIAR
+NA SOLIDÃO DA NOITE
+MEUS FANTASMAS VOU ENFRENTAR
+
+NÃO ADIANTA
+VIR ME DERRUBAR
+EU LEVANTO MAIS FORTE
+E VOLTA A LUTAR
+
+SE O VENTO SOPRA CONTRA
+MINHA ROTA VOU MUDAR
+NÃO IMPORTA O LADO
+O PESADELO VAI PASSAR.
+
+MESMO NA TEMPESTADE
+EU ME RECUSO A CAIR
+OS LEÕES RUGEM ALTO
+MAS NÃO VÃO ME DESTRUIR]]></letra>
+      <bpm>120</bpm>
+      <notas><![CDATA[Não ensaiada ainda.]]></notas>
+      <dataCriacao>2025-11-24T12:37:03.432Z</dataCriacao>
+      <dataModificacao>2025-11-24T12:37:46.773Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
