@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2025-11-24T12:37:56.686Z</dataExportacao>
-    <totalMusicas>11</totalMusicas>
+    <dataExportacao>2025-11-30T17:39:35.956Z</dataExportacao>
+    <totalMusicas>12</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -36,6 +36,65 @@ Então deixa eu dançar
       <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+    </musica>
+    <musica>
+      <nome><![CDATA[BALADA DOS IMPERFEITOS]]></nome>
+      <letra><![CDATA[[|C|]Ninguém aqui tá procurando ser herói[|G|]
+[|Dm|]Todo mundo já caiu, mas levantou [|C|]depois
+O tempo passa e a gente aprende a [|G|]rir
+[|F|]Das coisas que um dia fizeram a gente [|G|]fingir
+
+[|F|]Tem quem erra feio e ainda tenta [|C|]dançar
+[|G|]Tem quem jura alto que nunca vai [|AM|]falhar
+Mas[|F|] no fundo a gente sabe o que é [|C|]real
+Ser imperfeito é nosso ponto princip[|G|]al
+
+Então [|F|]vem sem medo, pode [|AM|]entrar
+Aqui ninguém precisa disfar[|G|]çar
+
+[|C|]Essa é a balada dos imperfeitos
+Gente de [|G|]riso torto e coração cheio
+Se a vida [|AM|]tropeça, a gente dá jeito
+E canta mais [|F|]alto só por ser desse jeito
+
+Já fiz promessas que eu nem consegui cumprir
+Falei demais quando era hora de ouvir
+Mas tô tentando ser alguém melhor
+Nunca dei bola para o que está ao meu redor
+
+Tem quem dança fora do compasso
+Tem quem ri na hora errada e não desfaço
+Mas quando junta todo mundo aqui
+Até os defeitos querem aplaudir
+
+Então vem sem medo, pode entrar
+Aqui ninguém precisa disfarçar
+
+Essa é a balada dos imperfeitos
+Gente de riso torto e coração cheio
+Se a vida tropeça, a gente dá jeito
+E canta mais alto só por ser desse jeito
+
+Se o mundo pesa demais
+A gente divide por dois
+Se o dia insiste em cair
+A gente levanta depois
+
+Somos feitos de falhas
+E de brilhos também
+Ser perfeito é mentira
+Mas amar é do bem
+
+Essa é a balada dos imperfeitos
+Gente de riso torto e coração cheio
+Se a vida tropeça, a gente dá jeito
+E canta mais alto só por ser desse jeito
+
+Essa é a balada dos imperfeitos
+Onde cada erro vira um novo jeito
+De ser verdadeiro, leve e inteiro
+E celebrar o que somos por inteiro]]></letra>
+      <dataCriacao>2025-11-30T17:39:23.851Z</dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[DEIXA PRA LÁ]]></nome>
@@ -164,8 +223,7 @@ OS LEÕES RUGEM ALTO
 MAS NÃO VÃO ME DESTRUIR]]></letra>
       <bpm>120</bpm>
       <notas><![CDATA[Não ensaiada ainda.]]></notas>
-      <dataCriacao>2025-11-24T12:37:03.432Z</dataCriacao>
-      <dataModificacao>2025-11-24T12:37:46.773Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
