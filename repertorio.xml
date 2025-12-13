@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2025-12-13T18:11:36.440Z</dataExportacao>
+    <dataExportacao>2025-12-13T19:22:35.522Z</dataExportacao>
     <totalMusicas>12</totalMusicas>
   </info>
   <musicas>
@@ -33,8 +33,7 @@ O RISO, O PRANTO — UMA ESTÁTICA REMOTA
 CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
 E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <bpm>144</bpm>
-      <notas><![CDATA[BPM: 144
-Harmony: G
+      <notas><![CDATA[BPM: 144 - Harmony: G
 
 Intro: 2x | Full Band (Guitar Drive)
 
@@ -62,7 +61,7 @@ Dry Ending: 2x | Full Band (Guitar Drive)
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-13T18:03:09.859Z</dataModificacao>
+      <dataModificacao>2025-12-13T18:36:53.604Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -116,7 +115,6 @@ Chorus: 2x | Full Band › "Erga os punhos …"
 
 Dry Ending]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-13T18:05:17.676Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -148,8 +146,39 @@ SOU O ECO DA PERDIÇÃO
 O ABISMO DA DEVOÇÃO
 SEM SAÍDA E SEM PERDÃO]]></letra>
       <bpm>110</bpm>
-      <notas><![CDATA[Ainda em Definição]]></notas>
+      <notas><![CDATA[BPM: 110 - Harmony: D
+
+Intro.: 
+Bar 1: 1 x Bass in (main riff). Drums: hi-hat keeping time.
+Bar 2: 1 x Drums: full beat in. Bass continues.
+Bar 3: 1 x Guitar in. Full Band established.
+Bar 4: 1 x Full Band.
+
+VRS1: | Full Band › "Mente profana…"
+
+Chorus: 1x | Full Band › "Sou o grito…"
+
+INT: 2x | Full Band
+
+VRS2: | Full Band › "O Espelho…"
+
+Chorus: 1x | Full Band › "Sou a fuga…"
+
+INT: 2x | Full Band
+
+SOLO: Solo guitar over complete song form | Full Band
+
+INT: 2x | Full Band
+
+VRS3: | Full Band › "Olhar insano…"
+
+Chorus: 1x | Full Band › "Sou o eco…"
+
+INT: 4x | Full Band
+
+(All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2025-12-13T19:21:48.882Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -342,7 +371,6 @@ A MOTHER DREAM YOU SUFFOCATE?
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-13T17:28:45.787Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
