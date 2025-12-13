@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2025-12-01T13:51:20.493Z</dataExportacao>
+    <dataExportacao>2025-12-13T17:28:50.378Z</dataExportacao>
     <totalMusicas>12</totalMusicas>
   </info>
   <musicas>
@@ -33,9 +33,37 @@ O RISO, O PRANTO — UMA ESTÁTICA REMOTA
 CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
 E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
       <bpm>144</bpm>
-      <notas><![CDATA[Ainda em Definição]]></notas>
+      <notas><![CDATA[DEIXA PRA LÁ — Guide
+BPM: 144
+Harmony: | G | F | B♭ | Am |
+
+Intro: 2x | Full Band (Guitar Drive)
+
+VRS1: | Full Band (Guitar Clean) › "Vozes vêm atrás…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+INT: 2x | Full Band (Guitar Drive)
+
+VRS2: | Full Band (Guitar Clean) › "Contenção no leito…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+INT: 2x | Full Band (Guitar Drive)
+
+VRS3: | Full Band (Guitar Clean) › "Conecta o eletrodo…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+Break: 2x | Drums + Vocal › "Sob o gesso da eutimia…"
+
+Final Chorus: | Full Band (Guitar Drive)
+
+Dry Ending: 2x | Full Band (Guitar Drive)
+
+(All stop — tight ending)]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-01T13:50:41.236Z</dataModificacao>
+      <dataModificacao>2025-12-13T17:26:06.345Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -66,8 +94,37 @@ E os donos do mundo, vão ter que cair!
 
 ]]></letra>
       <bpm>130</bpm>
-      <notas><![CDATA[Ainda em Definição]]></notas>
+      <notas><![CDATA[DEIXA PRA LÁ — Guide
+BPM: 144
+Harmony: | G | F | B♭ | Am |
+
+Intro: 2x | Full Band (Guitar Drive)
+
+VRS1: | Full Band (Guitar Clean) › "Vozes vêm atrás…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+INT: 2x | Full Band (Guitar Drive)
+
+VRS2: | Full Band (Guitar Clean) › "Contenção no leito…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+INT: 2x | Full Band (Guitar Drive)
+
+VRS3: | Full Band (Guitar Clean) › "Conecta o eletrodo…"
+
+Chorus: 2x | Full Band (Guitar Clean) › "Deixa pra lá…"
+
+Break: 2x | Drums + Vocal › "Sob o gesso da eutimia…"
+
+Final Chorus: | Full Band (Guitar Drive)
+
+Dry Ending: 2x | Full Band (Guitar Drive)
+
+(All stop — tight ending)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2025-12-13T17:26:28.529Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -270,7 +327,7 @@ o poder é o que desejo!
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
-      <letra><![CDATA[[|EM G C EM D|]        
+      <letra><![CDATA[[|EM G EM C  D|]        
 DO YOU CARE WHAT THEY SAY?
 DO YOU LIVE OR FADE AWAY?
 DO YOU FIGHT OR JUST OBEY?
@@ -293,6 +350,7 @@ A MOTHER DREAM YOU SUFFOCATE?
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2025-12-13T17:28:45.787Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
@@ -323,7 +381,6 @@ Então deixa eu dançar
       <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-01T13:50:46.373Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - BALADA DOS IMPERFEITOS]]></nome>
@@ -385,7 +442,6 @@ E celebrar o que somos por inteiro]]></letra>
       <bpm>120</bpm>
       <notas><![CDATA[N/D]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-01T13:50:10.244Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - MEUS FANTASMAS]]></nome>
@@ -421,7 +477,6 @@ MAS NÃO VÃO ME DESTRUIR]]></letra>
       <bpm>120</bpm>
       <notas><![CDATA[Não ensaiada ainda]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2025-12-01T13:51:02.781Z</dataModificacao>
     </musica>
   </musicas>
 </repertorio>
