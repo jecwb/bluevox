@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2025-12-13T19:22:35.522Z</dataExportacao>
+    <dataExportacao>2025-12-13T20:01:20.437Z</dataExportacao>
     <totalMusicas>12</totalMusicas>
   </info>
   <musicas>
@@ -213,8 +213,40 @@ DILEMA[|E|], FRAQUEZA[|F#|],
 ATÉ [|E|]QUANDO VOU AGUENTAR[|F#|].
 [R] REFRÃO]]></letra>
       <bpm>110</bpm>
-      <notas><![CDATA[Ainda em Definição]]></notas>
+      <notas><![CDATA[BPM: 110 - Harmony: B
+
+Intro.: 
+Bar 1: 2 x Drums and Guitar in.
+Bar 2: 2 x Bass In. Full Band established.
+
+VRS1: | Full Band › "Tantas dívidas…"
+
+Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
+
+— DRY ENDING —
+
+(Drum count: 1... 2... 3... 4...)
+
+VRS2: | Full Band › "Não sei mais…" 
+
+Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
+
+— DRY ENDING —
+
+(Drum count: 1... 2... 3... 4...)
+
+Intro.: 
+Bar 1: 2 x Drums and Guitar in.
+Bar 2: 2 x Bass In. Full Band established.
+
+VRS3: | Full Band › "O Aluguel…" 
+
+Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
+
+
+(All stop — Dry Ending)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2025-12-13T20:01:14.478Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
