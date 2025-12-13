@@ -2905,11 +2905,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('empty-state').style.display = 'none';
             document.getElementById('music-list').style.display = 'block';
             document.getElementById('controls').style.display = 'flex';
-            // REMOVIDO: music-count daqui (agora está no rodapé)
             exibirListaMusicas();
             atualizarContadorRodape(); // Atualizar o rodapé
         }
 
+        // FUNÇÃO EXIBIR LISTA DE MÚSICAS CORRIGIDA
         function exibirListaMusicas() {
             const lista = document.getElementById('music-list');
             
@@ -2917,7 +2917,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 document.getElementById('empty-state').style.display = 'block';
                 document.getElementById('music-list').style.display = 'none';
                 document.getElementById('controls').style.display = 'none';
-                // REMOVIDO: music-count daqui (agora está no rodapé)
                 atualizarContadorRodape(); // Atualizar o rodapé mesmo quando vazio
                 return;
             }
@@ -2929,7 +2928,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     <div class="music-info">
                         <div class="music-name">${musica.nome}</div>
                         ${musica.bpm ? `<div class="music-bpm" onclick="event.stopPropagation();" title="BPM da música">BPM: ${musica.bpm}</div>` : ''}
-                        ${musica.notas ? `<div class="music-notes" onclick="event.stopPropagation(); mostrarNotas('${musica.nome}', '${musica.notas.replace(/'/g, "\\'")}')" title="Ver notas de execução">📝</div>` : ''}
+                        ${musica.notas ? `<div class="music-notes" onclick="event.stopPropagation(); mostrarNotasModal(${index})" title="Ver notas de execução">📝</div>` : ''}
                     </div>
                     <div class="music-actions">
                         <button class="action-btn setlist-btn ${musica.noSetlist ? 'active' : ''}" 
@@ -2950,6 +2949,47 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             const countElement = document.getElementById('music-count-footer');
             const total = musicas.length;
             countElement.textContent = `${total} música${total !== 1 ? 's' : ''} no repertório`;
+        }
+
+        // NOVA FUNÇÃO PARA MOSTRAR NOTAS USANDO ÍNDICE (CORRIGIDA)
+        function mostrarNotasModal(index) {
+            const musica = musicas[index];
+            if (!musica || !musica.notas) return;
+            
+            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${musica.nome}`;
+            
+            // Converter quebras de linha para <br> e escapar caracteres especiais
+            const notasFormatadas = musica.notas
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+            
+            document.getElementById('notes-content').innerHTML = notasFormatadas;
+            document.getElementById('notes-modal').style.display = 'block';
+        }
+
+        // FUNÇÃO ANTIGA (MANTIDA PARA COMPATIBILIDADE)
+        function mostrarNotas(nomeMusica, notas) {
+            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${nomeMusica}`;
+            
+            // Converter quebras de linha para <br> e escapar caracteres especiais
+            const notasFormatadas = notas
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+            
+            document.getElementById('notes-content').innerHTML = notasFormatadas;
+            document.getElementById('notes-modal').style.display = 'block';
+        }
+
+        function fecharNotesModal() {
+            document.getElementById('notes-modal').style.display = 'none';
         }
 
         function salvarMusicas() {
@@ -3217,17 +3257,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
             
             document.getElementById('music-modal').style.display = 'none';
-        }
-
-        // FUNÇÃO PARA MOSTRAR NOTAS
-        function mostrarNotas(nomeMusica, notas) {
-            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${nomeMusica}`;
-            document.getElementById('notes-content').textContent = notas;
-            document.getElementById('notes-modal').style.display = 'block';
-        }
-
-        function fecharNotesModal() {
-            document.getElementById('notes-modal').style.display = 'none';
         }
 
         // FUNÇÕES DE MODOS DE VISUALIZAÇÃO - CORRIGIDAS
