@@ -2059,14 +2059,12 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let modoVisualizacaoAtual = 'retrato';
         let modoDispositivo = 'tablet';
 
-        // Variáveis do metrônomo (modificado para incluir pré-contagem)
+        // Variáveis do metrônomo
         let metronomeAtivo = false;
         let metronomeInterval = null;
         let metronomeAudioContext = null;
         let currentBPM = 120;
         let indiceMusicaAberta = -1;
-        let metronomePrecountCount = 0;
-        let metronomePrecountInterval = null;
 
         // Variáveis para os afinadores
         let tunerAudioContext = null;
@@ -2080,8 +2078,8 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let metronomeIntervalIndependente = null;
         let metronomeAudioContextIndependente = null;
         let metronomePrecount = false;
-        let metronomePrecountCountIndependente = 0;
-        let metronomePrecountIntervalIndependente = null;
+        let metronomePrecountCount = 0;
+        let metronomePrecountInterval = null;
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
@@ -2608,7 +2606,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }
         }
 
-        // FUNÇÕES DO METRÔNOMO - MODIFICADAS PARA INCLUIR PRÉ-CONTAGEM
+        // FUNÇÕES DO METRÔNOMO
         function toggleMetronome() {
             const botao = document.getElementById('metronome-toggle');
             const musicaAtual = musicas[indiceMusicaAberta];
@@ -2623,60 +2621,31 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 botao.classList.remove('active');
             } else {
                 currentBPM = parseInt(musicaAtual.bpm);
-                iniciarMetronomeComPrecontagem();
+                iniciarMetronome();
                 botao.classList.add('active');
             }
         }
 
-        function iniciarMetronomeComPrecontagem() {
+        function iniciarMetronome() {
             if (metronomeAtivo) return;
             
             metronomeAtivo = true;
-            metronomePrecountCount = 4; // 4 batidas de pré-contagem
+            const intervalo = 60000 / currentBPM; // ms por batida
             
             // Criar contexto de áudio se não existir
             if (!metronomeAudioContext) {
                 metronomeAudioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
             
-            // Mostrar status no console (opcional)
-            console.log('🎵 Pré-contagem: 4');
-            
-            // Iniciar pré-contagem
-            tocarSomMetronome(600); // Som mais agudo para pré-contagem
-            
-            metronomePrecountInterval = setInterval(() => {
-                metronomePrecountCount--;
-                
-                if (metronomePrecountCount <= 0) {
-                    // Fim da pré-contagem, iniciar metrônomo normal
-                    clearInterval(metronomePrecountInterval);
-                    metronomePrecountInterval = null;
-                    console.log('🎵 Metrônomo iniciado!');
-                    iniciarBatidaMetronomo();
-                    return;
-                }
-                
-                console.log(`🎵 Pré-contagem: ${metronomePrecountCount}`);
-                tocarSomMetronome(600);
-                
-            }, 60000 / currentBPM);
-        }
-
-        function iniciarBatidaMetronomo() {
             let contador = 0;
             
-            // Tocar a primeira batida imediatamente
-            tocarSomMetronome(800); // Som mais forte na primeira batida
-            contador = 1;
-            
             metronomeInterval = setInterval(() => {
-                tocarSomMetronome(contador === 0 ? 800 : 400); // Destaque na primeira batida
+                playMetronomeSound(contador === 0); // Destaque na primeira batida
                 contador = (contador + 1) % 4; // Padrão 4/4
-            }, 60000 / currentBPM);
+            }, intervalo);
         }
 
-        function tocarSomMetronome(frequencia) {
+        function playMetronomeSound(accent) {
             if (!metronomeAudioContext) return;
             
             const oscillator = metronomeAudioContext.createOscillator();
@@ -2686,11 +2655,11 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             gainNode.connect(metronomeAudioContext.destination);
             
             // Configurar o som
-            oscillator.frequency.value = frequencia; // Hz
+            oscillator.frequency.value = accent ? 800 : 400; // Hz - mais agudo na primeira batida
             oscillator.type = 'square';
             
             // Configurar o volume
-            gainNode.gain.value = 0.3;
+            gainNode.gain.value = accent ? 0.3 : 0.2;
             gainNode.gain.exponentialRampToValueAtTime(0.001, metronomeAudioContext.currentTime + 0.1);
             
             // Tocar o som
@@ -2703,14 +2672,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 clearInterval(metronomeInterval);
                 metronomeInterval = null;
             }
-            if (metronomePrecountInterval) {
-                clearInterval(metronomePrecountInterval);
-                metronomePrecountInterval = null;
-            }
             metronomeAtivo = false;
         }
 
-        // FUNÇÕES DO METRÔNOMO INDEPENDENTE (não modificado, apenas renomeei a variável para evitar conflito)
+        // FUNÇÕES DO METRÔNOMO INDEPENDENTE
         function abrirMetronomeModal() {
             document.getElementById('metronome-modal').style.display = 'block';
             // Parar o metrônomo se estiver rodando
@@ -2720,7 +2685,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             // Atualizar o valor do BPM no input
             document.getElementById('bpm-input').value = metronomeBPM;
             document.getElementById('precount-checkbox').checked = metronomePrecount;
-            atualizarDisplayMetronomeIndependente();
+            atualizarDisplayMetronome();
         }
 
         function fecharMetronomeModal() {
@@ -2754,7 +2719,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             metronomeRunning = true;
             metronomePrecount = document.getElementById('precount-checkbox').checked;
-            metronomePrecountCountIndependente = 0;
+            metronomePrecountCount = 0;
             
             // Atualizar interface
             document.getElementById('metronome-play-btn').textContent = '⏹️ Parar';
@@ -2762,9 +2727,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Verificar se há pré-contagem
             if (metronomePrecount) {
-                iniciarPrecontagemIndependente();
+                iniciarPrecontagem();
             } else {
-                iniciarBatidaMetronomoIndependente();
+                iniciarBatidaMetronomo();
             }
         }
 
@@ -2776,9 +2741,9 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 clearInterval(metronomeIntervalIndependente);
                 metronomeIntervalIndependente = null;
             }
-            if (metronomePrecountIntervalIndependente) {
-                clearInterval(metronomePrecountIntervalIndependente);
-                metronomePrecountIntervalIndependente = null;
+            if (metronomePrecountInterval) {
+                clearInterval(metronomePrecountInterval);
+                metronomePrecountInterval = null;
             }
             
             // Atualizar interface
@@ -2787,32 +2752,32 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             document.getElementById('metronome-beat').classList.remove('active');
         }
 
-        function iniciarPrecontagemIndependente() {
+        function iniciarPrecontagem() {
             let count = 4;
             document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
             
             // Tocar a pré-contagem
-            tocarSomMetronomeIndependente(600); // Som mais agudo para pré-contagem
+            tocarSomMetronomoIndependente(600); // Som mais agudo para pré-contagem
             
-            metronomePrecountIntervalIndependente = setInterval(() => {
+            metronomePrecountInterval = setInterval(() => {
                 count--;
                 if (count <= 0) {
-                    clearInterval(metronomePrecountIntervalIndependente);
-                    metronomePrecountIntervalIndependente = null;
-                    iniciarBatidaMetronomoIndependente();
+                    clearInterval(metronomePrecountInterval);
+                    metronomePrecountInterval = null;
+                    iniciarBatidaMetronomo();
                     return;
                 }
                 document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
-                tocarSomMetronomeIndependente(600);
+                tocarSomMetronomoIndependente(600);
             }, 60000 / metronomeBPM);
         }
 
-        function iniciarBatidaMetronomoIndependente() {
+        function iniciarBatidaMetronomo() {
             let beatCount = 0;
             document.getElementById('metronome-status').textContent = 'Tocando...';
             
             // Tocar a primeira batida imediatamente
-            tocarSomMetronomeIndependente(beatCount === 0 ? 800 : 400);
+            tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
             document.getElementById('metronome-beat').classList.add('active');
             setTimeout(() => {
                 document.getElementById('metronome-beat').classList.remove('active');
@@ -2822,7 +2787,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 beatCount = (beatCount + 1) % 4;
                 
                 // Tocar o som
-                tocarSomMetronomeIndependente(beatCount === 0 ? 800 : 400);
+                tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
                 
                 // Atualizar visual
                 document.getElementById('metronome-beat').classList.add('active');
@@ -2833,7 +2798,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             }, 60000 / metronomeBPM);
         }
 
-        function tocarSomMetronomeIndependente(frequencia) {
+        function tocarSomMetronomoIndependente(frequencia) {
             if (!metronomeAudioContextIndependente) {
                 metronomeAudioContextIndependente = new (window.AudioContext || window.webkitAudioContext)();
             }
@@ -2854,7 +2819,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             oscillator.stop(metronomeAudioContextIndependente.currentTime + 0.1);
         }
 
-        function atualizarDisplayMetronomeIndependente() {
+        function atualizarDisplayMetronome() {
             // Atualiza o display do metrônomo (caso necessário)
         }
 
@@ -3180,7 +3145,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 successMsg.className = 'success';
                 successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" excluída com sucesso!`;
                 lista.insertBefore(successMsg, lista.firstChild);
-                setTimeout(() -> successMsg.remove(), 3000);
+                setTimeout(() => successMsg.remove(), 3000);
             }
         }
 
@@ -4257,7 +4222,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • A- A A+ = Controles de tamanho da fonte (agora funcionam em ambos os modos)
 • ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
 • - 1 + = Controles simples de velocidade (1-7, inicia na mais lenta)
-• ♫ Metrônomo = Inicia/para metrônomo com 4 batidas de pré-contagem no BPM da música (requer BPM definido)
+• ♫ Metrônomo = Inicia/para metrônomo no BPM da música (requer BPM definido)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
 • 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
 
@@ -4281,7 +4246,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 ♫ METRÔNOMO:
 • Clique no botão ♫ para iniciar/parar
 • Usa o BPM definido na música
-• Antes de iniciar, toca 4 batidas de pré-contagem
 • Som com batida forte na primeira de cada 4 tempos
 • Funciona apenas se a música tiver BPM definido
 
