@@ -1,0 +1,4634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#00ff00">
+    <meta name="description" content="Repertório de músicas - BlueVox">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Repertório BlueVox</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --cor-primaria: #00ff00;
+            --cor-secundaria: #00aa00;
+            --cor-fundo: #000000;
+            --cor-texto: #00ff00;
+            --cor-destaque: #ffff00;
+            --cor-botao: #003300;
+            --cor-hover: #004400;
+        }
+        
+        body {
+            background: var(--cor-fundo);
+            color: var(--cor-texto);
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+        
+        /* REMOVIDO: header completo */
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #111111;
+            border: 2px dashed var(--cor-secundaria);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .empty-state h2 {
+            color: var(--cor-primaria);
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .empty-state p {
+            color: var(--cor-secundaria);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .music-list {
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .music-item {
+            background: #111111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .music-item:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+            transform: translateX(5px);
+        }
+        
+        .music-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .music-name {
+            color: var(--cor-primaria);
+            font-size: 1.1rem;
+            font-weight: bold;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 15px;
+        }
+        
+        .music-bpm {
+            color: var(--cor-destaque);
+            font-size: 0.8rem;
+            margin-right: 10px;
+            white-space: nowrap;
+            background: #003300;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--cor-primaria);
+        }
+        
+        .music-notes {
+            color: #00ccff;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            white-space: nowrap;
+            background: #003366;
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid #0088ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .music-notes:hover {
+            background: #004477;
+            transform: scale(1.05);
+        }
+        
+        .music-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .action-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 35px;
+            height: 35px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        
+        .action-btn:hover {
+            background: var(--cor-hover);
+            transform: scale(1.1);
+        }
+        
+        .setlist-btn {
+            background: #663300;
+            border-color: #ff8800;
+        }
+        
+        .setlist-btn.active {
+            background: #ffaa00;
+            color: #000000;
+            border-color: #ffff00;
+        }
+        
+        .setlist-btn:hover {
+            background: #884400;
+        }
+        
+        .edit-btn {
+            background: #003366;
+            border-color: #0066cc;
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            width: 100%;
+        }
+        
+        .btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-add {
+            background: #006600;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .btn-secondary {
+            background: #333333;
+            border-color: #666666;
+        }
+        
+        .btn-delete {
+            background: #660000;
+            border-color: #ff4444;
+            color: #ff8888;
+        }
+        
+        .btn-delete:hover {
+            background: #770000;
+        }
+        
+        .btn-install {
+            background: #004477;
+            border-color: #0088ff;
+            font-weight: bold;
+        }
+        
+        /* REMOVIDO: .music-count - AGORA ESTÁ NO RODAPÉ */
+        
+        .update-alert {
+            background: #003366;
+            border: 1px solid #0088ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .update-alert h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .update-alert p {
+            color: #00ccff;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--cor-fundo);
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 5px 10px;
+            background: #111;
+            border-bottom: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .modal-title-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .modal-header h2 {
+            color: var(--cor-primaria);
+            font-size: 0.8rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .separator {
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin: 0 3px;
+        }
+        
+        .font-controls-header {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+        
+        .font-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .font-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .scroll-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .scroll-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        
+        .scroll-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .scroll-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .scroll-speed-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .speed-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            min-width: 20px;
+        }
+        
+        .speed-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .speed-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .speed-display {
+            color: var(--cor-primaria);
+            font-size: 0.7rem;
+            margin: 0 3px;
+            min-width: 15px;
+            text-align: center;
+        }
+        
+        .view-mode-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+        
+        .view-mode-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        .view-mode-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        /* Estilos para o metrônomo */
+        .metronome-controls {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: 5px;
+        }
+        
+        .metronome-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .metronome-btn:hover {
+            background: var(--cor-hover);
+            transform: scale(1.05);
+        }
+        
+        .metronome-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+            animation: pulseMetronome 0.5s infinite alternate;
+        }
+        
+        /* ===== NOVO BOTÃO VS (VIRTUAL SOUND) ===== */
+        .vs-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            width: 28px;
+            height: 28px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-left: 3px;
+            font-weight: bold;
+        }
+        
+        .vs-btn:hover {
+            background: var(--cor-hover);
+            transform: scale(1.1);
+        }
+        
+        .vs-btn.playing {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+            animation: pulseVS 0.5s infinite alternate;
+        }
+        
+        @keyframes pulseVS {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        /* BOTÃO FLUTUANTE VS NO MODAL */
+        .vs-float-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cor-primaria), #0088ff);
+            color: var(--cor-fundo);
+            border: 2px solid var(--cor-destaque);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            animation: pulseVSFloat 2s infinite;
+        }
+        
+        .vs-float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.9);
+        }
+        
+        .vs-float-btn.playing {
+            animation: pulseVSActive 0.5s infinite alternate;
+        }
+        
+        @keyframes pulseVSFloat {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 255, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+        }
+        
+        @keyframes pulseVSActive {
+            from { transform: scale(1); box-shadow: 0 0 20px var(--cor-primaria); }
+            to { transform: scale(1.1); box-shadow: 0 0 40px var(--cor-destaque); }
+        }
+        
+        /* MENSAGEM DE VS INDISPONÍVEL */
+        .vs-toast {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            background: #660000;
+            color: #ff8888;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid #ff4444;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 1002;
+            animation: fadeInOut 3s ease forwards;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        /* ===== FIM DO BOTÃO VS ===== */
+        
+        @keyframes pulseMetronome {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        .close {
+            color: var(--cor-primaria);
+            font-size: 16px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 2px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 3px;
+        }
+        
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        .lyrics-content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 14px; /* ALTERADO: de 16px para 14px no modo retrato */
+            padding: 20px 15px;
+            min-height: calc(100vh - 120px);
+            margin: 0;
+            box-sizing: border-box;
+            color: var(--cor-texto);
+            transition: all 0.3s ease;
+        }
+
+        /* Modo Paisagem - Colunas - CORRIGIDO: Removido !important para permitir controle de fonte */
+        .lyrics-content.landscape {
+            column-count: 2;
+            column-gap: 40px;
+            text-align: left;
+            font-size: 22px; /* TAMANHO REDUZIDO PARA INICIAR MENOR (era 32px) */
+        }
+        
+        .lyrics-content.landscape .yellow-line,
+        .lyrics-content.landscape .normal-line {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            font-size: inherit; /* HERDAR DO ELEMENTO PAI */
+        }
+
+        .yellow-line {
+            color: var(--cor-destaque) !important;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
+        }
+        
+        .normal-line {
+            margin: 8px 0;
+            color: var(--cor-texto);
+        }
+
+        /* NOVO ESTILO PARA CIFRAS LARANJA */
+        .orange-chord {
+            color: #ff8800 !important;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
+        }
+        
+        .add-form, .edit-form, .config-form {
+            background: #111;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-secundaria);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--cor-primaria);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--cor-fundo);
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 5px;
+            color: var(--cor-texto);
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 8px var(--cor-primaria);
+        }
+        
+        .form-textarea {
+            height: 200px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--cor-secundaria);
+        }
+        
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .color-option {
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-option.active {
+            border-color: var(--cor-primaria);
+        }
+        
+        .success {
+            color: var(--cor-primaria);
+            background: #003300;
+            border-radius: 8px;
+            border: 1px solid var(--cor-primaria);
+            padding: 12px;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .install-prompt {
+            background: #003300;
+            border: 1px solid var(--cor-primaria);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .backup-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+            width: 100%;
+        }
+        
+        .backup-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .backup-info {
+            text-align: center;
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .import-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .import-option {
+            background: #111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .import-option:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+        }
+        
+        .import-option.selected {
+            background: #003300;
+            border-color: var(--cor-primaria);
+        }
+        
+        .import-option h3 {
+            color: var(--cor-primaria);
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .import-option p {
+            color: var(--cor-secundaria);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        /* Estilos para o setlist */
+        .setlist-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #111;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+        }
+        
+        .setlist-musicas {
+            margin: 15px 0;
+        }
+        
+        .setlist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #000;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .setlist-item:hover {
+            background: #1a1a1a;
+            border-color: var(--cor-primaria);
+        }
+        
+        .setlist-item.active {
+            background: #003300;
+            border-color: var(--cor-destaque);
+        }
+        
+        .setlist-pos {
+            color: var(--cor-primaria);
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 30px;
+        }
+        
+        .setlist-name {
+            flex: 1;
+            color: var(--cor-texto);
+        }
+        
+        .setlist-bpm {
+            color: var(--cor-destaque);
+            font-size: 0.8rem;
+            margin-right: 10px;
+            background: #003300;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-primaria);
+        }
+        
+        .setlist-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .setlist-controls .btn {
+            flex: 1;
+        }
+        
+        /* BOTÕES DE NAVEGAÇÃO NO MODAL - COMPACTOS */
+        .modal-footer {
+            padding: 10px;
+            background: #111;
+            border-top: 1px solid var(--cor-primaria);
+            display: none;
+        }
+        
+        .navigation-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .nav-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 2px solid var(--cor-primaria);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        .nav-btn-prev {
+            background: #003366;
+            border-color: #0088ff;
+        }
+        
+        .nav-btn-next {
+            background: #006600;
+            border-color: #00ff00;
+        }
+        
+        /* Esconder o texto e deixar apenas as setas */
+        .nav-btn::after {
+            content: "";
+            display: none;
+        }
+        
+        .nav-btn-prev::before {
+            content: "⏮️";
+            font-size: 1.2rem;
+        }
+        
+        .nav-btn-next::before {
+            content: "⏭️";
+            font-size: 1.2rem;
+        }
+        
+        /* Estilos para o modal de notas */
+        .notes-modal-content {
+            background: var(--cor-fundo);
+            margin: 5% auto;
+            padding: 0;
+            border: 2px solid var(--cor-primaria);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .notes-modal-header {
+            padding: 15px 20px;
+            background: #111;
+            border-bottom: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notes-modal-header h2 {
+            color: var(--cor-primaria);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .notes-modal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .notes-content {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: var(--cor-texto);
+            background: #111;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--cor-secundaria);
+        }
+        
+        .notes-modal-footer {
+            padding: 15px 20px;
+            background: #111;
+            border-top: 1px solid var(--cor-primaria);
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        @keyframes pulse {
+            0% { border-color: var(--cor-primaria); }
+            50% { border-color: var(--cor-destaque); }
+            100% { border-color: var(--cor-primaria); }
+        }
+        
+        /* NOVOS ESTILOS PARA MENUS EXPANSÍVEIS */
+        .expandable-section {
+            margin-bottom: 15px;
+            border: 1px solid var(--cor-secundaria);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #111;
+        }
+        
+        .section-header {
+            padding: 15px 20px;
+            background: #1a1a1a;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .section-header:hover {
+            background: #222;
+        }
+        
+        .section-header h3 {
+            color: var(--cor-primaria);
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-header .arrow {
+            color: var(--cor-primaria);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-header.expanded .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .section-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .section-content.expanded {
+            padding: 20px;
+            max-height: 1000px;
+        }
+        
+        /* NOVO RODAPÉ COM CONTADOR DE MÚSICAS */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #00aa00;
+            color: #00cc00;
+        }
+        
+        .footer-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .music-count-footer {
+            color: var(--cor-primaria);
+            font-weight: bold;
+        }
+        
+        /* ESTILOS PARA OS AFINADORES */
+        .tuner-container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tuner-title {
+            text-align: center;
+            color: var(--cor-primaria);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .tuner-strings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .string-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 2px solid var(--cor-secundaria);
+            padding: 20px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        
+        .string-btn:hover {
+            background: var(--cor-hover);
+            transform: translateY(-3px);
+        }
+        
+        .string-btn.playing {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+            border-color: var(--cor-destaque);
+            animation: pulseString 0.5s infinite alternate;
+        }
+        
+        .string-note {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .string-name {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .tuner-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .tuner-type-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tuner-type-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tuner-type-btn.active {
+            background: var(--cor-primaria);
+            color: var(--cor-fundo);
+        }
+        
+        .tuner-type-btn:hover {
+            background: var(--cor-hover);
+        }
+        
+        @keyframes pulseString {
+            from { transform: scale(1); box-shadow: 0 0 5px var(--cor-primaria); }
+            to { transform: scale(1.05); box-shadow: 0 0 15px var(--cor-primaria); }
+        }
+
+        /* ESTILOS PARA O METRÔNOMO INDEPENDENTE */
+        .metronome-container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .bpm-controls {
+            margin-bottom: 20px;
+        }
+
+        .bpm-controls label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--cor-primaria);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .bpm-input-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .bpm-btn {
+            background: var(--cor-botao);
+            color: var(--cor-primaria);
+            border: 1px solid var(--cor-secundaria);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .bpm-btn:hover {
+            background: var(--cor-hover);
+        }
+
+        .bpm-input {
+            width: 80px;
+            padding: 10px;
+            text-align: center;
+            background: var(--cor-fundo);
+            border: 1px solid var(--cor-primaria);
+            border-radius: 5px;
+            color: var(--cor-texto);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .metronome-options {
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--cor-texto);
+            font-size: 1rem;
+        }
+
+        .checkbox-label input {
+            margin-right: 10px;
+        }
+
+        .metronome-display {
+            margin: 30px 0;
+        }
+
+        .metronome-beat {
+            font-size: 4rem;
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+            transition: all 0.1s ease;
+        }
+
+        .metronome-beat.active {
+            color: var(--cor-destaque);
+            transform: scale(1.2);
+        }
+
+        .metronome-status {
+            color: var(--cor-secundaria);
+            font-size: 1.2rem;
+        }
+
+        .metronome-actions {
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .music-item { padding: 12px 15px; }
+            .music-name { font-size: 1rem; }
+            .action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; padding: 14px 16px; }
+            .modal-header { padding: 5px 8px; }
+            .font-btn, .scroll-btn, .speed-btn, .view-mode-btn, .metronome-btn, .vs-btn { transform: scale(0.9); }
+            .backup-options { flex-direction: column; }
+            .setlist-controls { flex-direction: column; }
+            .lyrics-content.landscape { 
+                column-count: 1; 
+                font-size: 20px; /* Tamanho ajustado para mobile em paisagem */
+            }
+            
+            /* Ajustes para botões de navegação em tablets */
+            .modal-footer {
+                padding: 8px;
+            }
+            
+            .navigation-controls {
+                gap: 8px;
+                flex-direction: row; /* Garantir que fique na horizontal */
+            }
+            
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                max-width: 120px;
+                min-height: 44px; /* Tamanho mínimo para touch */
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 1.1rem;
+            }
+            
+            /* Ajustes para menus expansíveis em mobile */
+            .section-header {
+                padding: 12px 15px;
+            }
+            
+            .section-header h3 {
+                font-size: 1rem;
+            }
+            
+            .section-content.expanded {
+                padding: 15px;
+            }
+            
+            /* Ajustes para o rodapé em mobile */
+            .footer-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            /* Ajustes para os afinadores em mobile */
+            .tuner-strings {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .string-btn {
+                padding: 15px 10px;
+                min-height: 80px;
+                font-size: 1rem;
+            }
+            
+            .string-note {
+                font-size: 1.5rem;
+            }
+
+            /* Ajustes para o metrônomo independente em mobile */
+            .bpm-input-group {
+                gap: 5px;
+            }
+            
+            .bpm-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .bpm-input {
+                width: 70px;
+                font-size: 1.3rem;
+            }
+            
+            .metronome-beat {
+                font-size: 3rem;
+            }
+
+            /* Ajustes para o botão flutuante VS */
+            .vs-float-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .vs-toast {
+                bottom: 80px;
+                right: 20px;
+                font-size: 0.8rem;
+                padding: 10px 15px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .music-item { padding: 10px 12px; }
+            .music-name { font-size: 0.9rem; }
+            .music-bpm, .music-notes { font-size: 0.7rem; margin-right: 5px; }
+            .action-btn { width: 30px; height: 30px; font-size: 0.75rem; }
+            .form-actions { flex-direction: column; }
+            .lyrics-content { font-size: 14px; padding: 15px 10px; }
+            .modal-header { flex-wrap: wrap; gap: 5px; }
+            .modal-title-container { min-width: 100px; }
+            .btn { padding: 16px 20px; font-size: 1rem; }
+            
+            /* Ajustes para botões de navegação em celulares */
+            .modal-footer {
+                padding: 6px;
+            }
+            
+            .navigation-controls {
+                gap: 6px;
+            }
+            
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0;
+                max-width: 100px;
+                min-height: 40px;
+            }
+            
+            /* Remover completamente o texto em telas muito pequenas */
+            .nav-btn {
+                font-size: 0;
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 1rem;
+                margin: 0;
+            }
+            
+            /* Ajustes para os afinadores em celulares */
+            .tuner-strings {
+                grid-template-columns: 1fr;
+            }
+            
+            .string-btn {
+                padding: 12px 8px;
+                min-height: 70px;
+            }
+
+            /* Ajustes para o metrônomo independente em celulares */
+            .bpm-input-group {
+                flex-wrap: wrap;
+            }
+            
+            .bpm-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .bpm-input {
+                width: 60px;
+                font-size: 1.2rem;
+                order: -1;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .metronome-beat {
+                font-size: 2.5rem;
+            }
+
+            /* Ajustes para o botão flutuante VS */
+            .vs-float-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .modal-header { padding: 5px 5px; }
+            .font-controls-header, .scroll-controls, .scroll-speed-controls, .view-mode-controls, .metronome-controls, .vs-btn { 
+                transform: scale(0.8); 
+            }
+            .btn { padding: 18px 16px; font-size: 0.95rem; }
+            
+            /* Ajustes finos para botões de navegação em telas muito pequenas */
+            .navigation-controls {
+                gap: 5px;
+            }
+            
+            .nav-btn {
+                padding: 6px 10px;
+                max-width: 80px;
+                min-height: 36px;
+            }
+            
+            .nav-btn-prev::before,
+            .nav-btn-next::before {
+                font-size: 0.9rem;
+            }
+
+            /* Ajustes finos para o metrônomo independente */
+            .bpm-btn {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+            
+            .metronome-beat {
+                font-size: 2rem;
+            }
+
+            /* Ajustes para o botão flutuante VS */
+            .vs-float-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- REMOVIDO: Header completo com título BLUEVOX -->
+        
+        <div id="update-alert" class="update-alert" style="display: none;">
+            <h3>🔄 ATUALIZAÇÃO DISPONÍVEL!</h3>
+            <p>Há uma nova versão do repertório disponível.</p>
+            <button class="btn" onclick="mostrarOpcoesUpdate()">
+                🔄 Fazer Update do Repertório
+            </button>
+        </div>
+        
+        <div id="install-prompt" class="install-prompt" style="display: none;">
+            <strong>💡 Para melhor experiência:</strong><br>
+            Adicione este app à tela inicial do seu celular!
+            <button class="btn btn-install" onclick="instalarApp()" style="margin-top: 10px;">
+                📱 Instalar App Agora
+            </button>
+            <div style="margin-top: 10px; font-size: 0.8rem; color: #00cc00;">
+                ⚡ Acesso rápido ⚡ Sem internet ⚡ Totalmente offline
+            </div>
+        </div>
+        
+        <!-- REMOVIDO: music-count daqui (agora está no rodapé) -->
+        
+        <div id="empty-state" class="empty-state">
+            <h2>🎵 Bem-vindo ao Repertório BlueVox!</h2>
+            <p>Gerencie seu repertório musical de forma prática e offline</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 20px;">
+                <button class="btn btn-add" onclick="mostrarFormulario()">
+                    ➕ Adicionar Primeira Música
+                </button>
+                
+                <div style="color: #00aa00; margin: 10px 0;">ou</div>
+                
+                <div class="backup-options">
+                    <div class="backup-option">
+                        <div class="file-input-wrapper">
+                            <button class="btn">
+                                📥 Importar Backup
+                            </button>
+                            <input type="file" id="file-input-initial" accept=".xml" style="display: none;" onchange="iniciarImportacao(event)">
+                        </div>
+                    </div>
+                    <div class="backup-option">
+                        <button class="btn" onclick="mostrarImportacaoURL()">
+                            🌐 Importar de URL
+                        </button>
+                    </div>
+                    <div class="backup-option">
+                        <button class="btn" onclick="mostrarOpcoesUpdate()">
+                            🔄 Update do Repertório
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 15px; background: #111; border-radius: 8px; border: 1px solid #00aa00;">
+                <strong style="color: #00ff00;">✨ Dicas:</strong>
+                <ul style="text-align: left; margin-top: 10px; color: #00cc00; padding-left: 20px;">
+                    <li>Use <strong>[R]</strong> no início das linhas para destaque em amarelo</li>
+                    <li>Use <strong>|D|</strong> para cifras em laranja (ex: |G|, |C#m|, etc.)</li>
+                    <li>Adicione à tela inicial para acesso rápido</li>
+                    <li>Todos os dados ficam salvos no seu navegador</li>
+                    <li>Backup único em formato XML universal</li>
+                    <li>Importe de arquivo local ou URL remota</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="music-list" class="music-list" style="display: none;"></div>
+        
+        <!-- SETLIST PARA SHOW -->
+        <div id="setlist-container" class="setlist-container" style="display: none;">
+            <div class="section-title">🎵 SETLIST DO SHOW</div>
+            
+            <div id="setlist-musicas" class="setlist-musicas"></div>
+            
+            <div class="setlist-controls">
+                <button class="btn" onclick="musicaAnterior()">⏮️ Anterior</button>
+                <button class="btn btn-add" onclick="proximaMusica()">⏭️ Próxima Música</button>
+                <button class="btn btn-secondary" onclick="limparSetlist()">🗑️ Limpar Setlist</button>
+            </div>
+        </div>
+        
+        <div id="controls" class="controls" style="display: none;">
+            <div class="controls-section">
+                <button class="btn btn-add" onclick="mostrarFormulario()">
+                    ➕ Adicionar Música
+                </button>
+            </div>
+
+            <!-- MENU VISUALIZAÇÃO EXPANSÍVEL -->
+            <div class="expandable-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>👁️ VISUALIZAÇÃO</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="backup-options">
+                        <button class="btn" onclick="aplicarModoVisualizacao('tablet')" id="modo-tablet-btn">
+                            📱 Modo Tablet
+                        </button>
+                        <button class="btn" onclick="aplicarModoVisualizacao('notebook')" id="modo-notebook-btn">
+                            💻 Modo Notebook
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOVO MENU UTILITÁRIOS EXPANSÍVEL -->
+            <div class="expandable-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>🛠️ UTILITÁRIOS</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="backup-options">
+                        <button class="btn" onclick="abrirTuner('bass')">
+                            🎸 Afinador de Baixo
+                        </button>
+                        <button class="btn" onclick="abrirTuner('guitar')">
+                            🎶 Afinador de Guitarra
+                        </button>
+                        <button class="btn" onclick="abrirMetronomeModal()">
+                            ♫ Metrônomo Independente
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENU BACKUP E DADOS EXPANSÍVEL -->
+            <div class="expandable-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>💾 BACKUP E DADOS</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="backup-options">
+                        <button class="btn" onclick="exportarDados()">
+                            📤 Exportar Backup
+                        </button>
+                        
+                        <div class="file-input-wrapper">
+                            <button class="btn">
+                                📥 Importar Backup
+                            </button>
+                            <input type="file" id="file-input" accept=".xml" style="display: none;" onchange="iniciarImportacao(event)">
+                        </div>
+                        
+                        <button class="btn" onclick="mostrarImportacaoURL()">
+                            🌐 Importar de URL
+                        </button>
+                        
+                        <button class="btn" onclick="mostrarOpcoesUpdate()">
+                            🔄 Update do Repertório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENU CONFIGURAÇÕES EXPANSÍVEL -->
+            <div class="expandable-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3>⚙️ CONFIGURAÇÕES</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="backup-options">
+                        <button class="btn" onclick="mostrarConfiguracoes()">
+                            🎨 Cores
+                        </button>
+                        
+                        <button class="btn" onclick="resetarAplicativo()">
+                            🗑️ Resetar App
+                        </button>
+                        
+                        <button class="btn btn-install" onclick="instalarApp()" id="install-btn">
+                            📱 Instalar App
+                        </button>
+                        
+                        <button class="btn" onclick="mostrarAjuda()">
+                            ❓ Ajuda
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO RODAPÉ COM CONTADOR DE MÚSICAS E VERSÃO ATUALIZADA -->
+    <footer class="footer">
+        <div class="footer-info">
+            <span id="music-count-footer" class="music-count-footer"></span>
+            <span class="copyright">© 2025 BlueVox - Version 2.0 - By Jeferson</span>
+        </div>
+    </footer>
+
+    <!-- MODAL DA LETRA -->
+    <div id="music-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <h2 id="modal-title">TÍTULO DA MÚSICA</h2>
+                    <span class="separator">-</span>
+                    <div class="font-controls-header">
+                        <button class="font-btn" onclick="ajustarFonte(-2)" title="Diminuir fonte">A-</button>
+                        <button class="font-btn" onclick="ajustarFonte(0)" title="Fonte padrão">A</button>
+                        <button class="font-btn" onclick="ajustarFonte(2)" title="Aumentar fonte">A+</button>
+                    </div>
+                    <div class="scroll-controls">
+                        <button class="scroll-btn" id="scroll-toggle" onclick="toggleAutoScroll()" title="Auto Scroll">▶️ Scroll</button>
+                    </div>
+                    <div class="scroll-speed-controls" id="speed-controls" style="display: none;">
+                        <button class="speed-btn" onclick="changeScrollSpeed(-1)" title="Diminuir velocidade">-</button>
+                        <span class="speed-display" id="current-speed-display">1</span>
+                        <button class="speed-btn" onclick="changeScrollSpeed(1)" title="Aumentar velocidade">+</button>
+                    </div>
+                    <!-- BOTÃO DO METRÔNOMO -->
+                    <div class="metronome-controls">
+                        <button class="metronome-btn" id="metronome-toggle" onclick="toggleMetronome()" title="Metrônomo">♫</button>
+                    </div>
+                    <!-- ===== NOVO BOTÃO VS NO HEADER ===== -->
+                    <div class="metronome-controls">
+                        <button class="vs-btn" id="vs-header-btn" onclick="toggleVS()" title="Virtual Sound - Tocar faixa de áudio">VS</button>
+                    </div>
+                    <!-- ===== FIM DO BOTÃO VS ===== -->
+                    <div class="view-mode-controls">
+                        <button class="view-mode-btn" id="view-mode-toggle" onclick="toggleViewMode()" title="Alternar modo de visualização">🔄 Visualização</button>
+                    </div>
+                </div>
+                <button class="close" onclick="fecharModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="lyrics-content" class="lyrics-content"></div>
+            </div>
+            <!-- NOVO FOOTER COM BOTÕES DE NAVEGAÇÃO COMPACTOS -->
+            <div class="modal-footer" id="setlist-navigation">
+                <div class="navigation-controls">
+                    <button class="nav-btn nav-btn-prev" onclick="musicaAnterior()" title="Música anterior">
+                        ⏮️
+                    </button>
+                    <button class="nav-btn nav-btn-next" onclick="proximaMusica()" title="Próxima música">
+                        ⏭️
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== BOTÃO FLUTUANTE VS DENTRO DO MODAL ===== -->
+        <button id="vs-float-btn" class="vs-float-btn" onclick="toggleVS()" title="Virtual Sound - Tocar/Parar faixa de áudio">VS</button>
+        <!-- ===== FIM DO BOTÃO FLUTUANTE ===== -->
+    </div>
+
+    <!-- NOVO MODAL DO METRÔNOMO INDEPENDENTE -->
+    <div id="metronome-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>♫ METRÔNOMO INDEPENDENTE</h2>
+                <button class="close" onclick="fecharMetronomeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="metronome-container">
+                    <div class="bpm-controls">
+                        <label for="bpm-input">BPM:</label>
+                        <div class="bpm-input-group">
+                            <button class="bpm-btn" onclick="alterarBPM(-5)">-5</button>
+                            <button class="bpm-btn" onclick="alterarBPM(-1)">-1</button>
+                            <input type="number" id="bpm-input" class="bpm-input" value="100" min="1" max="300">
+                            <button class="bpm-btn" onclick="alterarBPM(1)">+1</button>
+                            <button class="bpm-btn" onclick="alterarBPM(5)">+5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="metronome-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="precount-checkbox">
+                            <span class="checkmark"></span>
+                            Ativar 4 batidas de pré-contagem
+                        </label>
+                    </div>
+                    
+                    <div class="metronome-display">
+                        <div id="metronome-beat" class="metronome-beat">♫</div>
+                        <div id="metronome-status" class="metronome-status">Parado</div>
+                    </div>
+                    
+                    <div class="metronome-actions">
+                        <button id="metronome-play-btn" class="btn btn-add" onclick="toggleMetronomeIndependente()">▶️ Iniciar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL DO AFINADOR -->
+    <div id="tuner-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="tuner-modal-title">🎸 AFINADOR</h2>
+                <button class="close" onclick="fecharTunerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tuner-container">
+                    <div class="tuner-type-selector">
+                        <button class="tuner-type-btn active" id="tuner-bass-btn" onclick="mudarTipoTuner('bass')">🎸 Baixo 4 cordas</button>
+                        <button class="tuner-type-btn" id="tuner-guitar-btn" onclick="mudarTipoTuner('guitar')">🎶 Guitarra 6 cordas</button>
+                    </div>
+                    
+                    <div id="tuner-bass" class="tuner-content">
+                        <h3 class="tuner-title">AFINADOR DE BAIXO - 4 CORDAS</h3>
+                        <div class="tuner-strings">
+                            <button class="string-btn" onclick="tocarNota('E1', 'bass')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(41.20 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('A1', 'bass')">
+                                <div class="string-note">A</div>
+                                <div class="string-name">(55.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('D2', 'bass')">
+                                <div class="string-note">D</div>
+                                <div class="string-name">(73.42 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('G2', 'bass')">
+                                <div class="string-note">G</div>
+                                <div class="string-name">(98.00 Hz)</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="tuner-guitar" class="tuner-content" style="display: none;">
+                        <h3 class="tuner-title">AFINADOR DE GUITARRA - 6 CORDAS</h3>
+                        <div class="tuner-strings">
+                            <button class="string-btn" onclick="tocarNota('E2', 'guitar')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(82.41 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('A2', 'guitar')">
+                                <div class="string-note">A</div>
+                                <div class="string-name">(110.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('D3', 'guitar')">
+                                <div class="string-note">D</div>
+                                <div class="string-name">(146.83 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('G3', 'guitar')">
+                                <div class="string-note">G</div>
+                                <div class="string-name">(196.00 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('B3', 'guitar')">
+                                <div class="string-note">B</div>
+                                <div class="string-name">(246.94 Hz)</div>
+                            </button>
+                            <button class="string-btn" onclick="tocarNota('E4', 'guitar')">
+                                <div class="string-note">E</div>
+                                <div class="string-name">(329.63 Hz)</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tuner-controls">
+                        <button class="btn btn-secondary" onclick="pararTodasNotas()">⏹️ Parar Todas as Notas</button>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; color: var(--cor-secundaria); font-size: 0.8rem;">
+                        💡 Clique em uma corda para tocar a nota de referência
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR MÚSICA -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ ADICIONAR NOVA MÚSICA</h2>
+                <button class="close" onclick="fecharAddModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-form" class="add-form" onsubmit="adicionarMusica(event)">
+                    <div class="form-group">
+                        <label for="nome-musica">NOME DA MÚSICA:</label>
+                        <input type="text" id="nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bpm-musica">BPM (opcional):</label>
+                        <input type="number" id="bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notas-musica">NOTAS (opcional):</label>
+                        <textarea id="notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="letra-musica">LETRA DA MÚSICA:</label>
+                        <textarea id="letra-musica" class="form-input form-textarea" required 
+                                  placeholder="Cole aqui a letra completa...
+
+Exemplo:
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR |G|
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR |D|
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR |C|
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
+
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use |D|, |G|, |C#m| para cifras em LARANJA"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharAddModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">💾 Salvar Música</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR MÚSICA -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ EDITAR MÚSICA</h2>
+                <button class="close" onclick="fecharEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form" class="edit-form" onsubmit="editarMusica(event)">
+                    <input type="hidden" id="edit-index">
+                    <div class="form-group">
+                        <label for="edit-nome-musica">NOME DA MÚSICA:</label>
+                        <input type="text" id="edit-nome-musica" class="form-input" required placeholder="Ex: REINO DOS RATOS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-bpm-musica">BPM (opcional):</label>
+                        <input type="number" id="edit-bpm-musica" class="form-input" placeholder="Ex: 150" min="1" max="300">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-notas-musica">NOTAS (opcional):</label>
+                        <textarea id="edit-notas-musica" class="form-input" placeholder="Instruções de execução, dicas, etc." rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-letra-musica">LETRA DA MÚSICA:</label>
+                        <textarea id="edit-letra-musica" class="form-input form-textarea" required 
+                                  placeholder="Cole aqui a letra completa...
+
+Exemplo:
+[R] ESTE É O REINO DOS RATOS, É PARAR OU SEGUIR |G|
+[R] POR ENTRE RUAS E BECOS, UM LABIRINTO À DESCOBRIR |D|
+NA ESCURIDÃO DO PORÃO, O SOL NÃO VAI ENTRAR |C|
+CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
+
+💡 Use [R] no início das linhas que devem aparecer em AMARELO
+💡 Use |D|, |G|, |C#m| para cifras em LARANJA"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharEditModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">💾 Atualizar Música</button>
+                        <button type="button" class="btn btn-delete" onclick="excluirMusicaEdicao()">🗑️ Excluir Música</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAÇÕES -->
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎨 CONFIGURAÇÕES DE CORES</h2>
+                <button class="close" onclick="fecharConfigModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="config-form">
+                    <div class="form-group">
+                        <label>SELECIONE UM TEMA:</label>
+                        <div class="color-options">
+                            <div class="color-option active" data-theme="green" 
+                                 style="background: #000000; color: #00ff00; border: 1px solid #00ff00;"
+                                 onclick="aplicarTema('green')">
+                                🟢 Verde Neon
+                            </div>
+                            <div class="color-option" data-theme="blue"
+                                 style="background: #000033; color: #0088ff; border: 1px solid #0088ff;"
+                                 onclick="aplicarTema('blue')">
+                                🔵 Azul Tech
+                            </div>
+                            <div class="color-option" data-theme="red"
+                                 style="background: #330000; color: #ff4444; border: 1px solid #ff4444;"
+                                 onclick="aplicarTema('red')">
+                                🔴 Vermelho
+                            </div>
+                            <div class="color-option" data-theme="purple"
+                                 style="background: #1a001a; color: #cc00ff; border: 1px solid #cc00ff;"
+                                 onclick="aplicarTema('purple')">
+                                🟣 Roxo
+                            </div>
+                            <div class="color-option" data-theme="orange"
+                                 style="background: #331900; color: #ff8800; border: 1px solid #ff8800;"
+                                 onclick="aplicarTema('orange')">
+                                🟠 Laranja
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharConfigModal()">Fechar</button>
+                        <button type="button" class="btn" onclick="resetarTema()">🔄 Tema Padrão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE NOTAS -->
+    <div id="notes-modal" class="modal">
+        <div class="notes-modal-content">
+            <div class="notes-modal-header">
+                <h2 id="notes-modal-title">📝 NOTAS DA MÚSICA</h2>
+                <button class="close" onclick="fecharNotesModal()">&times;</button>
+            </div>
+            <div class="notes-modal-body">
+                <div id="notes-content" class="notes-content"></div>
+            </div>
+            <div class="notes-modal-footer">
+                <button class="btn btn-secondary" onclick="fecharNotesModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OPÇÕES DE IMPORTAR -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📥 OPÇÕES DE IMPORTAR</h2>
+                <button class="close" onclick="fecharImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 600px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>ENCONTRADAS <span id="import-count">0</span> MÚSICA(S) NO BACKUP</label>
+                        <p style="color: var(--cor-secundaria); margin-bottom: 20px;">
+                            Selecione como deseja importar as músicas:
+                        </p>
+                        
+                        <div class="import-options">
+                            <div class="import-option" onclick="selecionarOpcaoImport('substituir')" id="option-substituir">
+                                <h3>🔄 SUBSTITUIR TUDO</h3>
+                                <p>Remove todas as músicas atuais e importa apenas as do backup</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoImport('adicionar')" id="option-adicionar">
+                                <h3>➕ ADICIONAR NOVAS</h3>
+                                <p>Mantém as músicas atuais e adiciona apenas as que não existem</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoImport('mesclar')" id="option-mesclar">
+                                <h3>🔄 MESCLAR TUDO</h3>
+                                <p>Combina todas as músicas, atualizando as existentes e adicionando novas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharImportModal()">Cancelar</button>
+                        <button type="button" class="btn btn-add" onclick="confirmarImportacao()" id="confirm-import-btn" disabled>
+                            💾 Confirmar Importação
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL IMPORTAR VIA URL -->
+    <div id="import-url-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🌐 IMPORTAR DE URL</h2>
+                <button class="close" onclick="fecharImportURLModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="config-form" onsubmit="importarDeURL(event)">
+                    <div class="form-group">
+                        <label for="url-xml">URL DO ARQUIVO XML:</label>
+                        <input type="url" id="url-xml" class="form-input" required 
+                               placeholder="Ex: http://teste.com.br/musicas.xml"
+                               pattern="https?://.+" title="Digite uma URL válida começando com http:// ou https://">
+                        <p style="color: var(--cor-secundaria); margin-top: 8px; font-size: 0.8rem;">
+                            💡 A URL deve apontar para um arquivo XML válido do Repertório BlueVox
+                        </p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharImportURLModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">📥 Importar da URL</button>
+                    </div>
+                </form>
+                
+                <div id="url-loading" style="display: none; text-align: center; padding: 20px;">
+                    <div style="color: var(--cor-primaria); margin-bottom: 10px;">⏳ Carregando dados da URL...</div>
+                    <div style="color: var(--cor-secundaria); font-size: 0.8rem;">
+                        Aguarde enquanto buscamos o arquivo XML
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL UPDATE DO REPERTÓRIO -->
+    <div id="update-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔄 UPDATE DO REPERTÓRIO</h2>
+                <button class="close" onclick="fecharUpdateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 20px; max-width: 600px; margin: 0 auto;">
+                    <div class="form-group">
+                        <label>ENCONTRADAS <span id="update-count">0</span> MÚSICA(S) NO REPERTÓRIO ONLINE</label>
+                        <p style="color: var(--cor-secundaria); margin-bottom: 20px;">
+                            Selecione como deseja atualizar o repertório:
+                        </p>
+                        
+                        <div class="import-options">
+                            <div class="import-option" onclick="selecionarOpcaoUpdate('substituir')" id="update-option-substituir">
+                                <h3>🔄 SUBSTITUIR TUDO</h3>
+                                <p>Remove todas as músicas atuais e importa apenas as do repertório online</p>
+                            </div>
+                            
+                            <div class="import-option" onclick="selecionarOpcaoUpdate('mesclar')" id="update-option-mesclar">
+                                <h3>🔄 MESCLAR TUDO</h3>
+                                <p>Combina todas as músicas, atualizando as existentes e adicionando novas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="fecharUpdateModal()">Cancelar</button>
+                        <button type="button" class="btn btn-add" onclick="confirmarUpdate()" id="confirm-update-btn" disabled>
+                            💾 Confirmar Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO
+        let musicas = [];
+        let deferredPrompt = null;
+        let tamanhoFonteBase = 14; // ALTERADO: de 16 para 14
+        let autoScrollAtivo = false;
+        let scrollInterval = null;
+        let scrollSpeed = 1;
+        
+        // Variáveis para controle de importação
+        let dadosImportacao = null;
+        let opcaoImportSelecionada = null;
+        let importacaoURLEmAndamento = false;
+
+        // Variáveis para o setlist
+        let setlist = [];
+        let indiceMusicaAtual = -1;
+
+        // Variáveis para modos de visualização
+        let modoVisualizacaoAtual = 'retrato';
+        let modoDispositivo = 'tablet';
+
+        // Variáveis do metrônomo
+        let metronomeAtivo = false;
+        let metronomeInterval = null;
+        let metronomeAudioContext = null;
+        let currentBPM = 120;
+        let indiceMusicaAberta = -1;
+
+        // Variáveis para os afinadores
+        let tunerAudioContext = null;
+        let tunerOscillator = null;
+        let notaAtual = null;
+        let tipoTunerAtual = 'bass';
+
+        // Variáveis do metrônomo independente
+        let metronomeBPM = 100;
+        let metronomeRunning = false;
+        let metronomeIntervalIndependente = null;
+        let metronomeAudioContextIndependente = null;
+        let metronomePrecount = false;
+        let metronomePrecountCount = 0;
+        let metronomePrecountInterval = null;
+
+        // ===== NOVAS VARIÁVEIS PARA O VS =====
+        let vsAudio = null;
+        let vsAtivo = false;
+        let musicaVSAberta = null;
+        // ===== FIM DAS VARIÁVEIS VS =====
+
+        // URL do repertório online
+        const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
+
+        // Frequências das notas para os afinadores
+        const frequencias = {
+            'bass': {
+                'E1': 41.20,
+                'A1': 55.00,
+                'D2': 73.42,
+                'G2': 98.00
+            },
+            'guitar': {
+                'E2': 82.41,
+                'A2': 110.00,
+                'D3': 146.83,
+                'G3': 196.00,
+                'B3': 246.94,
+                'E4': 329.63
+            }
+        };
+
+        const temas = {
+            green: {
+                primaria: '#00ff00',
+                secundaria: '#00aa00',
+                fundo: '#000000',
+                texto: '#00ff00',
+                destaque: '#ffff00',
+                botao: '#003300',
+                hover: '#004400'
+            },
+            blue: {
+                primaria: '#0088ff',
+                secundaria: '#0066cc',
+                fundo: '#000033',
+                texto: '#0088ff',
+                destaque: '#00ffff',
+                botao: '#003366',
+                hover: '#004477'
+            },
+            red: {
+                primaria: '#ff4444',
+                secundaria: '#cc0000',
+                fundo: '#330000',
+                texto: '#ff4444',
+                destaque: '#ff8888',
+                botao: '#660000',
+                hover: '#770000'
+            },
+            purple: {
+                primaria: '#cc00ff',
+                secundaria: '#9900cc',
+                fundo: '#1a001a',
+                texto: '#cc00ff',
+                destaque: '#ff88ff',
+                botao: '#330033',
+                hover: '#440044'
+            },
+            orange: {
+                primaria: '#ff8800',
+                secundaria: '#cc6600',
+                fundo: '#331900',
+                texto: '#ff8800',
+                destaque: '#ffcc00',
+                botao: '#663300',
+                hover: '#774400'
+            }
+        };
+
+        // INICIAR APLICAÇÃO
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎵 Repertório BlueVox iniciado');
+            
+            // Configurar PWA
+            configurarPWA();
+            
+            // Carregar configurações salvas
+            carregarConfiguracoes();
+            
+            // Carregar músicas salvas
+            const musicasSalvas = localStorage.getItem('catalogoMusicas');
+            if (musicasSalvas) {
+                try {
+                    musicas = JSON.parse(musicasSalvas);
+                    if (musicas.length > 0) {
+                        mostrarInterfaceComMusicas();
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar músicas:', e);
+                    musicas = [];
+                }
+            }
+
+            // Carregar setlist
+            const setlistSalvo = localStorage.getItem('setlistRepertorio');
+            if (setlistSalvo) {
+                setlist = JSON.parse(setlistSalvo);
+                exibirSetlist();
+            }
+
+            // Carregar índice atual
+            const indiceSalvo = localStorage.getItem('indiceMusicaAtual');
+            if (indiceSalvo !== null) {
+                indiceMusicaAtual = parseInt(indiceSalvo);
+            }
+
+            // Carregar modo de visualização
+            const modoVisualizacaoSalvo = localStorage.getItem('modoVisualizacao');
+            if (modoVisualizacaoSalvo) {
+                modoVisualizacaoAtual = modoVisualizacaoSalvo;
+            }
+
+            // Carregar modo de dispositivo
+            const modoDispositivoSalvo = localStorage.getItem('modoDispositivo');
+            if (modoDispositivoSalvo) {
+                modoDispositivo = modoDispositivoSalvo;
+                atualizarBotoesModoDispositivo();
+            }
+
+            // Configurar eventos GLOBAIS (só uma vez)
+            configurarEventosGlobais();
+            
+            // Verificar se há atualizações disponíveis
+            verificarAtualizacoes();
+            
+            // Atualizar contador no rodapé
+            atualizarContadorRodape();
+
+            // Configurar eventos do metrônomo independente
+            const bpmInput = document.getElementById('bpm-input');
+            if (bpmInput) {
+                bpmInput.addEventListener('change', function() {
+                    let valor = parseInt(this.value);
+                    if (isNaN(valor) || valor < 1) {
+                        valor = 1;
+                    } else if (valor > 300) {
+                        valor = 300;
+                    }
+                    metronomeBPM = valor;
+                    this.value = metronomeBPM;
+                    // Se o metrônomo estiver rodando, reiniciar com o novo BPM
+                    if (metronomeRunning) {
+                        pararMetronomeIndependente();
+                        iniciarMetronomeIndependente();
+                    }
+                });
+            }
+        });
+
+        // FUNÇÃO PARA ALTERNAR SEÇÕES EXPANSÍVEIS
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const content = section.querySelector('.section-content');
+            const arrow = header.querySelector('.arrow');
+            
+            // Alternar classes
+            header.classList.toggle('expanded');
+            content.classList.toggle('expanded');
+            
+            // Animação da seta
+            if (content.classList.contains('expanded')) {
+                arrow.textContent = '▲';
+            } else {
+                arrow.textContent = '▼';
+            }
+        }
+
+        // CONFIGURAR PWA - COM BOTÃO FIXO
+        function configurarPWA() {
+            const isGitHubPages = window.location.hostname === 'jecwb.github.io';
+            const repoPath = '/bluevox/';
+            
+            // Verificar se já está instalado (modo standalone)
+            const isInStandaloneMode = () => 
+                (window.matchMedia('(display-mode: standalone)').matches) ||
+                (window.navigator.standalone) ||
+                (document.referrer.includes('android-app://'));
+            
+            if (isInStandaloneMode()) {
+                console.log('📱 Executando em modo PWA - ocultando botão de instalação');
+                // Ocultar botão de instalação se já estiver instalado
+                const installBtn = document.getElementById('install-btn');
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                document.getElementById('install-prompt').style.display = 'none';
+                
+                // Se estiver no GitHub Pages e em modo PWA, verificar se estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    console.log('🔄 Redirecionando para o caminho correto do GitHub Pages');
+                    window.location.href = repoPath;
+                    return;
+                }
+            } else {
+                console.log('🌐 Executando no navegador - habilitando instalação PWA');
+                
+                // Configurar evento para capturar o prompt de instalação
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    console.log('📲 Evento beforeinstallprompt disparado');
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    
+                    // Mostrar prompt automático após um tempo
+                    setTimeout(() => {
+                        if (deferredPrompt && !localStorage.getItem('pwaDismissed')) {
+                            console.log('👆 Mostrando prompt de instalação automático');
+                            document.getElementById('install-prompt').style.display = 'block';
+                        }
+                    }, 3000);
+                });
+            }
+
+            // Detectar se o app foi instalado
+            window.addEventListener('appinstalled', () => {
+                console.log('✅ App instalado com sucesso');
+                localStorage.setItem('pwaInstalado', 'true');
+                document.getElementById('install-prompt').style.display = 'none';
+                
+                // Ocultar botão de instalação
+                const installBtn = document.getElementById('install-btn');
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                
+                deferredPrompt = null;
+                
+                // Se for GitHub Pages, garantir que estamos no caminho correto
+                if (isGitHubPages && !window.location.pathname.startsWith(repoPath)) {
+                    setTimeout(() => {
+                        window.location.href = repoPath;
+                    }, 1000);
+                }
+            });
+
+            // Verificar critérios de instalabilidade
+            verificarInstalabilidade();
+        }
+
+        function verificarInstalabilidade() {
+            // Critérios básicos para PWA instalável
+            const hasManifest = document.querySelector('link[rel="manifest"]') !== null;
+            const hasIcons = document.querySelector('link[rel="icon"][sizes="192x192"]') !== null ||
+                            document.querySelector('link[rel="icon"][sizes="512x512"]') !== null;
+            const isHTTPS = window.location.protocol === 'https:';
+            
+            console.log('🔍 Critérios PWA:', {
+                hasManifest,
+                hasIcons,
+                isHTTPS,
+                isGitHubPages: window.location.hostname === 'jecwb.github.io'
+            });
+
+            if (hasManifest && hasIcons && isHTTPS) {
+                console.log('✅ App atende aos critérios mínimos para instalação PWA');
+            }
+        }
+
+        function instalarApp() {
+            if (deferredPrompt) {
+                console.log('🚀 Iniciando instalação PWA via botão...');
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ Usuário aceitou a instalação PWA');
+                        localStorage.setItem('pwaInstalado', 'true');
+                        document.getElementById('install-prompt').style.display = 'none';
+                        
+                        // Ocultar botão de instalação
+                        const installBtn = document.getElementById('install-btn');
+                        if (installBtn) {
+                            installBtn.style.display = 'none';
+                        }
+                        
+                        // Se for GitHub Pages, redirecionar para o caminho correto após instalação
+                        if (window.location.hostname === 'jecwb.github.io' && !window.location.pathname.startsWith('/bluevox/')) {
+                            setTimeout(() => {
+                                window.location.href = '/bluevox/';
+                            }, 1000);
+                        }
+                    } else {
+                        console.log('❌ Usuário recusou a instalação PWA');
+                        localStorage.setItem('pwaDismissed', 'true');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                console.log('ℹ️ Prompt de instalação não disponível, mostrando instruções manuais');
+                // Fallback para quando não há prompt de instalação
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                
+                let instructions = '';
+                
+                if (isIOS) {
+                    instructions = 'Para instalar no iPhone/iPad:\n\n1. Toque no ícone de compartilhar (📤)\n2. Role para baixo e toque em "Adicionar à Tela de Início"\n3. Toque em "Adicionar" no canto superior direito';
+                } else if (isAndroid) {
+                    instructions = 'Para instalar no Android:\n\n1. Toque no menu (⋯) no canto superior direito\n2. Toque em "Adicionar à tela inicial"\n3. Toque em "Adicionar" para confirmar';
+                } else {
+                    instructions = 'Para instalar o app:\n\n• Chrome: Menu → "Instalar Repertório BlueVox"\n• Safari: Compartilhar → "Adicionar à tela de início"\n• Firefox: Menu → "Instalar site"';
+                }
+                
+                alert('📱 ' + instructions);
+            }
+        }
+
+        // CONFIGURAÇÕES DE CORES
+        function carregarConfiguracoes() {
+            const temaSalvo = localStorage.getItem('temaRepertorio') || 'green';
+            aplicarTema(temaSalvo);
+        }
+
+        function mostrarConfiguracoes() {
+            document.getElementById('config-modal').style.display = 'block';
+            const temaAtual = localStorage.getItem('temaRepertorio') || 'green';
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.theme === temaAtual) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        function fecharConfigModal() {
+            document.getElementById('config-modal').style.display = 'none';
+        }
+
+        function aplicarTema(tema) {
+            const cores = temas[tema];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--cor-primaria', cores.primaria);
+            root.style.setProperty('--cor-secundaria', cores.secundaria);
+            root.style.setProperty('--cor-fundo', cores.fundo);
+            root.style.setProperty('--cor-texto', cores.texto);
+            root.style.setProperty('--cor-destaque', cores.destaque);
+            root.style.setProperty('--cor-botao', cores.botao);
+            root.style.setProperty('--cor-hover', cores.hover);
+            
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', cores.primaria);
+            localStorage.setItem('temaRepertorio', tema);
+            
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.querySelector(`[data-theme="${tema}"]`).classList.add('active');
+        }
+
+        function resetarTema() {
+            aplicarTema('green');
+        }
+
+        // CONTROLES DE FONTE E SCROLL - CORRIGIDO
+        function ajustarFonte(mudanca) {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            let tamanhoAtual = parseFloat(getComputedStyle(elemento).fontSize);
+            
+            if (mudanca === 0) {
+                // Reset para tamanho base baseado no modo atual
+                if (modoVisualizacaoAtual === 'paisagem') {
+                    elemento.style.fontSize = '22px'; // TAMANHO REDUZIDO PARA INICIAR MENOR
+                    tamanhoFonteBase = 22;
+                } else {
+                    elemento.style.fontSize = '14px'; // ALTERADO: de 16px para 14px
+                    tamanhoFonteBase = 14;
+                }
+            } else {
+                const novoTamanho = Math.max(10, Math.min(40, tamanhoAtual + mudanca));
+                elemento.style.fontSize = novoTamanho + 'px';
+                tamanhoFonteBase = novoTamanho;
+                
+                // Se estiver aumentando muito, ajustar automaticamente
+                if (novoTamanho > 30) {
+                    ajustarFonteAuto();
+                }
+            }
+        }
+
+        function ajustarFonteAuto() {
+            const elemento = document.getElementById('lyrics-content');
+            if (!elemento) return;
+            
+            const texto = elemento.textContent;
+            const linhas = texto.split('\n');
+            const linhaMaisLonga = linhas.reduce((maisLonga, linha) => 
+                linha.length > maisLonga.length ? linha : maisLonga, '');
+            
+            const larguraDisponivel = elemento.clientWidth - 40;
+            const tamanhoIdeal = Math.max(12, Math.min(24, Math.floor(larguraDisponivel / (linhaMaisLonga.length * 0.6))));
+            
+            elemento.style.fontSize = tamanhoIdeal + 'px';
+            tamanhoFonteBase = tamanhoIdeal;
+        }
+
+        function toggleAutoScroll() {
+            autoScrollAtivo = !autoScrollAtivo;
+            const botao = document.getElementById('scroll-toggle');
+            const controlesVelocidade = document.getElementById('speed-controls');
+            
+            if (!botao) return;
+            
+            if (autoScrollAtivo) {
+                botao.classList.add('active');
+                botao.innerHTML = '⏳ Scroll';
+                controlesVelocidade.style.display = 'flex';
+                
+                // Atualizar o display da velocidade
+                atualizarDisplayVelocidade();
+                
+                // Mostrar mensagem informando sobre o delay
+                const lyricsContent = document.getElementById('lyrics-content');
+                if (lyricsContent) {
+                    const mensagemDelay = document.createElement('div');
+                    mensagemDelay.style.cssText = 'position: fixed; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #00ff00; padding: 10px; border-radius: 5px; border: 1px solid #00ff00; z-index: 1000;';
+                    mensagemDelay.innerHTML = '⏳ Auto scroll iniciará em 10 segundos...';
+                    mensagemDelay.id = 'delay-message';
+                    document.querySelector('.modal-content').appendChild(mensagemDelay);
+                    
+                    // Remover mensagem após 3 segundos
+                    setTimeout(() => {
+                        const msg = document.getElementById('delay-message');
+                        if (msg) msg.remove();
+                    }, 3000);
+                }
+                
+                iniciarAutoScroll();
+            } else {
+                botao.classList.remove('active');
+                botao.innerHTML = '▶️ Scroll';
+                controlesVelocidade.style.display = 'none';
+                pararAutoScroll();
+                
+                // Remover mensagem de delay se existir
+                const mensagemDelay = document.getElementById('delay-message');
+                if (mensagemDelay) mensagemDelay.remove();
+            }
+        }
+
+        // NOVA FUNÇÃO PARA MUDAR VELOCIDADE COM BOTÕES +/-
+        function changeScrollSpeed(change) {
+            const newSpeed = Math.max(1, Math.min(7, scrollSpeed + change));
+            setScrollSpeed(newSpeed);
+        }
+
+        function setScrollSpeed(velocidade) {
+            scrollSpeed = velocidade;
+            
+            // Atualizar o display da velocidade
+            atualizarDisplayVelocidade();
+            
+            // Reiniciar scroll se estiver ativo
+            if (autoScrollAtivo) {
+                pararAutoScroll();
+                iniciarAutoScroll();
+            }
+        }
+
+        function atualizarDisplayVelocidade() {
+            const speedDisplay = document.getElementById('current-speed-display');
+            if (speedDisplay) {
+                speedDisplay.textContent = scrollSpeed;
+            }
+        }
+
+        function iniciarAutoScroll() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const modalBody = document.querySelector('.modal-body');
+            
+            if (!lyricsContent || !modalBody) return;
+            
+            // Verificar se já chegou ao final
+            if (modalBody.scrollTop >= lyricsContent.scrollHeight - modalBody.clientHeight) {
+                // Se estiver no final, voltar para o topo
+                modalBody.scrollTop = 0;
+            }
+            
+            // VELOCIDADES MAIS LENTAS E GRADATIVAS:
+            const velocidades = {
+                1: 0.2,   // Muito muito lento
+                2: 0.4,   // Muito lento
+                3: 0.8,   // Lento
+                4: 1.2,   // Normal-lento
+                5: 1.8,   // Normal
+                6: 2.5,   // Rápido
+                7: 3.5    // Muito rápido
+            };
+            
+            pararAutoScroll(); // Garantir que não há intervalos duplicados
+            
+            // AGUARDAR 10 SEGUNDOS ANTES DE INICIAR O SCROLL
+            setTimeout(() => {
+                scrollInterval = setInterval(() => {
+                    const currentScroll = modalBody.scrollTop;
+                    const maxScroll = lyricsContent.scrollHeight - modalBody.clientHeight;
+                    
+                    if (currentScroll >= maxScroll) {
+                        // Chegou ao final - parar auto scroll
+                        pararAutoScroll();
+                        autoScrollAtivo = false;
+                        const scrollToggle = document.getElementById('scroll-toggle');
+                        if (scrollToggle) {
+                            scrollToggle.classList.remove('active');
+                            scrollToggle.innerHTML = '▶️ Scroll';
+                        }
+                        const speedControls = document.getElementById('speed-controls');
+                        if (speedControls) speedControls.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Aplicar scroll suave
+                    modalBody.scrollTop += velocidades[scrollSpeed];
+                    
+                }, 16); // ≈ 60fps
+            }, 10000); // 10 segundos de delay
+        }
+
+        function pararAutoScroll() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+        }
+
+        // FUNÇÕES DO METRÔNOMO
+        function toggleMetronome() {
+            const botao = document.getElementById('metronome-toggle');
+            const musicaAtual = musicas[indiceMusicaAberta];
+            
+            if (!musicaAtual || !musicaAtual.bpm) {
+                alert('❌ Esta música não tem BPM definido!');
+                return;
+            }
+
+            if (metronomeAtivo) {
+                pararMetronome();
+                botao.classList.remove('active');
+            } else {
+                currentBPM = parseInt(musicaAtual.bpm);
+                iniciarMetronome();
+                botao.classList.add('active');
+            }
+        }
+
+        function iniciarMetronome() {
+            if (metronomeAtivo) return;
+            
+            metronomeAtivo = true;
+            const intervalo = 60000 / currentBPM; // ms por batida
+            
+            // Criar contexto de áudio se não existir
+            if (!metronomeAudioContext) {
+                metronomeAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            let contador = 0;
+            
+            metronomeInterval = setInterval(() => {
+                playMetronomeSound(contador === 0); // Destaque na primeira batida
+                contador = (contador + 1) % 4; // Padrão 4/4
+            }, intervalo);
+        }
+
+        function playMetronomeSound(accent) {
+            if (!metronomeAudioContext) return;
+            
+            const oscillator = metronomeAudioContext.createOscillator();
+            const gainNode = metronomeAudioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(metronomeAudioContext.destination);
+            
+            // Configurar o som
+            oscillator.frequency.value = accent ? 800 : 400; // Hz - mais agudo na primeira batida
+            oscillator.type = 'square';
+            
+            // Configurar o volume
+            gainNode.gain.value = accent ? 0.3 : 0.2;
+            gainNode.gain.exponentialRampToValueAtTime(0.001, metronomeAudioContext.currentTime + 0.1);
+            
+            // Tocar o som
+            oscillator.start();
+            oscillator.stop(metronomeAudioContext.currentTime + 0.1);
+        }
+
+        function pararMetronome() {
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+            metronomeAtivo = false;
+        }
+
+        // FUNÇÕES DO METRÔNOMO INDEPENDENTE
+        function abrirMetronomeModal() {
+            document.getElementById('metronome-modal').style.display = 'block';
+            // Parar o metrônomo se estiver rodando
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            }
+            // Atualizar o valor do BPM no input
+            document.getElementById('bpm-input').value = metronomeBPM;
+            document.getElementById('precount-checkbox').checked = metronomePrecount;
+            atualizarDisplayMetronome();
+        }
+
+        function fecharMetronomeModal() {
+            document.getElementById('metronome-modal').style.display = 'none';
+            // Parar o metrônomo ao fechar
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            }
+        }
+
+        function alterarBPM(valor) {
+            metronomeBPM = Math.max(1, Math.min(300, metronomeBPM + valor));
+            document.getElementById('bpm-input').value = metronomeBPM;
+            // Se o metrônomo estiver rodando, reiniciar com o novo BPM
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+                iniciarMetronomeIndependente();
+            }
+        }
+
+        function toggleMetronomeIndependente() {
+            if (metronomeRunning) {
+                pararMetronomeIndependente();
+            } else {
+                iniciarMetronomeIndependente();
+            }
+        }
+
+        function iniciarMetronomeIndependente() {
+            if (metronomeRunning) return;
+            
+            metronomeRunning = true;
+            metronomePrecount = document.getElementById('precount-checkbox').checked;
+            metronomePrecountCount = 0;
+            
+            // Atualizar interface
+            document.getElementById('metronome-play-btn').textContent = '⏹️ Parar';
+            document.getElementById('metronome-status').textContent = 'Iniciando...';
+            
+            // Verificar se há pré-contagem
+            if (metronomePrecount) {
+                iniciarPrecontagem();
+            } else {
+                iniciarBatidaMetronomo();
+            }
+        }
+
+        function pararMetronomeIndependente() {
+            metronomeRunning = false;
+            
+            // Parar intervalos
+            if (metronomeIntervalIndependente) {
+                clearInterval(metronomeIntervalIndependente);
+                metronomeIntervalIndependente = null;
+            }
+            if (metronomePrecountInterval) {
+                clearInterval(metronomePrecountInterval);
+                metronomePrecountInterval = null;
+            }
+            
+            // Atualizar interface
+            document.getElementById('metronome-play-btn').textContent = '▶️ Iniciar';
+            document.getElementById('metronome-status').textContent = 'Parado';
+            document.getElementById('metronome-beat').classList.remove('active');
+        }
+
+        function iniciarPrecontagem() {
+            let count = 4;
+            document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
+            
+            // Tocar a pré-contagem
+            tocarSomMetronomoIndependente(600); // Som mais agudo para pré-contagem
+            
+            metronomePrecountInterval = setInterval(() => {
+                count--;
+                if (count <= 0) {
+                    clearInterval(metronomePrecountInterval);
+                    metronomePrecountInterval = null;
+                    iniciarBatidaMetronomo();
+                    return;
+                }
+                document.getElementById('metronome-status').textContent = `Pré-contagem: ${count}`;
+                tocarSomMetronomoIndependente(600);
+            }, 60000 / metronomeBPM);
+        }
+
+        function iniciarBatidaMetronomo() {
+            let beatCount = 0;
+            document.getElementById('metronome-status').textContent = 'Tocando...';
+            
+            // Tocar a primeira batida imediatamente
+            tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
+            document.getElementById('metronome-beat').classList.add('active');
+            setTimeout(() => {
+                document.getElementById('metronome-beat').classList.remove('active');
+            }, 100);
+            
+            metronomeIntervalIndependente = setInterval(() => {
+                beatCount = (beatCount + 1) % 4;
+                
+                // Tocar o som
+                tocarSomMetronomoIndependente(beatCount === 0 ? 800 : 400);
+                
+                // Atualizar visual
+                document.getElementById('metronome-beat').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('metronome-beat').classList.remove('active');
+                }, 100);
+                
+            }, 60000 / metronomeBPM);
+        }
+
+        function tocarSomMetronomoIndependente(frequencia) {
+            if (!metronomeAudioContextIndependente) {
+                metronomeAudioContextIndependente = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            const oscillator = metronomeAudioContextIndependente.createOscillator();
+            const gainNode = metronomeAudioContextIndependente.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(metronomeAudioContextIndependente.destination);
+            
+            oscillator.frequency.value = frequencia;
+            oscillator.type = 'square';
+            
+            gainNode.gain.value = 0.3;
+            gainNode.gain.exponentialRampToValueAtTime(0.001, metronomeAudioContextIndependente.currentTime + 0.1);
+            
+            oscillator.start();
+            oscillator.stop(metronomeAudioContextIndependente.currentTime + 0.1);
+        }
+
+        function atualizarDisplayMetronome() {
+            // Atualiza o display do metrônomo (caso necessário)
+        }
+
+        // ===== NOVAS FUNÇÕES PARA O VS =====
+        function formatarNomeArquivoVS(nomeMusica) {
+            // Converter para minúsculas e remover acentos
+            let nomeFormatado = nomeMusica.toLowerCase();
+            
+            // Mapeamento de caracteres acentuados
+            const acentos = {
+                'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a',
+                'é': 'e', 'è': 'e', 'ê': 'e',
+                'í': 'i', 'ì': 'i', 'î': 'i',
+                'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o',
+                'ú': 'u', 'ù': 'u', 'û': 'u',
+                'ç': 'c',
+                'ñ': 'n'
+            };
+            
+            // Substituir acentos
+            nomeFormatado = nomeFormatado.replace(/[áàãâä]/g, 'a')
+                                         .replace(/[éèêë]/g, 'e')
+                                         .replace(/[íìîï]/g, 'i')
+                                         .replace(/[óòõôö]/g, 'o')
+                                         .replace(/[úùûü]/g, 'u')
+                                         .replace(/ç/g, 'c')
+                                         .replace(/ñ/g, 'n');
+            
+            // Substituir caracteres especiais por hífen
+            nomeFormatado = nomeFormatado.replace(/[^\w\s]/g, '');
+            
+            // Substituir espaços por hífen
+            nomeFormatado = nomeFormatado.replace(/\s+/g, '-');
+            
+            // Remover hífens duplicados
+            nomeFormatado = nomeFormatado.replace(/-+/g, '-');
+            
+            // Remover hífens no início e no final
+            nomeFormatado = nomeFormatado.replace(/^-+|-+$/g, '');
+            
+            return nomeFormatado;
+        }
+
+        function toggleVS() {
+            if (!musicaVSAberta) return;
+            
+            if (vsAtivo) {
+                pararVS();
+            } else {
+                tocarVS();
+            }
+        }
+
+        function tocarVS() {
+            if (!musicaVSAberta) return;
+            
+            const nomeArquivo = formatarNomeArquivoVS(musicaVSAberta.nome);
+            const caminhoArquivo = `vs/${nomeArquivo}.mp3`;
+            
+            console.log('🔍 Procurando arquivo VS:', caminhoArquivo);
+            
+            // Criar elemento de áudio
+            vsAudio = new Audio(caminhoArquivo);
+            
+            // Verificar se o arquivo existe
+            vsAudio.addEventListener('canplaythrough', function() {
+                vsAudio.play()
+                    .then(() => {
+                        vsAtivo = true;
+                        atualizarInterfaceVS(true);
+                        console.log('▶️ VS tocando:', caminhoArquivo);
+                    })
+                    .catch(error => {
+                        console.error('❌ Erro ao tocar VS:', error);
+                        mostrarVSNaoDisponivel();
+                        vsAudio = null;
+                    });
+            });
+            
+            vsAudio.addEventListener('error', function() {
+                console.error('❌ Arquivo VS não encontrado:', caminhoArquivo);
+                mostrarVSNaoDisponivel();
+                vsAudio = null;
+            });
+            
+            // Timeout para evitar espera infinita
+            setTimeout(() => {
+                if (vsAudio && !vsAtivo) {
+                    vsAudio = null;
+                    if (!vsAtivo) {
+                        mostrarVSNaoDisponivel();
+                    }
+                }
+            }, 3000);
+        }
+
+        function pararVS() {
+            if (vsAudio) {
+                vsAudio.pause();
+                vsAudio.currentTime = 0;
+                vsAudio = null;
+            }
+            vsAtivo = false;
+            atualizarInterfaceVS(false);
+            console.log('⏹️ VS parado');
+        }
+
+        function atualizarInterfaceVS(ativo) {
+            const vsFloatBtn = document.getElementById('vs-float-btn');
+            const vsHeaderBtn = document.getElementById('vs-header-btn');
+            
+            if (ativo) {
+                vsFloatBtn.classList.add('playing');
+                vsFloatBtn.innerHTML = '⏹️';
+                vsFloatBtn.title = 'Virtual Sound - Parar';
+                
+                if (vsHeaderBtn) {
+                    vsHeaderBtn.classList.add('playing');
+                    vsHeaderBtn.innerHTML = '⏹️';
+                }
+            } else {
+                vsFloatBtn.classList.remove('playing');
+                vsFloatBtn.innerHTML = 'VS';
+                vsFloatBtn.title = 'Virtual Sound - Tocar faixa de áudio';
+                
+                if (vsHeaderBtn) {
+                    vsHeaderBtn.classList.remove('playing');
+                    vsHeaderBtn.innerHTML = 'VS';
+                }
+            }
+        }
+
+        function mostrarVSNaoDisponivel() {
+            // Remover toast anterior se existir
+            const toastAnterior = document.querySelector('.vs-toast');
+            if (toastAnterior) {
+                toastAnterior.remove();
+            }
+            
+            // Criar novo toast
+            const toast = document.createElement('div');
+            toast.className = 'vs-toast';
+            toast.innerHTML = '❌ VS não disponível para esta música';
+            document.body.appendChild(toast);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 3000);
+            
+            // Garantir que o botão não fique como playing
+            atualizarInterfaceVS(false);
+        }
+        // ===== FIM DAS FUNÇÕES VS =====
+
+        // EVENTOS GLOBAIS - executados apenas uma vez
+        function configurarEventosGlobais() {
+            // Fechar modais ao clicar fora
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharNotesModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                    fecharUpdateModal();
+                    fecharTunerModal();
+                    fecharMetronomeModal(); // ADICIONADO
+                }
+            });
+
+            // Fechar modais com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    fecharModal();
+                    fecharAddModal();
+                    fecharEditModal();
+                    fecharConfigModal();
+                    fecharNotesModal();
+                    fecharImportModal();
+                    fecharImportURLModal();
+                    fecharUpdateModal();
+                    fecharTunerModal();
+                    fecharMetronomeModal(); // ADICIONADO
+                }
+            });
+
+            // Tela cheia automática em dispositivos móveis
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        // CONFIGURAR EVENTOS DO MODAL - executados quando o modal é aberto
+        function configurarEventosModal() {
+            const modalBody = document.querySelector('.modal-body');
+            if (modalBody) {
+                // Remover event listeners antigos para evitar duplicação
+                modalBody.replaceWith(modalBody.cloneNode(true));
+                
+                // Re-aplicar event listeners
+                const novoModalBody = document.querySelector('.modal-body');
+                
+                novoModalBody.addEventListener('wheel', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('touchstart', () => {
+                    if (autoScrollAtivo) {
+                        toggleAutoScroll();
+                    }
+                });
+
+                novoModalBody.addEventListener('scroll', () => {
+                    // Se o usuário estiver scrollando manualmente e o auto scroll estiver ativo
+                    if (autoScrollAtivo) {
+                        // Verificar se o usuário está tentando scrollar na direção oposta
+                        const lyricsContent = document.getElementById('lyrics-content');
+                        const maxScroll = lyricsContent.scrollHeight - novoModalBody.clientHeight;
+                        
+                        // Se estiver perto do final ou se o scroll manual for significativo, parar auto scroll
+                        if (novoModalBody.scrollTop >= maxScroll - 10) {
+                            toggleAutoScroll();
+                        }
+                    }
+                });
+            }
+        }
+
+        function mostrarInterfaceComMusicas() {
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('music-list').style.display = 'block';
+            document.getElementById('controls').style.display = 'flex';
+            exibirListaMusicas();
+            atualizarContadorRodape(); // Atualizar o rodapé
+        }
+
+        // FUNÇÃO EXIBIR LISTA DE MÚSICAS CORRIGIDA
+        function exibirListaMusicas() {
+            const lista = document.getElementById('music-list');
+            
+            if (musicas.length === 0) {
+                document.getElementById('empty-state').style.display = 'block';
+                document.getElementById('music-list').style.display = 'none';
+                document.getElementById('controls').style.display = 'none';
+                atualizarContadorRodape(); // Atualizar o rodapé mesmo quando vazio
+                return;
+            }
+            
+            musicas.sort((a, b) => a.nome.localeCompare(b.nome));
+            
+            lista.innerHTML = musicas.map((musica, index) => `
+                <div class="music-item" onclick="abrirMusica(${index})">
+                    <div class="music-info">
+                        <div class="music-name">${musica.nome}</div>
+                        ${musica.bpm ? `<div class="music-bpm" onclick="event.stopPropagation();" title="BPM da música">BPM: ${musica.bpm}</div>` : ''}
+                        ${musica.notas ? `<div class="music-notes" onclick="event.stopPropagation(); mostrarNotasModal(${index})" title="Ver notas de execução">📝</div>` : ''}
+                    </div>
+                    <div class="music-actions">
+                        <button class="action-btn setlist-btn ${musica.noSetlist ? 'active' : ''}" 
+                                onclick="event.stopPropagation(); toggleSetlist(${index})" 
+                                title="${musica.noSetlist ? 'Remover do setlist' : 'Adicionar ao setlist'}">
+                            ${musica.noSetlist ? '⭐' : '☆'}
+                        </button>
+                        <button class="action-btn edit-btn" onclick="event.stopPropagation(); editarMusicaForm(${index})" title="Editar música">✏️</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            atualizarContadorRodape(); // Atualizar o rodapé
+        }
+
+        // NOVA FUNÇÃO PARA ATUALIZAR CONTADOR NO RODAPÉ
+        function atualizarContadorRodape() {
+            const countElement = document.getElementById('music-count-footer');
+            const total = musicas.length;
+            countElement.textContent = `${total} música${total !== 1 ? 's' : ''} no repertório`;
+        }
+
+        // NOVA FUNÇÃO PARA MOSTRAR NOTAS USANDO ÍNDICE (CORRIGIDA)
+        function mostrarNotasModal(index) {
+            const musica = musicas[index];
+            if (!musica || !musica.notas) return;
+            
+            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${musica.nome}`;
+            
+            // Converter quebras de linha para <br> e escapar caracteres especiais
+            const notasFormatadas = musica.notas
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+            
+            document.getElementById('notes-content').innerHTML = notasFormatadas;
+            document.getElementById('notes-modal').style.display = 'block';
+        }
+
+        // FUNÇÃO ANTIGA (MANTIDA PARA COMPATIBILIDADE)
+        function mostrarNotas(nomeMusica, notas) {
+            document.getElementById('notes-modal-title').textContent = `📝 NOTAS: ${nomeMusica}`;
+            
+            // Converter quebras de linha para <br> e escapar caracteres especiais
+            const notasFormatadas = notas
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+            
+            document.getElementById('notes-content').innerHTML = notasFormatadas;
+            document.getElementById('notes-modal').style.display = 'block';
+        }
+
+        function fecharNotesModal() {
+            document.getElementById('notes-modal').style.display = 'none';
+        }
+
+        function salvarMusicas() {
+            localStorage.setItem('catalogoMusicas', JSON.stringify(musicas));
+            localStorage.setItem('setlistRepertorio', JSON.stringify(setlist));
+            localStorage.setItem('indiceMusicaAtual', indiceMusicaAtual.toString());
+            atualizarContadorRodape(); // Atualizar o rodapé ao salvar
+        }
+
+        function mostrarFormulario() {
+            document.getElementById('add-form').reset();
+            document.getElementById('add-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('nome-musica').focus(), 100);
+        }
+
+        function fecharAddModal() {
+            document.getElementById('add-modal').style.display = 'none';
+        }
+
+        function adicionarMusica(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nome-musica').value.trim();
+            const letra = document.getElementById('letra-musica').value;
+            const bpm = document.getElementById('bpm-musica').value.trim();
+            const notas = document.getElementById('notas-musica').value.trim();
+
+            if (!nome || !letra.trim()) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            if (musicas.some(m => m.nome.toUpperCase() === nome.toUpperCase())) {
+                alert('❌ Já existe uma música com este nome!');
+                return;
+            }
+
+            const novaMusica = {
+                nome: nome.toUpperCase(),
+                letra: letra,
+                bpm: bpm || null,
+                notas: notas || null,
+                noSetlist: false,
+                dataCriacao: new Date().toISOString()
+            };
+
+            musicas.push(novaMusica);
+            salvarMusicas();
+
+            if (musicas.length === 1) {
+                mostrarInterfaceComMusicas();
+            } else {
+                exibirListaMusicas();
+            }
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" adicionada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
+            fecharAddModal();
+        }
+
+        function editarMusicaForm(index) {
+            const musica = musicas[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-nome-musica').value = musica.nome;
+            document.getElementById('edit-letra-musica').value = musica.letra;
+            document.getElementById('edit-bpm-musica').value = musica.bpm || '';
+            document.getElementById('edit-notas-musica').value = musica.notas || '';
+            document.getElementById('edit-modal').style.display = 'block';
+            setTimeout(() => document.getElementById('edit-nome-musica').focus(), 100);
+        }
+
+        function fecharEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function editarMusica(event) {
+            event.preventDefault();
+            const index = document.getElementById('edit-index').value;
+            const nome = document.getElementById('edit-nome-musica').value.trim();
+            const letra = document.getElementById('edit-letra-musica').value;
+            const bpm = document.getElementById('edit-bpm-musica').value.trim();
+            const notas = document.getElementById('edit-notas-musica').value.trim();
+
+            if (!nome || !letra.trim()) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            // Verificar se o nome já existe (excluindo a própria música)
+            const nomeExistente = musicas.some((m, i) => 
+                i != index && m.nome.toUpperCase() === nome.toUpperCase()
+            );
+
+            if (nomeExistente) {
+                alert('❌ Já existe uma música com este nome!');
+                return;
+            }
+
+            // Atualizar a música
+            musicas[index] = {
+                ...musicas[index],
+                nome: nome.toUpperCase(),
+                letra: letra,
+                bpm: bpm || null,
+                notas: notas || null,
+                dataModificacao: new Date().toISOString()
+            };
+
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = `✅ Música "<strong>${nome}</strong>" atualizada com sucesso!`;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 3000);
+
+            fecharEditModal();
+        }
+
+        // NOVA FUNÇÃO PARA EXCLUIR MÚSICA DA TELA DE EDIÇÃO
+        function excluirMusicaEdicao() {
+            const index = document.getElementById('edit-index').value;
+            const nomeMusica = musicas[index].nome;
+            
+            if (confirm(`Tem certeza que deseja excluir permanentemente a música "${nomeMusica}"?`)) {
+                // Remover do setlist se estiver lá
+                const setlistIndex = setlist.indexOf(parseInt(index));
+                if (setlistIndex !== -1) {
+                    setlist.splice(setlistIndex, 1);
+                    if (indiceMusicaAtual >= setlistIndex) {
+                        indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+                    }
+                }
+                
+                musicas.splice(index, 1);
+                salvarMusicas();
+                exibirListaMusicas();
+                exibirSetlist();
+                fecharEditModal();
+                
+                // Feedback visual
+                const lista = document.getElementById('music-list');
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.innerHTML = `✅ Música "<strong>${nomeMusica}</strong>" excluída com sucesso!`;
+                lista.insertBefore(successMsg, lista.firstChild);
+                setTimeout(() => successMsg.remove(), 3000);
+            }
+        }
+
+        function abrirMusica(index) {
+            indiceMusicaAberta = index;
+            const musica = musicas[index];
+            musicaVSAberta = musica; // Salvar música atual para o VS
+            document.getElementById('modal-title').textContent = musica.nome;
+            document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
+            document.getElementById('music-modal').style.display = 'block';
+            
+            // Resetar VS ao abrir nova música
+            if (vsAtivo) {
+                pararVS();
+            }
+            
+            // Aplicar modo de visualização salvo
+            aplicarModoVisualizacaoAtual();
+            
+            // Verificar se a música está no setlist para mostrar os controles de navegação
+            const setlistIndex = setlist.indexOf(index);
+            const footer = document.getElementById('setlist-navigation');
+            if (setlistIndex !== -1) {
+                footer.style.display = 'block';
+                indiceMusicaAtual = setlistIndex;
+            } else {
+                footer.style.display = 'none';
+                indiceMusicaAtual = -1;
+            }
+            
+            // Resetar controles de scroll
+            autoScrollAtivo = false;
+            pararAutoScroll();
+            const scrollToggle = document.getElementById('scroll-toggle');
+            if (scrollToggle) {
+                scrollToggle.classList.remove('active');
+                scrollToggle.innerHTML = '▶️ Scroll';
+            }
+            const speedControls = document.getElementById('speed-controls');
+            if (speedControls) speedControls.style.display = 'none';
+            
+            // Resetar velocidade para a mais lenta
+            scrollSpeed = 1;
+            atualizarDisplayVelocidade();
+            
+            // Resetar metrônomo
+            if (metronomeAtivo) {
+                pararMetronome();
+                const metronomeBtn = document.getElementById('metronome-toggle');
+                if (metronomeBtn) metronomeBtn.classList.remove('active');
+            }
+            
+            // Configurar eventos do modal
+            setTimeout(() => {
+                configurarEventosModal();
+                document.querySelector('.modal-body').scrollTop = 0;
+                // Ajustar fonte baseada no modo atual
+                if (modoVisualizacaoAtual === 'paisagem') {
+                    document.getElementById('lyrics-content').style.fontSize = '22px'; // TAMANHO REDUZIDO
+                    tamanhoFonteBase = 22;
+                } else {
+                    document.getElementById('lyrics-content').style.fontSize = '14px'; // ALTERADO: de 16px para 14px
+                    tamanhoFonteBase = 14;
+                }
+            }, 100);
+            
+            // Tela cheia automática ao abrir música
+            if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                document.documentElement.requestFullscreen?.();
+            }
+        }
+
+        // FUNÇÃO FORMATAR LETRA MODIFICADA - COM SUPORTE PARA CIFRAS LARANJAS
+        function formatarLetra(texto) {
+            const linhas = texto.split('\n');
+            let html = '';
+            
+            // Função para processar cifras entre ||
+            const processarCifras = (texto) => {
+                return texto.replace(/\|([^|]+)\|/g, '<span class="orange-chord">$1</span>');
+            };
+            
+            linhas.forEach(linha => {
+                linha = linha.trim();
+                if (!linha) {
+                    html += '<br>';
+                    return;
+                }
+                
+                if (linha.toUpperCase().startsWith('[R]')) {
+                    const linhaSemR = linha.substring(3).trim();
+                    const linhaComCifras = processarCifras(linhaSemR.toUpperCase());
+                    html += `<div class="yellow-line">${linhaComCifras}</div>`;
+                } else {
+                    const linhaComCifras = processarCifras(linha.toUpperCase());
+                    html += `<div class="normal-line">${linhaComCifras}</div>`;
+                }
+            });
+            
+            return html;
+        }
+
+        function fecharModal() {
+            // Parar auto scroll se estiver ativo
+            if (autoScrollAtivo) {
+                pararAutoScroll();
+                autoScrollAtivo = false;
+            }
+            
+            // Parar metrônomo se estiver ativo
+            if (metronomeAtivo) {
+                pararMetronome();
+                const metronomeBtn = document.getElementById('metronome-toggle');
+                if (metronomeBtn) metronomeBtn.classList.remove('active');
+            }
+            
+            // Parar VS se estiver tocando
+            if (vsAtivo) {
+                pararVS();
+            }
+            
+            musicaVSAberta = null;
+            document.getElementById('music-modal').style.display = 'none';
+        }
+
+        // FUNÇÕES DE MODOS DE VISUALIZAÇÃO - CORRIGIDAS
+        function toggleViewMode() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const botao = document.getElementById('view-mode-toggle');
+            
+            if (modoVisualizacaoAtual === 'retrato') {
+                modoVisualizacaoAtual = 'paisagem';
+                lyricsContent.classList.add('landscape');
+                botao.classList.add('active');
+                botao.innerHTML = '📱 Retrato';
+                // Ajustar fonte para modo paisagem - TAMANHO REDUZIDO
+                lyricsContent.style.fontSize = '22px';
+                tamanhoFonteBase = 22;
+            } else {
+                modoVisualizacaoAtual = 'retrato';
+                lyricsContent.classList.remove('landscape');
+                botao.classList.remove('active');
+                botao.innerHTML = '🔄 Paisagem';
+                // Ajustar fonte para modo retrato - ALTERADO: de 16px para 14px
+                lyricsContent.style.fontSize = '14px';
+                tamanhoFonteBase = 14;
+            }
+            
+            localStorage.setItem('modoVisualizacao', modoVisualizacaoAtual);
+        }
+
+        function aplicarModoVisualizacaoAtual() {
+            const lyricsContent = document.getElementById('lyrics-content');
+            const botao = document.getElementById('view-mode-toggle');
+            
+            if (modoVisualizacaoAtual === 'paisagem') {
+                lyricsContent.classList.add('landscape');
+                botao.classList.add('active');
+                botao.innerHTML = '📱 Retrato';
+                // Ajustar fonte para modo paisagem - TAMANHO REDUZIDO
+                lyricsContent.style.fontSize = '22px';
+                tamanhoFonteBase = 22;
+            } else {
+                lyricsContent.classList.remove('landscape');
+                botao.classList.remove('active');
+                botao.innerHTML = '🔄 Paisagem';
+                // Ajustar fonte para modo retrato - ALTERADO: de 16px para 14px
+                lyricsContent.style.fontSize = '14px';
+                tamanhoFonteBase = 14;
+            }
+        }
+
+        function aplicarModoVisualizacao(modo) {
+            modoDispositivo = modo;
+            localStorage.setItem('modoDispositivo', modo);
+            
+            // Aplicar configurações específicas do modo
+            if (modo === 'notebook') {
+                // Modo Notebook - padrão para paisagem
+                modoVisualizacaoAtual = 'paisagem';
+                localStorage.setItem('modoVisualizacao', 'paisagem');
+            } else {
+                // Modo Tablet - padrão para retrato
+                modoVisualizacaoAtual = 'retrato';
+                localStorage.setItem('modoVisualizacao', 'retrato');
+            }
+            
+            // Aplicar visualização se o modal estiver aberto
+            if (document.getElementById('music-modal').style.display === 'block') {
+                aplicarModoVisualizacaoAtual();
+            }
+            
+            atualizarBotoesModoDispositivo();
+            
+            // Feedback visual
+            alert(`✅ Modo ${modo === 'notebook' ? 'Notebook' : 'Tablet'} ativado!`);
+        }
+
+        function atualizarBotoesModoDispositivo() {
+            const tabletBtn = document.getElementById('modo-tablet-btn');
+            const notebookBtn = document.getElementById('modo-notebook-btn');
+            
+            if (modoDispositivo === 'tablet') {
+                tabletBtn.classList.add('active');
+                notebookBtn.classList.remove('active');
+            } else {
+                notebookBtn.classList.add('active');
+                tabletBtn.classList.remove('active');
+            }
+        }
+
+        // FUNÇÕES DOS AFINADORES
+        function abrirTuner(tipo) {
+            document.getElementById('tuner-modal').style.display = 'block';
+            mudarTipoTuner(tipo);
+        }
+
+        function fecharTunerModal() {
+            document.getElementById('tuner-modal').style.display = 'none';
+            pararTodasNotas();
+        }
+
+        function mudarTipoTuner(tipo) {
+            tipoTunerAtual = tipo;
+            
+            // Atualizar botões de seleção
+            document.getElementById('tuner-bass-btn').classList.remove('active');
+            document.getElementById('tuner-guitar-btn').classList.remove('active');
+            document.getElementById(`tuner-${tipo}-btn`).classList.add('active');
+            
+            // Mostrar/ocultar conteúdo
+            document.getElementById('tuner-bass').style.display = tipo === 'bass' ? 'block' : 'none';
+            document.getElementById('tuner-guitar').style.display = tipo === 'guitar' ? 'block' : 'none';
+            
+            // Atualizar título
+            document.getElementById('tuner-modal-title').textContent = 
+                tipo === 'bass' ? '🎸 AFINADOR DE BAIXO' : '🎶 AFINADOR DE GUITARRA';
+            
+            // Parar notas atuais
+            pararTodasNotas();
+        }
+
+        function tocarNota(nota, tipo) {
+            // Parar nota atual se estiver tocando
+            pararTodasNotas();
+            
+            // Obter frequência da nota
+            const frequencia = frequencias[tipo][nota];
+            
+            if (!frequencia) {
+                console.error('Frequência não encontrada para a nota:', nota);
+                return;
+            }
+            
+            // Criar contexto de áudio se não existir
+            if (!tunerAudioContext) {
+                tunerAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Criar oscilador
+            tunerOscillator = tunerAudioContext.createOscillator();
+            const gainNode = tunerAudioContext.createGain();
+            
+            // Configurar oscilador
+            tunerOscillator.type = 'sine'; // Onda senoidal para som puro
+            tunerOscillator.frequency.setValueAtTime(frequencia, tunerAudioContext.currentTime);
+            
+            // Configurar ganho (volume)
+            gainNode.gain.setValueAtTime(0.3, tunerAudioContext.currentTime); // Volume moderado
+            
+            // Conectar e iniciar
+            tunerOscillator.connect(gainNode);
+            gainNode.connect(tunerAudioContext.destination);
+            tunerOscillator.start();
+            
+            // Salvar nota atual
+            notaAtual = nota;
+            
+            // Atualizar visual do botão
+            const botaoAtual = event.target.closest('.string-btn');
+            if (botaoAtual) {
+                botaoAtual.classList.add('playing');
+            }
+            
+            console.log(`🎵 Tocando nota: ${nota} (${frequencia} Hz)`);
+        }
+
+        function pararTodasNotas() {
+            if (tunerOscillator) {
+                tunerOscillator.stop();
+                tunerOscillator.disconnect();
+                tunerOscillator = null;
+            }
+            
+            // Remover classe playing de todos os botões
+            document.querySelectorAll('.string-btn.playing').forEach(botao => {
+                botao.classList.remove('playing');
+            });
+            
+            notaAtual = null;
+        }
+
+        // FUNÇÕES DE BACKUP EM XML
+        function exportarDados() {
+            // Criar estrutura XML
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            xml += '<repertorio>\n';
+            xml += `  <info>\n`;
+            xml += `    <aplicacao>Repertório BlueVox</aplicacao>\n`;
+            xml += `    <versao>2.0</versao>\n`; // ATUALIZADO PARA 2.0
+            xml += `    <dataExportacao>${new Date().toISOString()}</dataExportacao>\n`;
+            xml += `    <totalMusicas>${musicas.length}</totalMusicas>\n`;
+            xml += `  </info>\n`;
+            xml += `  <musicas>\n`;
+            
+            // Adicionar cada música
+            musicas.forEach(musica => {
+                xml += `    <musica>\n`;
+                xml += `      <nome><![CDATA[${musica.nome}]]></nome>\n`;
+                xml += `      <letra><![CDATA[${musica.letra}]]></letra>\n`;
+                if (musica.bpm) {
+                    xml += `      <bpm>${musica.bpm}</bpm>\n`;
+                }
+                if (musica.notas) {
+                    xml += `      <notas><![CDATA[${musica.notas}]]></notas>\n`;
+                }
+                xml += `      <dataCriacao>${musica.dataCriacao || ''}</dataCriacao>\n`;
+                if (musica.dataModificacao) {
+                    xml += `      <dataModificacao>${musica.dataModificacao}</dataModificacao>\n`;
+                }
+                xml += `    </musica>\n`;
+            });
+            
+            xml += `  </musicas>\n`;
+            xml += `</repertorio>`;
+            
+            // Criar e baixar arquivo
+            const blob = new Blob([xml], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `repertorio-bluevox-${new Date().toISOString().split('T')[0]}.xml`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`📤 Backup XML exportado com sucesso!\n${musicas.length} música(s) salvas.`);
+        }
+
+        // FUNÇÕES DE IMPORTAR VIA URL
+        function mostrarImportacaoURL() {
+            document.getElementById('import-url-modal').style.display = 'block';
+            document.getElementById('url-xml').value = '';
+            document.getElementById('url-loading').style.display = 'none';
+            setTimeout(() => document.getElementById('url-xml').focus(), 100);
+        }
+
+        function fecharImportURLModal() {
+            if (importacaoURLEmAndamento) {
+                if (!confirm('Deseja continuar?')) {
+                    return;
+                }
+            }
+            document.getElementById('import-url-modal').style.display = 'none';
+            importacaoURLEmAndamento = false;
+        }
+
+        async function importarDeURL(event) {
+            event.preventDefault();
+            
+            const urlInput = document.getElementById('url-xml').value.trim();
+            
+            if (!urlInput) {
+                alert('❌ Por favor, digite uma URL válida.');
+                return;
+            }
+            
+            // Validar formato da URL
+            if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+                alert('❌ A URL deve começar com http:// ou https://');
+                return;
+            }
+            
+            try {
+                // Mostrar loading
+                document.getElementById('url-loading').style.display = 'block';
+                importacaoURLEmAndamento = true;
+                
+                console.log('🌐 Iniciando importação da URL:', urlInput);
+                
+                // Fazer requisição para a URL
+                const response = await fetch(urlInput);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                // Verificar se o conteúdo é XML
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/xml') && !contentType.includes('text/xml')) {
+                    console.warn('Content-Type não é XML:', contentType);
+                    // Continuamos mesmo assim, pois alguns servidores podem não configurar o content-type corretamente
+                }
+                
+                const xmlText = await response.text();
+                
+                if (!xmlText || xmlText.trim().length === 0) {
+                    throw new Error('O arquivo da URL está vazio');
+                }
+                
+                // Processar o XML (reutilizando a lógica existente)
+                processarXMLImportado(xmlText, `URL: ${urlInput}`);
+                
+            } catch (error) {
+                console.error('❌ Erro na importação via URL:', error);
+                
+                let mensagemErro = 'Erro ao importar da URL: ';
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    mensagemErro += 'Não foi possível conectar ao servidor. Verifique a URL e sua conexão com a internet.';
+                } else if (error.message.includes('404')) {
+                    mensagemErro += 'Arquivo não encontrado (404). Verifique se a URL está correta.';
+                } else if (error.message.includes('403')) {
+                    mensagemErro += 'Acesso negado (403). O servidor pode estar bloqueando o acesso.';
+                } else if (error.message.includes('CORS')) {
+                    mensagemErro += 'Bloqueado por política CORS. O servidor não permite acesso de outros domínios.';
+                } else {
+                    mensagemErro += error.message;
+                }
+                
+                alert('❌ ' + mensagemErro);
+            } finally {
+                // Esconder loading
+                document.getElementById('url-loading').style.display = 'none';
+                importacaoURLEmAndamento = false;
+            }
+        }
+
+        // Função para processar XML importado (reutilizável para arquivo e URL)
+        function processarXMLImportado(xmlText, fonte) {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Verificar se é um backup do Repertório BlueVox
+                const aplicacao = xmlDoc.querySelector('aplicacao');
+                if (!aplicacao || aplicacao.textContent !== 'Repertório BlueVox') {
+                    // Tentar uma verificação mais flexível
+                    const musicasNodes = xmlDoc.querySelectorAll('musica');
+                    if (musicasNodes.length === 0) {
+                        throw new Error('Arquivo XML não é um backup válido do Repertório BlueVox');
+                    }
+                    console.warn('⚠️ Arquivo XML pode não ser um backup oficial do BlueVox, mas tentando importar...');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasImportadas = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    const dataCriacao = musicaNode.querySelector('dataCriacao')?.textContent || new Date().toISOString();
+                    
+                    if (nome && letra) {
+                        musicasImportadas.push({
+                            nome: nome,
+                            letra: letra,
+                            bpm: bpm || null,
+                            notas: notas || null,
+                            noSetlist: false,
+                            dataCriacao: dataCriacao,
+                            fonte: fonte
+                        });
+                    }
+                });
+                
+                if (musicasImportadas.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no arquivo');
+                }
+
+                // Salvar dados para uso posterior
+                dadosImportacao = musicasImportadas;
+                
+                // Mostrar modal de opções de importação
+                mostrarOpcoesImportacao(musicasImportadas.length);
+                
+                // Fechar modal de URL se estiver aberto
+                fecharImportURLModal();
+
+            } catch (error) {
+                console.error('Erro ao processar XML:', error);
+                alert(`❌ Erro ao processar o arquivo da URL!\n${error.message}`);
+            }
+        }
+
+        function iniciarImportacao(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validar tipo de arquivo
+            if (!file.name.toLowerCase().endsWith('.xml')) {
+                alert('❌ Por favor, selecione um arquivo XML válido.');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processarXMLImportado(e.target.result, `Arquivo: ${file.name}`);
+            };
+            
+            reader.onerror = function() {
+                alert('❌ Erro ao ler o arquivo. Tente novamente.');
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function mostrarOpcoesImportacao(quantidadeMusicas) {
+            document.getElementById('import-count').textContent = quantidadeMusicas;
+            document.getElementById('import-modal').style.display = 'block';
+            
+            // Resetar seleção
+            opcaoImportSelecionada = null;
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('confirm-import-btn').disabled = true;
+        }
+
+        function fecharImportModal() {
+            document.getElementById('import-modal').style.display = 'none';
+            dadosImportacao = null;
+            opcaoImportSelecionada = null;
+            
+            // Limpar inputs
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-input-initial').value = '';
+        }
+
+        function selecionarOpcaoImport(opcao) {
+            opcaoImportSelecionada = opcao;
+            
+            // Atualizar visualmente a seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(`option-${opcao}`).classList.add('selected');
+            
+            // Habilitar botão de confirmação
+            document.getElementById('confirm-import-btn').disabled = false;
+        }
+
+        function confirmarImportacao() {
+            if (!dadosImportacao || !opcaoImportSelecionada) {
+                alert('❌ Selecione uma opção de importação.');
+                return;
+            }
+
+            let mensagem = '';
+            let musicasAdicionadas = 0;
+            let musicasAtualizadas = 0;
+
+            switch (opcaoImportSelecionada) {
+                case 'substituir':
+                    // Substituir tudo
+                    musicas = dadosImportacao;
+                    setlist = [];
+                    indiceMusicaAtual = -1;
+                    mensagem = `✅ Backup importado! ${musicas.length} música(s) carregadas.`;
+                    break;
+                    
+                case 'adicionar':
+                    // Adicionar apenas novas
+                    const musicasExistentes = new Set(musicas.map(m => m.nome.toUpperCase()));
+                    const novasMusicas = dadosImportacao.filter(m => 
+                        !musicasExistentes.has(m.nome.toUpperCase())
+                    );
+                    
+                    if (novasMusicas.length === 0) {
+                        alert('ℹ️ Todas as músicas do backup já existem no repertório.');
+                        fecharImportModal();
+                        return;
+                    }
+                    
+                    musicas.push(...novasMusicas);
+                    musicasAdicionadas = novasMusicas.length;
+                    mensagem = `✅ Backup importado! ${musicasAdicionadas} nova(s) música(s) adicionadas.`;
+                    break;
+                    
+                case 'mesclar':
+                    // Mesclar tudo - combinar e atualizar
+                    const mapaMusicas = new Map();
+                    
+                    // Primeiro, adicionar todas as músicas atuais ao mapa
+                    musicas.forEach(musica => {
+                        mapaMusicas.set(musica.nome.toUpperCase(), musica);
+                    });
+                    
+                    // Depois, adicionar/atualizar com as músicas do backup
+                    dadosImportacao.forEach(musicaBackup => {
+                        const chave = musicaBackup.nome.toUpperCase();
+                        if (mapaMusicas.has(chave)) {
+                            // Atualizar música existente
+                            const musicaExistente = mapaMusicas.get(chave);
+                            mapaMusicas.set(chave, {
+                                ...musicaExistente,
+                                letra: musicaBackup.letra,
+                                bpm: musicaBackup.bpm || musicaExistente.bpm,
+                                notas: musicaBackup.notas || musicaExistente.notas,
+                                dataModificacao: new Date().toISOString()
+                            });
+                            musicasAtualizadas++;
+                        } else {
+                            // Adicionar nova música
+                            mapaMusicas.set(chave, musicaBackup);
+                            musicasAdicionadas++;
+                        }
+                    });
+                    
+                    // Converter mapa de volta para array
+                    musicas = Array.from(mapaMusicas.values());
+                    mensagem = `✅ Backup mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
+                    break;
+            }
+
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+            
+            if (musicas.length > 0) {
+                mostrarInterfaceComMusicas();
+            }
+
+            // Feedback visual
+            const lista = document.getElementById('music-list');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success';
+            successMsg.innerHTML = mensagem;
+            lista.insertBefore(successMsg, lista.firstChild);
+            setTimeout(() => successMsg.remove(), 5000);
+
+            fecharImportModal();
+        }
+
+        // FUNÇÕES DE UPDATE DO REPERTÓRIO
+        async function verificarAtualizacoes() {
+            try {
+                console.log('🔄 Verificando atualizações do repertório...');
+                
+                const response = await fetch(REPERTORIO_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasOnline = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    
+                    if (nome && letra) {
+                        musicasOnline.push({
+                            nome: nome,
+                            letra: letra,
+                            bpm: bpm || null,
+                            notas: notas || null
+                        });
+                    }
+                });
+                
+                if (musicasOnline.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no repertório online');
+                }
+                
+                // Salvar hash do repertório online para comparação futura
+                const hashOnline = calcularHash(musicasOnline);
+                const hashSalvo = localStorage.getItem('repertorioHash');
+                
+                console.log('🔍 Hash do repertório online:', hashOnline);
+                console.log('🔍 Hash do repertório salvo:', hashSalvo);
+                
+                // Se não há hash salvo ou se o hash é diferente, mostrar alerta
+                if (!hashSalvo || hashSalvo !== hashOnline) {
+                    console.log('🆕 Atualização disponível!');
+                    localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
+                    mostrarAlertaAtualizacao();
+                } else {
+                    console.log('✅ Repertório está atualizado');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao verificar atualizações:', error);
+                // Não mostrar erro para o usuário para não poluir a experiência
+            }
+        }
+
+        function calcularHash(musicasArray) {
+            // Criar uma string única baseada nas músicas para comparação
+            const dados = musicasArray.map(m => `${m.nome}${m.letra}${m.bpm || ''}${m.notas || ''}`).join('');
+            let hash = 0;
+            for (let i = 0; i < dados.length; i++) {
+                const char = dados.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash.toString();
+        }
+
+        function mostrarAlertaAtualizacao() {
+            const alertElement = document.getElementById('update-alert');
+            if (alertElement) {
+                alertElement.style.display = 'block';
+            }
+        }
+
+        function mostrarOpcoesUpdate() {
+            // Tentar carregar dados online salvos
+            const musicasOnlineSalvas = localStorage.getItem('repertorioOnline');
+            let musicasOnline = [];
+            
+            if (musicasOnlineSalvas) {
+                try {
+                    musicasOnline = JSON.parse(musicasOnlineSalvas);
+                } catch (e) {
+                    console.error('Erro ao carregar repertório online salvo:', e);
+                }
+            }
+            
+            // Se não há dados salvos, buscar online
+            if (musicasOnline.length === 0) {
+                buscarRepertorioOnline();
+                return;
+            }
+            
+            document.getElementById('update-count').textContent = musicasOnline.length;
+            document.getElementById('update-modal').style.display = 'block';
+            
+            // Resetar seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById('confirm-update-btn').disabled = true;
+        }
+
+        async function buscarRepertorioOnline() {
+            try {
+                console.log('🌐 Buscando repertório online...');
+                
+                const response = await fetch(REPERTORIO_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                
+                // Verificar se é um XML válido
+                if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+                    throw new Error('XML malformado ou inválido');
+                }
+                
+                // Extrair músicas do XML
+                const musicasNodes = xmlDoc.querySelectorAll('musica');
+                const musicasOnline = [];
+                
+                musicasNodes.forEach(musicaNode => {
+                    const nome = musicaNode.querySelector('nome')?.textContent || '';
+                    const letra = musicaNode.querySelector('letra')?.textContent || '';
+                    const bpm = musicaNode.querySelector('bpm')?.textContent || '';
+                    const notas = musicaNode.querySelector('notas')?.textContent || '';
+                    
+                    if (nome && letra) {
+                        musicasOnline.push({
+                            nome: nome,
+                            letra: letra,
+                            bpm: bpm || null,
+                            notas: notas || null
+                        });
+                    }
+                });
+                
+                if (musicasOnline.length === 0) {
+                    throw new Error('Nenhuma música válida encontrada no repertório online');
+                }
+                
+                // Salvar dados online
+                localStorage.setItem('repertorioOnline', JSON.stringify(musicasOnline));
+                
+                // Mostrar modal de opções
+                document.getElementById('update-count').textContent = musicasOnline.length;
+                document.getElementById('update-modal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('❌ Erro ao buscar repertório online:', error);
+                alert(`❌ Erro ao buscar repertório online:\n${error.message}`);
+            }
+        }
+
+        function fecharUpdateModal() {
+            document.getElementById('update-modal').style.display = 'none';
+        }
+
+        function selecionarOpcaoUpdate(opcao) {
+            // Atualizar visualmente a seleção
+            document.querySelectorAll('.import-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(`update-option-${opcao}`).classList.add('selected');
+            
+            // Habilitar botão de confirmação
+            document.getElementById('confirm-update-btn').disabled = false;
+        }
+
+        function confirmarUpdate() {
+            const opcaoSelecionada = document.querySelector('#update-modal .import-option.selected');
+            if (!opcaoSelecionada) {
+                alert('❌ Selecione uma opção de update.');
+                return;
+            }
+            
+            const opcao = opcaoSelecionada.id.replace('update-option-', '');
+            const musicasOnlineSalvas = localStorage.getItem('repertorioOnline');
+            
+            if (!musicasOnlineSalvas) {
+                alert('❌ Dados do repertório online não encontrados. Tente novamente.');
+                return;
+            }
+            
+            try {
+                const musicasOnline = JSON.parse(musicasOnlineSalvas);
+                let mensagem = '';
+                let musicasAdicionadas = 0;
+                let musicasAtualizadas = 0;
+
+                switch (opcao) {
+                    case 'substituir':
+                        // Substituir tudo
+                        musicas = musicasOnline;
+                        setlist = [];
+                        indiceMusicaAtual = -1;
+                        mensagem = `✅ Repertório atualizado! ${musicas.length} música(s) carregadas.`;
+                        break;
+                        
+                    case 'mesclar':
+                        // Mesclar tudo - combinar e atualizar
+                        const mapaMusicas = new Map();
+                        
+                        // Primeiro, adicionar todas as músicas atuais ao mapa
+                        musicas.forEach(musica => {
+                            mapaMusicas.set(musica.nome.toUpperCase(), musica);
+                        });
+                        
+                        // Depois, adicionar/atualizar com as músicas online
+                        musicasOnline.forEach(musicaOnline => {
+                            const chave = musicaOnline.nome.toUpperCase();
+                            if (mapaMusicas.has(chave)) {
+                                // Atualizar música existente
+                                const musicaExistente = mapaMusicas.get(chave);
+                                mapaMusicas.set(chave, {
+                                    ...musicaExistente,
+                                    letra: musicaOnline.letra,
+                                    bpm: musicaOnline.bpm || musicaExistente.bpm,
+                                    notas: musicaOnline.notas || musicaExistente.notas,
+                                    dataModificacao: new Date().toISOString()
+                                });
+                                musicasAtualizadas++;
+                            } else {
+                                // Adicionar nova música
+                                mapaMusicas.set(chave, musicaOnline);
+                                musicasAdicionadas++;
+                            }
+                        });
+                        
+                        // Converter mapa de volta para array
+                        musicas = Array.from(mapaMusicas.values());
+                        mensagem = `✅ Repertório mesclado! ${musicasAdicionadas} nova(s) música(s) adicionadas e ${musicasAtualizadas} música(s) atualizadas.`;
+                        break;
+                }
+
+                // Atualizar hash do repertório
+                const hashOnline = calcularHash(musicasOnline);
+                localStorage.setItem('repertorioHash', hashOnline);
+                
+                // Esconder alerta de atualização
+                document.getElementById('update-alert').style.display = 'none';
+                
+                salvarMusicas();
+                exibirListaMusicas();
+                exibirSetlist();
+                
+                if (musicas.length > 0) {
+                    mostrarInterfaceComMusicas();
+                }
+
+                // Feedback visual
+                const lista = document.getElementById('music-list');
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.innerHTML = mensagem;
+                lista.insertBefore(successMsg, lista.firstChild);
+                setTimeout(() => successMsg.remove(), 5000);
+
+                fecharUpdateModal();
+                
+            } catch (error) {
+                console.error('Erro ao processar update:', error);
+                alert(`❌ Erro ao processar update:\n${error.message}`);
+            }
+        }
+
+        // FUNÇÕES DO SETLIST
+        function toggleSetlist(index) {
+            const musica = musicas[index];
+            
+            if (musica.noSetlist) {
+                // Remover do setlist
+                musica.noSetlist = false;
+                const setlistIndex = setlist.indexOf(index);
+                if (setlistIndex !== -1) {
+                    setlist.splice(setlistIndex, 1);
+                    // Ajustar índice atual se necessário
+                    if (indiceMusicaAtual >= setlistIndex) {
+                        indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+                    }
+                }
+            } else {
+                // Adicionar ao setlist
+                musica.noSetlist = true;
+                setlist.push(index);
+            }
+            
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+        }
+
+        function exibirSetlist() {
+            const setlistContainer = document.getElementById('setlist-container');
+            if (!setlistContainer) return;
+            
+            if (setlist.length === 0) {
+                setlistContainer.style.display = 'none';
+                return;
+            }
+            
+            setlistContainer.style.display = 'block';
+            const setlistElement = document.getElementById('setlist-musicas');
+            
+            setlistElement.innerHTML = setlist.map((index, posicao) => {
+                const musica = musicas[index];
+                return `
+                    <div class="setlist-item ${posicao === indiceMusicaAtual ? 'active' : ''}" 
+                         onclick="abrirMusicaSetlist(${index}, ${posicao})">
+                        <div class="setlist-pos">${posicao + 1}</div>
+                        <div class="setlist-name">${musica.nome}</div>
+                        ${musica.bpm ? `<div class="setlist-bpm">BPM: ${musica.bpm}</div>` : ''}
+                        <button class="action-btn delete-btn" onclick="event.stopPropagation(); removerDoSetlist(${posicao})" title="Remover do setlist">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function abrirMusicaSetlist(index, posicao) {
+            indiceMusicaAtual = posicao;
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function removerDoSetlist(posicao) {
+            const index = setlist[posicao];
+            if (musicas[index]) {
+                musicas[index].noSetlist = false;
+            }
+            setlist.splice(posicao, 1);
+            
+            // Ajustar índice atual se necessário
+            if (indiceMusicaAtual >= posicao) {
+                indiceMusicaAtual = Math.max(-1, indiceMusicaAtual - 1);
+            }
+            
+            salvarMusicas();
+            exibirListaMusicas();
+            exibirSetlist();
+        }
+
+        function proximaMusica() {
+            if (setlist.length === 0) {
+                alert('Nenhuma música no setlist!');
+                return;
+            }
+            
+            if (indiceMusicaAtual === -1) {
+                // Começar do início
+                indiceMusicaAtual = 0;
+            } else {
+                // Próxima música
+                indiceMusicaAtual = (indiceMusicaAtual + 1) % setlist.length;
+            }
+            
+            const index = setlist[indiceMusicaAtual];
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function musicaAnterior() {
+            if (setlist.length === 0) {
+                alert('Nenhuma música no setlist!');
+                return;
+            }
+            
+            if (indiceMusicaAtual === -1) {
+                // Começar do final
+                indiceMusicaAtual = setlist.length - 1;
+            } else {
+                // Música anterior
+                indiceMusicaAtual = (indiceMusicaAtual - 1 + setlist.length) % setlist.length;
+            }
+            
+            const index = setlist[indiceMusicaAtual];
+            abrirMusica(index);
+            exibirSetlist();
+        }
+
+        function limparSetlist() {
+            if (confirm('Tem certeza que deseja limpar todo o setlist?')) {
+                // Remover flag de todas as músicas
+                setlist.forEach(index => {
+                    if (musicas[index]) {
+                        musicas[index].noSetlist = false;
+                    }
+                });
+                
+                setlist = [];
+                indiceMusicaAtual = -1;
+                salvarMusicas();
+                exibirListaMusicas();
+                exibirSetlist();
+            }
+        }
+
+        // FUNÇÃO PARA RESETAR O APLICATIVO
+        function resetarAplicativo() {
+            if (confirm('⚠️ ATENÇÃO!\n\nIsso irá apagar TODOS os dados do aplicativo, incluindo:\n\n• Todas as músicas do repertório\n• Configurações salvas\n• Histórico de atualizações\n• Setlist atual\n\nTem certeza que deseja resetar o aplicativo?')) {
+                // Limpar todos os dados do localStorage
+                localStorage.clear();
+                
+                // Recarregar a página para aplicar o reset
+                alert('✅ Aplicativo resetado com sucesso!\n\nA página será recarregada.');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        }
+
+        function mostrarAjuda() {
+            alert(`🎵 AJUDA - REPERTÓRIO BLUEVOX
+
+👁️ VISUALIZAR MÚSICA:
+• A- A A+ = Controles de tamanho da fonte (agora funcionam em ambos os modos)
+• ▶️ Scroll = Auto scroll automático (inicia após 10 segundos)
+• - 1 + = Controles simples de velocidade (1-7, inicia na mais lenta)
+• ♫ Metrônomo = Inicia/para metrônomo no BPM da música (requer BPM definido)
+• ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
+• 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
+• VS (Virtual Sound) = Toca a faixa de áudio correspondente da pasta /vs/
+
+➕ ADICIONAR MÚSICA:
+• Clique em "Adicionar Música"
+• Digite o nome, BPM (opcional), notas (opcional) e cole a letra
+• Use [R] para linhas em AMARELO
+• Use |D|, |G|, |C#m| para cifras em LARANJA
+
+✏️ EDITAR MÚSICA:
+• Clique no ícone ✏️ ao lado da música
+• Altere o nome, BPM, notas e/ou letra
+• Salve as alterações
+• Use o botão "🗑️ Excluir Música" para remover a música
+
+📝 NOTAS DE EXECUÇÃO:
+• Clique no ícone 📝 ao lado do BPM para ver as instruções de execução
+• As notas são exibidas em um modal separado
+• Útil para instruções específicas da banda
+
+♫ METRÔNOMO:
+• Clique no botão ♫ para iniciar/parar
+• Usa o BPM definido na música
+• Som com batida forte na primeira de cada 4 tempos
+• Funciona apenas se a música tiver BPM definido
+
+🎧 VIRTUAL SOUND (VS):
+• Botão "VS" no cabeçalho e botão flutuante
+• Toca o arquivo MP3 correspondente da pasta "vs"
+• Nome do arquivo deve seguir o formato: nome-da-musica.mp3
+• Exemplo: "NÃO TENHO COMO PAGAR" → "nao-tenho-como-pagar.mp3"
+• Mensagem de "VS não disponível" se o arquivo não existir
+
+🛠️ UTILITÁRIOS:
+• 🎸 Afinador de Baixo = Notas de referência para baixo 4 cordas (E-A-D-G)
+• 🎶 Afinador de Guitarra = Notas de referência para guitarra 6 cordas (E-A-D-G-B-E)
+• ♫ Metrônomo Independente = Metrônomo com BPM ajustável e pré-contagem
+• Clique em uma corda para tocar a nota de referência
+• Use "Parar Todas as Notas" para silenciar
+
+📱💻 MODOS DE VISUALIZAÇÃO:
+• Modo Tablet = Visualização em retrato, ideal para tablets e celulares
+• Modo Notebook = Visualização em paisagem com colunas, ideal para notebooks
+
+⭐ SETLIST (REPERTÓRIO DE SHOW):
+• Clique na estrela ☆ para adicionar música ao setlist
+• A estrela ficará ⭐ quando a música estiver no setlist
+• Use os botões ⏮️ e ⏭️ para navegar durante o show
+• Use "Limpar Setlist" para remover todas as músicas
+
+💾 BACKUP:
+• EXPORTAR: Gera arquivo XML universal
+• IMPORTAR: Carrega backup XML (arquivo ou URL)
+• Formatos suportados: Substituir, Adicionar, Mesclar
+
+🔄 UPDATE DO REPERTÓRIO:
+• Busca atualizações do repertório online
+• Opções: Substituir tudo ou Mesclar
+• Verificação automática na inicialização
+
+🌐 IMPORTAR DE URL:
+• Digite a URL completa do arquivo XML
+• Suporta http:// e https://
+• Funciona com qualquer servidor público
+
+🎨 PERSONALIZAR:
+• Botão "Cores" para mudar o tema
+• 5 temas diferentes disponíveis
+
+🗑️ RESETAR APP:
+• Apaga todos os dados do aplicativo
+• Reinicia completamente o sistema
+
+📱 INSTALAÇÃO:
+• Adicione à tela inicial para acesso rápido
+• Funciona 100% offline
+• Dados salvos no navegador
+
+⏰ AUTO SCROLL:
+• Inicia automaticamente após 10 segundos
+• 7 velocidades diferentes (inicia na mais lenta)
+• Controles simples com - e +
+• Mais opções de velocidade lenta para melhor controle
+
+💡 DICAS DE FORMATAÇÃO:
+• [R] no início da linha → linha inteira em AMARELO
+• |D|, |G|, |C#m| em qualquer lugar → cifra em LARANJA
+• Combine ambos: [R] linha com |D| cifra |G|`);
+        }
+    </script>
+</body>
+</html>
