@@ -12,1797 +12,253 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192.png">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --cor-primaria: #00ff00;
-            --cor-secundaria: #00aa00;
-            --cor-fundo: #000000;
-            --cor-texto: #00ff00;
-            --cor-destaque: #ffff00;
-            --cor-botao: #003300;
-            --cor-hover: #004400;
-        }
-        
-        body {
-            background: var(--cor-fundo);
-            color: var(--cor-texto);
-            font-family: Arial, sans-serif;
-            padding: 15px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            flex: 1;
-            width: 100%;
-        }
-        
-        /* REMOVIDO: header completo */
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: #111111;
-            border: 2px dashed var(--cor-secundaria);
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
-        .empty-state h2 {
-            color: var(--cor-primaria);
-            margin-bottom: 12px;
-            font-size: 1.3rem;
-        }
-        
-        .empty-state p {
-            color: var(--cor-secundaria);
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-        
-        .music-list {
-            margin: 20px 0;
-            width: 100%;
-        }
-        
-        .music-item {
-            background: #111111;
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            width: 100%;
-        }
-        
-        .music-item:hover {
-            background: #1a1a1a;
-            border-color: var(--cor-primaria);
-            transform: translateX(5px);
-        }
-        
-        .music-info {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .music-name {
-            color: var(--cor-primaria);
-            font-size: 1.1rem;
-            font-weight: bold;
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 15px;
-        }
-        
-        .music-bpm {
-            color: var(--cor-destaque);
-            font-size: 0.8rem;
-            margin-right: 10px;
-            white-space: nowrap;
-            background: #003300;
-            padding: 3px 8px;
-            border-radius: 10px;
-            border: 1px solid var(--cor-primaria);
-        }
-        
-        .music-notes {
-            color: #00ccff;
-            font-size: 0.8rem;
-            margin-right: 10px;
-            white-space: nowrap;
-            background: #003366;
-            padding: 3px 8px;
-            border-radius: 10px;
-            border: 1px solid #0088ff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .music-notes:hover {
-            background: #004477;
-            transform: scale(1.05);
-        }
-        
-        .music-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        
-        .action-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            width: 35px;
-            height: 35px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-        
-        .action-btn:hover {
-            background: var(--cor-hover);
-            transform: scale(1.1);
-        }
-        
-        .setlist-btn {
-            background: #663300;
-            border-color: #ff8800;
-        }
-        
-        .setlist-btn.active {
-            background: #ffaa00;
-            color: #000000;
-            border-color: #ffff00;
-        }
-        
-        .setlist-btn:hover {
-            background: #884400;
-        }
-        
-        .edit-btn {
-            background: #003366;
-            border-color: #0066cc;
-        }
-        
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 25px;
-            width: 100%;
-        }
-        
-        .btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 15px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn:hover {
-            background: var(--cor-hover);
-            transform: translateY(-2px);
-        }
-        
-        .btn-add {
-            background: #006600;
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-        
-        .btn-secondary {
-            background: #333333;
-            border-color: #666666;
-        }
-        
-        .btn-delete {
-            background: #660000;
-            border-color: #ff4444;
-            color: #ff8888;
-        }
-        
-        .btn-delete:hover {
-            background: #770000;
-        }
-        
-        .btn-install {
-            background: #004477;
-            border-color: #0088ff;
-            font-weight: bold;
-        }
-        
-        /* REMOVIDO: .music-count - AGORA ESTÁ NO RODAPÉ */
-        
-        .update-alert {
-            background: #003366;
-            border: 1px solid #0088ff;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-            animation: pulse 2s infinite;
-        }
-        
-        .update-alert h3 {
-            color: #00ffff;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .update-alert p {
-            color: #00ccff;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98);
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            background: var(--cor-fundo);
-            margin: 0;
-            padding: 0;
-            border: none;
-            border-radius: 0;
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            max-height: none;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .modal-header {
-            padding: 5px 10px;
-            background: #111;
-            border-bottom: 1px solid var(--cor-primaria);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .modal-title-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .modal-header h2 {
-            color: var(--cor-primaria);
-            font-size: 0.8rem;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .separator {
-            color: var(--cor-secundaria);
-            font-size: 0.8rem;
-            margin: 0 3px;
-        }
-        
-        .font-controls-header {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-        }
-        
-        .font-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            width: 24px;
-            height: 24px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .font-btn:hover {
-            background: var(--cor-hover);
-        }
-        
-        .scroll-controls {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            margin-left: 5px;
-        }
-        
-        .scroll-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 2px 6px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            white-space: nowrap;
-        }
-        
-        .scroll-btn:hover {
-            background: var(--cor-hover);
-        }
-        
-        .scroll-btn.active {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-        }
-        
-        .scroll-speed-controls {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            margin-left: 5px;
-        }
-        
-        .speed-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 2px 6px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            min-width: 20px;
-        }
-        
-        .speed-btn:hover {
-            background: var(--cor-hover);
-        }
-        
-        .speed-btn.active {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-        }
-        
-        .speed-display {
-            color: var(--cor-primaria);
-            font-size: 0.7rem;
-            margin: 0 3px;
-            min-width: 15px;
-            text-align: center;
-        }
-        
-        .view-mode-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 2px 6px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            margin-left: 5px;
-        }
-        
-        .view-mode-btn:hover {
-            background: var(--cor-hover);
-        }
-        
-        .view-mode-btn.active {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-        }
-        
-        /* Estilos para o metrônomo */
-        .metronome-controls {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            margin-left: 5px;
-        }
-        
-        .metronome-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            width: 24px;
-            height: 24px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .metronome-btn:hover {
-            background: var(--cor-hover);
-            transform: scale(1.05);
-        }
-        
-        .metronome-btn.active {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-            animation: pulseMetronome 0.5s infinite alternate;
-        }
-        
-        /* ===== NOVO BOTÃO VS (VIRTUAL SOUND) ===== */
-        .vs-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            width: 28px;
-            height: 28px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            margin-left: 3px;
-            font-weight: bold;
-        }
-        
-        .vs-btn:hover {
-            background: var(--cor-hover);
-            transform: scale(1.1);
-        }
-        
-        .vs-btn.playing {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-            animation: pulseVS 0.5s infinite alternate;
-        }
-        
-        .vs-btn.countdown {
-            background: #ff8800;
-            color: #000000;
-            border-color: #ffff00;
-            animation: pulseCountdown 0.5s infinite alternate;
-        }
-        
-        @keyframes pulseVS {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-        
-        @keyframes pulseCountdown {
-            from { transform: scale(1); background: #ff8800; }
-            to { transform: scale(1.1); background: #ffaa00; }
-        }
-        
-        /* ===== NOVO BOTÃO DE NOTAS FLUTUANTE ===== */
-        .notes-float-btn {
-            position: fixed;
-            bottom: 120px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0088ff, #00ccff);
-            color: white;
-            border: 3px solid #ffff00;
-            box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            z-index: 1001;
-            animation: pulseNotesFloat 2s infinite;
-        }
-        
-        .notes-float-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(0, 136, 255, 0.9);
-        }
-        
-        .notes-float-btn.has-notes {
-            animation: pulseNotesActive 1.5s infinite;
-            border-color: #00ff00;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-        }
-        
-        .notes-float-btn.no-notes {
-            opacity: 0.5;
-            filter: grayscale(0.5);
-            animation: pulseNotesDisabled 3s infinite;
-        }
-        
-        @keyframes pulseNotesFloat {
-            0% { box-shadow: 0 0 0 0 rgba(0, 136, 255, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 136, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 136, 255, 0); }
-        }
-        
-        @keyframes pulseNotesActive {
-            0% { transform: scale(1); box-shadow: 0 0 20px #00ff00; }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px #00ff00; }
-            100% { transform: scale(1); box-shadow: 0 0 20px #00ff00; }
-        }
-        
-        @keyframes pulseNotesDisabled {
-            0% { opacity: 0.5; }
-            50% { opacity: 0.3; }
-            100% { opacity: 0.5; }
-        }
-        
-        /* BALÃO DE NOTAS */
-        .notes-bubble {
-            position: fixed;
-            bottom: 200px;
-            right: 25px;
-            max-width: 300px;
-            min-width: 200px;
-            background: #111;
-            border: 2px solid #0088ff;
-            border-radius: 15px 15px 5px 15px;
-            padding: 15px;
-            color: #00ccff;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            z-index: 1002;
-            box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
-            animation: bubbleAppear 0.3s ease;
-            word-wrap: break-word;
-        }
-        
-        .notes-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            right: 20px;
-            border-width: 15px 15px 0 15px;
-            border-style: solid;
-            border-color: #0088ff transparent transparent transparent;
-        }
-        
-        .notes-bubble::before {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            right: 22px;
-            border-width: 13px 13px 0 13px;
-            border-style: solid;
-            border-color: #111 transparent transparent transparent;
-            z-index: 1;
-        }
-        
-        .notes-bubble-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #0088ff;
-            padding-bottom: 5px;
-            color: #ffff00;
-            font-weight: bold;
-        }
-        
-        .notes-bubble-close {
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #ff4444;
-            background: none;
-            border: none;
-            padding: 0 5px;
-        }
-        
-        .notes-bubble-close:hover {
-            color: #ff8888;
-        }
-        
-        .notes-bubble-content {
-            max-height: 200px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-        
-        @keyframes bubbleAppear {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* BOTÃO FLUTUANTE VS NO MODAL (AJUSTADO PARA FICAR ABAIXO DO NOTES) */
-        .vs-float-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--cor-primaria), #0088ff);
-            color: var(--cor-fundo);
-            border: 3px solid var(--cor-destaque);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            z-index: 1001;
-            animation: pulseVSFloat 2s infinite;
-        }
-        
-        .vs-float-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.9);
-        }
-        
-        .vs-float-btn.playing {
-            animation: pulseVSActive 0.5s infinite alternate;
-            background: linear-gradient(135deg, #ff00ff, #ff0088);
-            border-color: #ffff00;
-        }
-        
-        .vs-float-btn.countdown {
-            animation: pulseCountdownFloat 0.5s infinite alternate;
-            background: linear-gradient(135deg, #ff8800, #ff5500);
-            border-color: #ffff00;
-            font-size: 32px;
-        }
-        
-        @keyframes pulseVSFloat {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 255, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
-        }
-        
-        @keyframes pulseVSActive {
-            from { transform: scale(1); box-shadow: 0 0 20px #ff00ff; }
-            to { transform: scale(1.1); box-shadow: 0 0 40px #ffff00; }
-        }
-        
-        @keyframes pulseCountdownFloat {
-            0% { transform: scale(1); box-shadow: 0 0 20px #ff8800; }
-            100% { transform: scale(1.15); box-shadow: 0 0 40px #ffff00; }
-        }
-        
-        /* MENSAGEM DE VS INDISPONÍVEL */
-        .vs-toast {
-            position: fixed;
-            bottom: 120px;
-            right: 25px;
-            background: #660000;
-            color: #ff8888;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: 1px solid #ff4444;
-            font-size: 0.9rem;
-            font-weight: bold;
-            z-index: 1002;
-            animation: fadeInOut 3s ease forwards;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-        
-        /* MENSAGEM DE CONTAGEM REGRESSIVA */
-        .countdown-message {
-            position: fixed;
-            bottom: 120px;
-            right: 25px;
-            background: #ff8800;
-            color: #000000;
-            padding: 15px 25px;
-            border-radius: 50px;
-            border: 2px solid #ffff00;
-            font-size: 1.2rem;
-            font-weight: bold;
-            z-index: 1002;
-            animation: pulseMessage 0.5s infinite alternate;
-            box-shadow: 0 0 30px rgba(255, 136, 0, 0.8);
-            text-align: center;
-        }
-        
-        .countdown-number {
-            font-size: 2.5rem;
-            display: block;
-            margin-top: 5px;
-            animation: pulseNumber 0.5s infinite alternate;
-        }
-        
-        @keyframes pulseMessage {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-        
-        @keyframes pulseNumber {
-            from { transform: scale(1); }
-            to { transform: scale(1.2); }
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
-        }
-        /* ===== FIM DOS BOTÕES FLUTUANTES ===== */
-        
-        @keyframes pulseMetronome {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-        
-        .close {
-            color: var(--cor-primaria);
-            font-size: 16px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 2px;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 3px;
-        }
-        
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-        }
-        
-        .lyrics-content {
-            line-height: 1.6;
-            white-space: pre-wrap;
-            font-family: Arial, sans-serif;
-            text-transform: uppercase;
-            text-align: center;
-            font-size: 14px; /* ALTERADO: de 16px para 14px no modo retrato */
-            padding: 20px 15px;
-            min-height: calc(100vh - 120px);
-            margin: 0;
-            box-sizing: border-box;
-            color: var(--cor-texto);
-            transition: all 0.3s ease;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Modo Paisagem - Colunas - CORRIGIDO: Removido !important para permitir controle de fonte */
-        .lyrics-content.landscape {
-            column-count: 2;
-            column-gap: 40px;
-            text-align: left;
-            font-size: 22px; /* TAMANHO REDUZIDO PARA INICIAR MENOR (era 32px) */
-        }
-        
-        .lyrics-content.landscape .yellow-line,
-        .lyrics-content.landscape .normal-line {
-            break-inside: avoid;
-            margin-bottom: 15px;
-            font-size: inherit; /* HERDAR DO ELEMENTO PAI */
-        }
+:root {
+    --cor-primaria: #1DB954;         /* Verde profissional */
+    --cor-secundaria: #15803d;       /* Verde escuro elegante */
+    --cor-fundo: #000000;            /* Preto absoluto */
+    --cor-card: #0c0c0c;             /* Preto elevado */
+    --cor-borda: #1a1a1a;
+    --cor-texto: #eaeaea;
+    --cor-texto-sec: #9ca3af;
+    --cor-destaque: #22c55e;
+    --cor-botao: #111111;
+    --cor-hover: #1a1a1a;
+}
 
-        .yellow-line {
-            color: var(--cor-destaque) !important;
-            font-weight: bold;
-            margin: 10px 0;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.3);
-        }
-        
-        .normal-line {
-            margin: 8px 0;
-            color: var(--cor-texto);
-        }
+body {
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 0.3px;
+}
 
-        /* NOVO ESTILO PARA CIFRAS LARANJA */
-        .orange-chord {
-            color: #ff8800 !important;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 136, 0, 0.3);
-        }
-        
-        .add-form, .edit-form, .config-form {
-            background: #111;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--cor-secundaria);
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--cor-primaria);
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            background: var(--cor-fundo);
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 5px;
-            color: var(--cor-texto);
-            font-size: 1rem;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--cor-primaria);
-            box-shadow: 0 0 8px var(--cor-primaria);
-        }
-        
-        .form-textarea {
-            height: 200px;
-            resize: vertical;
-            font-family: Arial, sans-serif;
-            line-height: 1.4;
-            white-space: pre-wrap;
-        }
-        
-        .form-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid var(--cor-secundaria);
-        }
-        
-        .color-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .color-option {
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .color-option:hover {
-            transform: scale(1.05);
-        }
-        
-        .color-option.active {
-            border-color: var(--cor-primaria);
-        }
-        
-        .success {
-            color: var(--cor-primaria);
-            background: #003300;
-            border-radius: 8px;
-            border: 1px solid var(--cor-primaria);
-            padding: 12px;
-            text-align: center;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
-        .install-prompt {
-            background: #003300;
-            border: 1px solid var(--cor-primaria);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-            animation: pulse 2s infinite;
-        }
-        
-        .backup-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            justify-content: center;
-            margin: 15px 0;
-            width: 100%;
-        }
-        
-        .backup-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-        }
-        
-        .backup-info {
-            text-align: center;
-            color: var(--cor-secundaria);
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-        
-        .import-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .import-option {
-            background: #111;
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .import-option:hover {
-            background: #1a1a1a;
-            border-color: var(--cor-primaria);
-        }
-        
-        .import-option.selected {
-            background: #003300;
-            border-color: var(--cor-primaria);
-        }
-        
-        .import-option h3 {
-            color: var(--cor-primaria);
-            margin-bottom: 5px;
-            font-size: 1rem;
-        }
-        
-        .import-option p {
-            color: var(--cor-secundaria);
-            font-size: 0.8rem;
-            margin: 0;
-        }
-        
-        /* Estilos para o setlist */
-        .setlist-container {
-            margin: 20px 0;
-            padding: 15px;
-            background: #111;
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 8px;
-        }
-        
-        .setlist-musicas {
-            margin: 15px 0;
-        }
-        
-        .setlist-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background: #000;
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 5px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .setlist-item:hover {
-            background: #1a1a1a;
-            border-color: var(--cor-primaria);
-        }
-        
-        .setlist-item.active {
-            background: #003300;
-            border-color: var(--cor-destaque);
-        }
-        
-        .setlist-pos {
-            color: var(--cor-primaria);
-            font-weight: bold;
-            margin-right: 10px;
-            min-width: 30px;
-        }
-        
-        .setlist-name {
-            flex: 1;
-            color: var(--cor-texto);
-        }
-        
-        .setlist-bpm {
-            color: var(--cor-destaque);
-            font-size: 0.8rem;
-            margin-right: 10px;
-            background: #003300;
-            padding: 2px 6px;
-            border-radius: 8px;
-            border: 1px solid var(--cor-primaria);
-        }
-        
-        .setlist-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .setlist-controls .btn {
-            flex: 1;
-        }
-        
-        /* BOTÕES DE NAVEGAÇÃO NO MODAL - COMPACTOS */
-        .modal-footer {
-            padding: 10px;
-            background: #111;
-            border-top: 1px solid var(--cor-primaria);
-            display: none;
-        }
-        
-        .navigation-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-        
-        .nav-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 2px solid var(--cor-primaria);
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            flex: 1;
-            max-width: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .nav-btn:hover {
-            background: var(--cor-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(0, 255, 0, 0.3);
-        }
-        
-        .nav-btn:active {
-            transform: translateY(0);
-        }
-        
-        .nav-btn-prev {
-            background: #003366;
-            border-color: #0088ff;
-        }
-        
-        .nav-btn-next {
-            background: #006600;
-            border-color: #00ff00;
-        }
-        
-        /* Esconder o texto e deixar apenas as setas */
-        .nav-btn::after {
-            content: "";
-            display: none;
-        }
-        
-        .nav-btn-prev::before {
-            content: "⏮️";
-            font-size: 1.2rem;
-        }
-        
-        .nav-btn-next::before {
-            content: "⏭️";
-            font-size: 1.2rem;
-        }
-        
-        /* Estilos para o modal de notas */
-        .notes-modal-content {
-            background: var(--cor-fundo);
-            margin: 5% auto;
-            padding: 0;
-            border: 2px solid var(--cor-primaria);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .notes-modal-header {
-            padding: 15px 20px;
-            background: #111;
-            border-bottom: 1px solid var(--cor-primaria);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .notes-modal-header h2 {
-            color: var(--cor-primaria);
-            font-size: 1.2rem;
-            margin: 0;
-        }
-        
-        .notes-modal-body {
-            padding: 20px;
-            flex: 1;
-            overflow-y: auto;
-        }
-        
-        .notes-content {
-            line-height: 1.6;
-            white-space: pre-wrap;
-            font-family: Arial, sans-serif;
-            font-size: 1rem;
-            color: var(--cor-texto);
-            background: #111;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid var(--cor-secundaria);
-        }
-        
-        .notes-modal-footer {
-            padding: 15px 20px;
-            background: #111;
-            border-top: 1px solid var(--cor-primaria);
-            display: flex;
-            justify-content: flex-end;
-        }
-        
-        @keyframes pulse {
-            0% { border-color: var(--cor-primaria); }
-            50% { border-color: var(--cor-destaque); }
-            100% { border-color: var(--cor-primaria); }
-        }
-        
-        /* NOVOS ESTILOS PARA MENUS EXPANSÍVEIS */
-        .expandable-section {
-            margin-bottom: 15px;
-            border: 1px solid var(--cor-secundaria);
-            border-radius: 8px;
-            overflow: hidden;
-            background: #111;
-        }
-        
-        .section-header {
-            padding: 15px 20px;
-            background: #1a1a1a;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-        
-        .section-header:hover {
-            background: #222;
-        }
-        
-        .section-header h3 {
-            color: var(--cor-primaria);
-            font-size: 1.1rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-header .arrow {
-            color: var(--cor-primaria);
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .section-header.expanded .arrow {
-            transform: rotate(180deg);
-        }
-        
-        .section-content {
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .section-content.expanded {
-            padding: 20px;
-            max-height: 1000px;
-        }
-        
-        /* NOVO RODAPÉ COM CONTADOR DE MÚSICAS */
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #00aa00;
-            color: #00cc00;
-        }
-        
-        .footer-info {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
-        
-        .music-count-footer {
-            color: var(--cor-primaria);
-            font-weight: bold;
-        }
-        
-        /* ESTILOS PARA OS AFINADORES */
-        .tuner-container {
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .tuner-title {
-            text-align: center;
-            color: var(--cor-primaria);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-        
-        .tuner-strings {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .string-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 2px solid var(--cor-secundaria);
-            padding: 20px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100px;
-        }
-        
-        .string-btn:hover {
-            background: var(--cor-hover);
-            transform: translateY(-3px);
-        }
-        
-        .string-btn.playing {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-            border-color: var(--cor-destaque);
-            animation: pulseString 0.5s infinite alternate;
-        }
-        
-        .string-note {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .string-name {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .tuner-controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .tuner-type-selector {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .tuner-type-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .tuner-type-btn.active {
-            background: var(--cor-primaria);
-            color: var(--cor-fundo);
-        }
-        
-        .tuner-type-btn:hover {
-            background: var(--cor-hover);
-        }
-        
-        @keyframes pulseString {
-            from { transform: scale(1); box-shadow: 0 0 5px var(--cor-primaria); }
-            to { transform: scale(1.05); box-shadow: 0 0 15px var(--cor-primaria); }
-        }
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    flex: 1;
+}
 
-        /* ESTILOS PARA O METRÔNOMO INDEPENDENTE */
-        .metronome-container {
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            text-align: center;
-        }
+/* CARDS */
 
-        .bpm-controls {
-            margin-bottom: 20px;
-        }
+.music-item,
+.setlist-item,
+.expandable-section,
+.empty-state,
+.setlist-container {
+    background: var(--cor-card);
+    border: 1px solid var(--cor-borda);
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: 0.25s ease;
+}
 
-        .bpm-controls label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--cor-primaria);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+.music-item:hover,
+.setlist-item:hover {
+    border-color: var(--cor-primaria);
+    transform: translateY(-2px);
+}
 
-        .bpm-input-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+/* TÍTULO MÚSICA */
 
-        .bpm-btn {
-            background: var(--cor-botao);
-            color: var(--cor-primaria);
-            border: 1px solid var(--cor-secundaria);
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
+.music-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: white;
+}
 
-        .bpm-btn:hover {
-            background: var(--cor-hover);
-        }
+.music-bpm {
+    background: #111;
+    border-radius: 30px;
+    padding: 4px 10px;
+    border: 1px solid var(--cor-primaria);
+    color: var(--cor-primaria);
+}
 
-        .bpm-input {
-            width: 80px;
-            padding: 10px;
-            text-align: center;
-            background: var(--cor-fundo);
-            border: 1px solid var(--cor-primaria);
-            border-radius: 5px;
-            color: var(--cor-texto);
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+/* BOTÕES */
 
-        .metronome-options {
-            margin-bottom: 20px;
-        }
+.btn,
+.action-btn,
+.font-btn,
+.scroll-btn,
+.speed-btn,
+.metronome-btn,
+.view-mode-btn,
+.vs-btn,
+.nav-btn,
+.string-btn,
+.bpm-btn,
+.tuner-type-btn {
+    background: var(--cor-botao);
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+    border-radius: 10px;
+    transition: 0.2s ease;
+}
 
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--cor-texto);
-            font-size: 1rem;
-        }
+.btn:hover,
+.action-btn:hover,
+.font-btn:hover,
+.scroll-btn:hover,
+.speed-btn:hover,
+.metronome-btn:hover,
+.view-mode-btn:hover,
+.vs-btn:hover,
+.nav-btn:hover,
+.string-btn:hover,
+.bpm-btn:hover,
+.tuner-type-btn:hover {
+    background: var(--cor-hover);
+    border-color: var(--cor-primaria);
+    transform: translateY(-1px);
+}
 
-        .checkbox-label input {
-            margin-right: 10px;
-        }
+.btn-add {
+    background: var(--cor-primaria);
+    color: black;
+    font-weight: 600;
+}
 
-        .metronome-display {
-            margin: 30px 0;
-        }
+.btn-add:hover {
+    background: var(--cor-destaque);
+}
 
-        .metronome-beat {
-            font-size: 4rem;
-            color: var(--cor-primaria);
-            margin-bottom: 10px;
-            transition: all 0.1s ease;
-        }
+/* MODAL */
 
-        .metronome-beat.active {
-            color: var(--cor-destaque);
-            transform: scale(1.2);
-        }
+.modal-content {
+    background: #050505;
+}
 
-        .metronome-status {
-            color: var(--cor-secundaria);
-            font-size: 1.2rem;
-        }
+.modal-header {
+    background: #0a0a0a;
+    border-bottom: 1px solid var(--cor-borda);
+}
 
-        .metronome-actions {
-            margin-top: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .music-item { padding: 12px 15px; }
-            .music-name { font-size: 1rem; }
-            .action-btn { width: 32px; height: 32px; font-size: 0.8rem; }
-            .controls { flex-direction: column; }
-            .btn { width: 100%; padding: 14px 16px; }
-            .modal-header { padding: 5px 8px; }
-            .font-btn, .scroll-btn, .speed-btn, .view-mode-btn, .metronome-btn, .vs-btn { transform: scale(0.9); }
-            .backup-options { flex-direction: column; }
-            .setlist-controls { flex-direction: column; }
-            .lyrics-content.landscape { 
-                column-count: 1; 
-                font-size: 20px; /* Tamanho ajustado para mobile em paisagem */
-            }
-            
-            /* Ajustes para botões de navegação em tablets */
-            .modal-footer {
-                padding: 8px;
-            }
-            
-            .navigation-controls {
-                gap: 8px;
-                flex-direction: row; /* Garantir que fique na horizontal */
-            }
-            
-            .nav-btn {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-                max-width: 120px;
-                min-height: 44px; /* Tamanho mínimo para touch */
-            }
-            
-            .nav-btn-prev::before,
-            .nav-btn-next::before {
-                font-size: 1.1rem;
-            }
-            
-            /* Ajustes para menus expansíveis em mobile */
-            .section-header {
-                padding: 12px 15px;
-            }
-            
-            .section-header h3 {
-                font-size: 1rem;
-            }
-            
-            .section-content.expanded {
-                padding: 15px;
-            }
-            
-            /* Ajustes para o rodapé em mobile */
-            .footer-info {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            /* Ajustes para os afinadores em mobile */
-            .tuner-strings {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .string-btn {
-                padding: 15px 10px;
-                min-height: 80px;
-                font-size: 1rem;
-            }
-            
-            .string-note {
-                font-size: 1.5rem;
-            }
+.modal-header h2 {
+    color: white;
+    font-weight: 600;
+}
 
-            /* Ajustes para o metrônomo independente em mobile */
-            .bpm-input-group {
-                gap: 5px;
-            }
-            
-            .bpm-btn {
-                padding: 8px 12px;
-                font-size: 0.9rem;
-            }
-            
-            .bpm-input {
-                width: 70px;
-                font-size: 1.3rem;
-            }
-            
-            .metronome-beat {
-                font-size: 3rem;
-            }
+/* LETRAS */
 
-            /* Ajustes para os botões flutuantes */
-            .notes-float-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                bottom: 100px;
-                right: 20px;
-            }
-            
-            .vs-float-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 22px;
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .notes-bubble {
-                bottom: 170px;
-                right: 20px;
-                max-width: 250px;
-                font-size: 0.8rem;
-            }
-            
-            .vs-toast {
-                bottom: 100px;
-                right: 20px;
-                font-size: 0.8rem;
-                padding: 10px 15px;
-            }
-            
-            .countdown-message {
-                bottom: 100px;
-                right: 20px;
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            
-            .countdown-number {
-                font-size: 2rem;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .music-item { padding: 10px 12px; }
-            .music-name { font-size: 0.9rem; }
-            .music-bpm, .music-notes { font-size: 0.7rem; margin-right: 5px; }
-            .action-btn { width: 30px; height: 30px; font-size: 0.75rem; }
-            .form-actions { flex-direction: column; }
-            .lyrics-content { font-size: 14px; padding: 15px 10px; }
-            .modal-header { flex-wrap: wrap; gap: 5px; }
-            .modal-title-container { min-width: 100px; }
-            .btn { padding: 16px 20px; font-size: 1rem; }
-            
-            /* Ajustes para botões de navegação em celulares */
-            .modal-footer {
-                padding: 6px;
-            }
-            
-            .navigation-controls {
-                gap: 6px;
-            }
-            
-            .nav-btn {
-                padding: 8px 12px;
-                font-size: 0;
-                max-width: 100px;
-                min-height: 40px;
-            }
-            
-            /* Remover completamente o texto em telas muito pequenas */
-            .nav-btn {
-                font-size: 0;
-            }
-            
-            .nav-btn-prev::before,
-            .nav-btn-next::before {
-                font-size: 1rem;
-                margin: 0;
-            }
-            
-            /* Ajustes para os afinadores em celulares */
-            .tuner-strings {
-                grid-template-columns: 1fr;
-            }
-            
-            .string-btn {
-                padding: 12px 8px;
-                min-height: 70px;
-            }
+.lyrics-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+}
 
-            /* Ajustes para o metrônomo independente em celulares */
-            .bpm-input-group {
-                flex-wrap: wrap;
-            }
-            
-            .bpm-btn {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
-            
-            .bpm-input {
-                width: 60px;
-                font-size: 1.2rem;
-                order: -1;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            
-            .metronome-beat {
-                font-size: 2.5rem;
-            }
+.yellow-line {
+    color: var(--cor-destaque) !important;
+    font-weight: 700;
+}
 
-            /* Ajustes para os botões flutuantes */
-            .notes-float-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 22px;
-                bottom: 90px;
-                right: 15px;
-            }
-            
-            .vs-float-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 20px;
-                bottom: 15px;
-                right: 15px;
-            }
-            
-            .notes-bubble {
-                bottom: 150px;
-                right: 15px;
-                max-width: 220px;
-                padding: 12px;
-            }
-            
-            .countdown-message {
-                bottom: 90px;
-                right: 15px;
-                padding: 10px 15px;
-            }
-            
-            .countdown-number {
-                font-size: 1.8rem;
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .modal-header { padding: 5px 5px; }
-            .font-controls-header, .scroll-controls, .scroll-speed-controls, .view-mode-controls, .metronome-controls, .vs-btn { 
-                transform: scale(0.8); 
-            }
-            .btn { padding: 18px 16px; font-size: 0.95rem; }
-            
-            /* Ajustes finos para botões de navegação em telas muito pequenas */
-            .navigation-controls {
-                gap: 5px;
-            }
-            
-            .nav-btn {
-                padding: 6px 10px;
-                max-width: 80px;
-                min-height: 36px;
-            }
-            
-            .nav-btn-prev::before,
-            .nav-btn-next::before {
-                font-size: 0.9rem;
-            }
+.orange-chord {
+    color: #f97316 !important;
+}
 
-            /* Ajustes finos para o metrônomo independente */
-            .bpm-btn {
-                padding: 5px 8px;
-                font-size: 0.7rem;
-            }
-            
-            .metronome-beat {
-                font-size: 2rem;
-            }
+/* BOTÕES FLUTUANTES */
 
-            /* Ajustes para os botões flutuantes */
-            .notes-float-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-                bottom: 80px;
-                right: 10px;
-            }
-            
-            .vs-float-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 18px;
-            }
-            
-            .notes-bubble {
-                bottom: 135px;
-                right: 10px;
-                max-width: 200px;
-                padding: 10px;
-                font-size: 0.75rem;
-            }
-            
-            .countdown-message {
-                bottom: 80px;
-                right: 10px;
-                padding: 8px 12px;
-            }
-            
-            .countdown-number {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+.notes-float-btn,
+.vs-float-btn {
+    background: var(--cor-primaria);
+    border: none;
+    box-shadow: 0 0 25px rgba(29,185,84,0.4);
+}
+
+.notes-float-btn:hover,
+.vs-float-btn:hover {
+    transform: scale(1.08);
+}
+
+/* FOOTER */
+
+.footer {
+    border-top: 1px solid var(--cor-borda);
+    color: var(--cor-texto-sec);
+    margin-top: 40px;
+    padding-top: 20px;
+}
+
+/* MENUS EXPANSÍVEIS */
+
+.section-header {
+    background: #0f0f0f;
+    font-weight: 600;
+}
+
+.section-header:hover {
+    background: #141414;
+}
+
+/* AFINADOR */
+
+.string-btn {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.string-btn.playing {
+    background: var(--cor-primaria);
+    color: black;
+}
+
+/* METRÔNOMO */
+
+.metronome-beat {
+    font-size: 4rem;
+    color: var(--cor-primaria);
+}
+
+.metronome-beat.active {
+    color: white;
+}
+
+/* INPUTS */
+
+.form-input,
+.form-textarea,
+.bpm-input {
+    background: #0c0c0c;
+    border: 1px solid var(--cor-borda);
+    color: white;
+    border-radius: 8px;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.bpm-input:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 10px rgba(29,185,84,0.3);
+    outline: none;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .lyrics-content {
+        font-size: 15px;
+    }
+
+    .music-name {
+        font-size: 0.95rem;
+    }
+}
+</style>
 </head>
 <body>
     <div class="container">
