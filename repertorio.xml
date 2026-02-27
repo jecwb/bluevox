@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2025-12-16T19:09:05.162Z</dataExportacao>
+    <dataExportacao>2026-02-27T12:46:28.615Z</dataExportacao>
     <totalMusicas>13</totalMusicas>
   </info>
   <musicas>
@@ -32,8 +32,8 @@ SOB O GESSO DA EUTIMIA, NENHUM AFETO BROTA
 O RISO, O PRANTO — UMA ESTÁTICA REMOTA
 CUMPRIRAM O PROTOCOLO, VENCERAM A DERROTA
 E O QUE ERA CRISE, AGORA É SÓ UMA NOTA!]]></letra>
-      <bpm>144</bpm>
-      <notas><![CDATA[BPM: 144 - Harmony: G
+      <bpm>140</bpm>
+      <notas><![CDATA[BPM: 140 - Harmony: G
 
 Intro: 2x | Full Band (Guitar Drive)
 
@@ -61,6 +61,7 @@ Dry Ending: 2x | Full Band (Guitar Drive)
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:43:29.988Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -84,14 +85,11 @@ Das ruínas do sistema, a verdade irá chegar
 E os donos do mundo, vão ter que cair!
 [|F|] O sistema opressor, [|G|] deixará de existir
 
-[R][|F|] Queimem [|G|] tronos, [|Em|]caiam  reis!
-[R][|F|] Agora é [|C|]nossa [|G|] vez
-[R][|F|] Nossa luta , [|G|] é sem[|Em|] fim
-[R][|F|] Nada é [|C|] mais forte que o que [|G|] há em mim!
+[R][REFRÃO]
 
 ]]></letra>
-      <bpm>130</bpm>
-      <notas><![CDATA[BPM: 130
+      <bpm>120</bpm>
+      <notas><![CDATA[BPM: 120
 Harmony: A
 
 Start.: Bass intro Riff 
@@ -114,6 +112,7 @@ Chorus: 2x | Full Band › "Erga os punhos …"
 
 Dry Ending]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:43:19.140Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -144,8 +143,8 @@ VOLTANDO A ARDER
 SOU O ECO DA PERDIÇÃO
 O ABISMO DA DEVOÇÃO
 SEM SAÍDA E SEM PERDÃO]]></letra>
-      <bpm>110</bpm>
-      <notas><![CDATA[BPM: 110 - Harmony: D
+      <bpm>200</bpm>
+      <notas><![CDATA[BPM: 200 - Harmony: D
 
 Intro.: 
 Bar 1: 1 x Bass in (main riff). Drums: hi-hat keeping time.
@@ -177,6 +176,7 @@ INT: 4x | Full Band
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:44:14.513Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -210,8 +210,8 @@ VAI[|E|] TER QUE ESPERAR![|F#|]
 DILEMA[|E|], FRAQUEZA[|F#|],
 ATÉ [|E|]QUANDO VOU AGUENTAR[|F#|].
 [R] REFRÃO]]></letra>
-      <bpm>110</bpm>
-      <notas><![CDATA[BPM: 110 - Harmony: B
+      <bpm>200</bpm>
+      <notas><![CDATA[BPM: 200 - Harmony: B
 
 Intro.: 
 Bar 1: 2 x Drums and Guitar in.
@@ -244,6 +244,7 @@ Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
 
 (All stop — Dry Ending)]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:44:37.137Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
@@ -271,9 +272,10 @@ Desce mais uma dose
 O copo rachou.
 [R][REFRÃO]
 ]]></letra>
-      <bpm>160</bpm>
+      <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:45:03.612Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PRESO NO SOFÁ]]></nome>
@@ -301,9 +303,10 @@ Eu não quero nada, só penso em parar
 Não venha com histórias, mitos e memórias.
 Só quero me deitar, dormir e relaxar!
 [R] [REFRÃO]]]></letra>
-      <bpm>110</bpm>
+      <bpm>210</bpm>
       <notas><![CDATA[Após o último refrão repete a base 2x e Retorna p/ o refrão para finalizar a música.]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:45:18.844Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[REINO DOS RATOS]]></nome>
@@ -337,6 +340,7 @@ No reino dos ratos, ninguém pode vencer.
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:42:39.033Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[RISO DO CAOS]]></nome>
@@ -371,9 +375,10 @@ Nem temo a condenação!
 Meu altar é a dinheiro,
 o poder é o que desejo!
 [R][REFRÃO]]]></letra>
-      <bpm>100</bpm>
+      <bpm>200</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:45:39.748Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
@@ -397,9 +402,10 @@ A MOTHER DREAM YOU SUFFOCATE?
 [R]WANNA BREAK THE WALL?
 [R]DO YOU! DO YOU!
 [R]WANNA WATCH IT FALL?]]></letra>
-      <bpm>110</bpm>
+      <bpm>210</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T12:46:01.209Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
@@ -538,8 +544,7 @@ O lar acabou, mas a paz ficou
 Duda está livre, encontrou-se na dor.]]></letra>
       <bpm>83</bpm>
       <notas><![CDATA[Reggae]]></notas>
-      <dataCriacao>2025-12-16T19:06:22.106Z</dataCriacao>
-      <dataModificacao>2025-12-16T19:08:15.418Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - MEUS FANTASMAS]]></nome>
