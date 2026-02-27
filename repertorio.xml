@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-02-27T12:46:28.615Z</dataExportacao>
+    <dataExportacao>2026-02-27T13:56:23.046Z</dataExportacao>
     <totalMusicas>13</totalMusicas>
   </info>
   <musicas>
@@ -61,7 +61,6 @@ Dry Ending: 2x | Full Band (Guitar Drive)
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:43:29.988Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[DONOS DO MUNDO]]></nome>
@@ -112,7 +111,6 @@ Chorus: 2x | Full Band › "Erga os punhos …"
 
 Dry Ending]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:43:19.140Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[MENTE PROFANA]]></nome>
@@ -176,7 +174,6 @@ INT: 4x | Full Band
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:44:14.513Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -244,7 +241,6 @@ Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
 
 (All stop — Dry Ending)]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:44:37.137Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
@@ -275,7 +271,6 @@ O copo rachou.
       <bpm>150</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:45:03.612Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[PRESO NO SOFÁ]]></nome>
@@ -306,7 +301,6 @@ Só quero me deitar, dormir e relaxar!
       <bpm>210</bpm>
       <notas><![CDATA[Após o último refrão repete a base 2x e Retorna p/ o refrão para finalizar a música.]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:45:18.844Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[REINO DOS RATOS]]></nome>
@@ -340,7 +334,6 @@ No reino dos ratos, ninguém pode vencer.
       <bpm>110</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:42:39.033Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[RISO DO CAOS]]></nome>
@@ -378,7 +371,6 @@ o poder é o que desejo!
       <bpm>200</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:45:39.748Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
@@ -405,7 +397,6 @@ A MOTHER DREAM YOU SUFFOCATE?
       <bpm>210</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T12:46:01.209Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
@@ -542,9 +533,10 @@ O pôr do sol pinta o céu de alegria
 Mesmo na luta, tem sabedoria
 O lar acabou, mas a paz ficou
 Duda está livre, encontrou-se na dor.]]></letra>
-      <bpm>83</bpm>
+      <bpm>100</bpm>
       <notas><![CDATA[Reggae]]></notas>
       <dataCriacao></dataCriacao>
+      <dataModificacao>2026-02-27T13:56:07.069Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - MEUS FANTASMAS]]></nome>
