@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-02-27T13:56:23.046Z</dataExportacao>
+    <dataExportacao>2026-03-03T17:36:45.475Z</dataExportacao>
     <totalMusicas>13</totalMusicas>
   </info>
   <musicas>
@@ -174,6 +174,39 @@ INT: 4x | Full Band
 
 (All stop — Band Hit)]]></notas>
       <dataCriacao></dataCriacao>
+    </musica>
+    <musica>
+      <nome><![CDATA[MONSTROS (HEY! HO!)]]></nome>
+      <letra><![CDATA[Monstros na cabeça
+Não vão me parar
+Falam no meu ouvido
+Mandam eu voltar
+
+Eu digo NÃO!
+Eu digo VAI!
+Se quer me ver no chão
+Vai ter que tentar mais!
+
+[R]Hey! Ho! Eu não vou cair!
+[R]Hey! Ho! Não vão me destruir!
+[R]Grita alto! Deixa ouvir!
+[R]Hey! Ho! Eu vou resistir!
+
+Noite escura, medo vem
+Bate forte outra vez
+Mas eu rio da cara dele
+Não manda em mim, ok?
+
+Sem drama! Sem dó!
+Eu nasci pra lutar!
+Quanto mais me empurra
+Mais eu quero avançar!
+
+[R]Refrão (2x)]]></letra>
+      <bpm>170</bpm>
+      <notas><![CDATA[Não ensaiada ainda]]></notas>
+      <dataCriacao></dataCriacao>
+      <dataModificacao>2026-03-03T17:36:18.727Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -535,42 +568,6 @@ O lar acabou, mas a paz ficou
 Duda está livre, encontrou-se na dor.]]></letra>
       <bpm>100</bpm>
       <notas><![CDATA[Reggae]]></notas>
-      <dataCriacao></dataCriacao>
-      <dataModificacao>2026-02-27T13:56:07.069Z</dataModificacao>
-    </musica>
-    <musica>
-      <nome><![CDATA[WIP - MEUS FANTASMAS]]></nome>
-      <letra><![CDATA[CARREGO MONSTROS ANTIGOS
-QUE INSISTO EM EXISTIR
-EM CADA PASSO QUE EU DOU
-OUÇO VOZES ATRÁS DE MIM
-
-MESMO NA TEMPESTADE
-NÃO VÃO ME DEFINIR
-OS LEÕES RUGEM ALTO
-MAS NÃO VÃO ME DESTRUIR
-
-QUANDO O MEDO VOLTAR
-DEIXO O SILENCIO ME GUIAR
-NA SOLIDÃO DA NOITE
-MEUS FANTASMAS VOU ENFRENTAR
-
-NÃO ADIANTA
-VIR ME DERRUBAR
-EU LEVANTO MAIS FORTE
-E VOLTA A LUTAR
-
-SE O VENTO SOPRA CONTRA
-MINHA ROTA VOU MUDAR
-NÃO IMPORTA O LADO
-O PESADELO VAI PASSAR.
-
-MESMO NA TEMPESTADE
-EU ME RECUSO A CAIR
-OS LEÕES RUGEM ALTO
-MAS NÃO VÃO ME DESTRUIR]]></letra>
-      <bpm>120</bpm>
-      <notas><![CDATA[Não ensaiada ainda]]></notas>
       <dataCriacao></dataCriacao>
     </musica>
   </musicas>
