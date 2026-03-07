@@ -3,7 +3,7 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-03-03T17:36:45.475Z</dataExportacao>
+    <dataExportacao>2026-03-07T17:02:37.192Z</dataExportacao>
     <totalMusicas>13</totalMusicas>
   </info>
   <musicas>
@@ -177,36 +177,38 @@ INT: 4x | Full Band
     </musica>
     <musica>
       <nome><![CDATA[MONSTROS (HEY! HO!)]]></nome>
-      <letra><![CDATA[Monstros na cabeça
+      <letra><![CDATA[[|E|]Monstros na cabeça
 Não vão me parar
 Falam no meu ouvido
-Mandam eu voltar
+Mandam [|B|]eu voltar[|E|]
 
 Eu digo NÃO!
-Eu digo VAI!
-Se quer me ver no chão
-Vai ter que tentar mais!
+Eu digo [|B|]VAI!
+Se quer me ver no [|C#M|]chão
+Vai ter que tentar [|B|]mais![|E|]
 
-[R]Hey! Ho! Eu não vou cair!
-[R]Hey! Ho! Não vão me destruir!
-[R]Grita alto! Deixa ouvir!
-[R]Hey! Ho! Eu vou resistir!
+[R]Hey! Ho! Eu não vou [|B|]cair!
+[R][|C#M|]Hey! Ho! Não vão me des[|A|]truir!
+[R]Grita [|E|]alto! Deixa [|B|]ouvir!
+[R][|C#M|]Hey! Ho! Eu vou resistir[|A|]!
 
-Noite escura, medo vem
-Bate forte outra vez
+[|E|][|B|][|C#M|][|A|][|B|]
+
+[|E|]Noite escura, medo vem
+Bate forte[|B|] outra vez[|E|]
 Mas eu rio da cara dele
-Não manda em mim, ok?
+Não manda em mim[|B|], ok?[|E|]
 
 Sem drama! Sem dó!
-Eu nasci pra lutar!
+Eu [|E|]nasci pra lut[|B|]ar![|E|]
 Quanto mais me empurra
-Mais eu quero avançar!
+Mais eu [|B|]quero avançar![|E|]
 
 [R]Refrão (2x)]]></letra>
       <bpm>170</bpm>
       <notas><![CDATA[Não ensaiada ainda]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-03-03T17:36:18.727Z</dataModificacao>
+      <dataModificacao>2026-03-07T17:02:23.448Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
