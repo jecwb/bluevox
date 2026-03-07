@@ -496,23 +496,175 @@
             animation: pulseVS 0.5s infinite alternate;
         }
         
+        .vs-btn.countdown {
+            background: #ff8800;
+            color: #000000;
+            border-color: #ffff00;
+            animation: pulseCountdown 0.5s infinite alternate;
+        }
+        
         @keyframes pulseVS {
             from { transform: scale(1); }
             to { transform: scale(1.1); }
         }
         
-        /* BOTÃO FLUTUANTE VS NO MODAL */
-        .vs-float-btn {
+        @keyframes pulseCountdown {
+            from { transform: scale(1); background: #ff8800; }
+            to { transform: scale(1.1); background: #ffaa00; }
+        }
+        
+        /* ===== NOVO BOTÃO DE NOTAS FLUTUANTE ===== */
+        .notes-float-btn {
             position: fixed;
-            bottom: 25px;
+            bottom: 120px;
             right: 25px;
             width: 60px;
             height: 60px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #0088ff, #00ccff);
+            color: white;
+            border: 3px solid #ffff00;
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            animation: pulseNotesFloat 2s infinite;
+        }
+        
+        .notes-float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 136, 255, 0.9);
+        }
+        
+        .notes-float-btn.has-notes {
+            animation: pulseNotesActive 1.5s infinite;
+            border-color: #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+        }
+        
+        .notes-float-btn.no-notes {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+            animation: pulseNotesDisabled 3s infinite;
+        }
+        
+        @keyframes pulseNotesFloat {
+            0% { box-shadow: 0 0 0 0 rgba(0, 136, 255, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 136, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 136, 255, 0); }
+        }
+        
+        @keyframes pulseNotesActive {
+            0% { transform: scale(1); box-shadow: 0 0 20px #00ff00; }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px #00ff00; }
+            100% { transform: scale(1); box-shadow: 0 0 20px #00ff00; }
+        }
+        
+        @keyframes pulseNotesDisabled {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { opacity: 0.5; }
+        }
+        
+        /* BALÃO DE NOTAS */
+        .notes-bubble {
+            position: fixed;
+            bottom: 200px;
+            right: 25px;
+            max-width: 300px;
+            min-width: 200px;
+            background: #111;
+            border: 2px solid #0088ff;
+            border-radius: 15px 15px 5px 15px;
+            padding: 15px;
+            color: #00ccff;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            z-index: 1002;
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.5);
+            animation: bubbleAppear 0.3s ease;
+            word-wrap: break-word;
+        }
+        
+        .notes-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: 20px;
+            border-width: 15px 15px 0 15px;
+            border-style: solid;
+            border-color: #0088ff transparent transparent transparent;
+        }
+        
+        .notes-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            right: 22px;
+            border-width: 13px 13px 0 13px;
+            border-style: solid;
+            border-color: #111 transparent transparent transparent;
+            z-index: 1;
+        }
+        
+        .notes-bubble-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #0088ff;
+            padding-bottom: 5px;
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .notes-bubble-close {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #ff4444;
+            background: none;
+            border: none;
+            padding: 0 5px;
+        }
+        
+        .notes-bubble-close:hover {
+            color: #ff8888;
+        }
+        
+        .notes-bubble-content {
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        @keyframes bubbleAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* BOTÃO FLUTUANTE VS NO MODAL (AJUSTADO PARA FICAR ABAIXO DO NOTES) */
+        .vs-float-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
             background: linear-gradient(135deg, var(--cor-primaria), #0088ff);
             color: var(--cor-fundo);
-            border: 2px solid var(--cor-destaque);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+            border: 3px solid var(--cor-destaque);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -526,28 +678,42 @@
         
         .vs-float-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.9);
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.9);
         }
         
         .vs-float-btn.playing {
             animation: pulseVSActive 0.5s infinite alternate;
+            background: linear-gradient(135deg, #ff00ff, #ff0088);
+            border-color: #ffff00;
+        }
+        
+        .vs-float-btn.countdown {
+            animation: pulseCountdownFloat 0.5s infinite alternate;
+            background: linear-gradient(135deg, #ff8800, #ff5500);
+            border-color: #ffff00;
+            font-size: 32px;
         }
         
         @keyframes pulseVSFloat {
             0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 255, 0, 0); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 255, 0, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
         }
         
         @keyframes pulseVSActive {
-            from { transform: scale(1); box-shadow: 0 0 20px var(--cor-primaria); }
-            to { transform: scale(1.1); box-shadow: 0 0 40px var(--cor-destaque); }
+            from { transform: scale(1); box-shadow: 0 0 20px #ff00ff; }
+            to { transform: scale(1.1); box-shadow: 0 0 40px #ffff00; }
+        }
+        
+        @keyframes pulseCountdownFloat {
+            0% { transform: scale(1); box-shadow: 0 0 20px #ff8800; }
+            100% { transform: scale(1.15); box-shadow: 0 0 40px #ffff00; }
         }
         
         /* MENSAGEM DE VS INDISPONÍVEL */
         .vs-toast {
             position: fixed;
-            bottom: 100px;
+            bottom: 120px;
             right: 25px;
             background: #660000;
             color: #ff8888;
@@ -561,13 +727,48 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
         
+        /* MENSAGEM DE CONTAGEM REGRESSIVA */
+        .countdown-message {
+            position: fixed;
+            bottom: 120px;
+            right: 25px;
+            background: #ff8800;
+            color: #000000;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 2px solid #ffff00;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 1002;
+            animation: pulseMessage 0.5s infinite alternate;
+            box-shadow: 0 0 30px rgba(255, 136, 0, 0.8);
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 2.5rem;
+            display: block;
+            margin-top: 5px;
+            animation: pulseNumber 0.5s infinite alternate;
+        }
+        
+        @keyframes pulseMessage {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        
+        @keyframes pulseNumber {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translateY(20px); }
             10% { opacity: 1; transform: translateY(0); }
             90% { opacity: 1; transform: translateY(0); }
             100% { opacity: 0; transform: translateY(-20px); }
         }
-        /* ===== FIM DO BOTÃO VS ===== */
+        /* ===== FIM DOS BOTÕES FLUTUANTES ===== */
         
         @keyframes pulseMetronome {
             from { transform: scale(1); }
@@ -1387,20 +1588,46 @@
                 font-size: 3rem;
             }
 
-            /* Ajustes para o botão flutuante VS */
-            .vs-float-btn {
+            /* Ajustes para os botões flutuantes */
+            .notes-float-btn {
                 width: 50px;
                 height: 50px;
-                font-size: 20px;
+                font-size: 24px;
+                bottom: 100px;
+                right: 20px;
+            }
+            
+            .vs-float-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 22px;
                 bottom: 20px;
                 right: 20px;
             }
             
+            .notes-bubble {
+                bottom: 170px;
+                right: 20px;
+                max-width: 250px;
+                font-size: 0.8rem;
+            }
+            
             .vs-toast {
-                bottom: 80px;
+                bottom: 100px;
                 right: 20px;
                 font-size: 0.8rem;
                 padding: 10px 15px;
+            }
+            
+            .countdown-message {
+                bottom: 100px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
             }
         }
         
@@ -1474,13 +1701,38 @@
                 font-size: 2.5rem;
             }
 
-            /* Ajustes para o botão flutuante VS */
-            .vs-float-btn {
+            /* Ajustes para os botões flutuantes */
+            .notes-float-btn {
                 width: 45px;
                 height: 45px;
-                font-size: 18px;
+                font-size: 22px;
+                bottom: 90px;
+                right: 15px;
+            }
+            
+            .vs-float-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
                 bottom: 15px;
                 right: 15px;
+            }
+            
+            .notes-bubble {
+                bottom: 150px;
+                right: 15px;
+                max-width: 220px;
+                padding: 12px;
+            }
+            
+            .countdown-message {
+                bottom: 90px;
+                right: 15px;
+                padding: 10px 15px;
+            }
+            
+            .countdown-number {
+                font-size: 1.8rem;
             }
         }
         
@@ -1517,11 +1769,37 @@
                 font-size: 2rem;
             }
 
-            /* Ajustes para o botão flutuante VS */
-            .vs-float-btn {
+            /* Ajustes para os botões flutuantes */
+            .notes-float-btn {
                 width: 40px;
                 height: 40px;
-                font-size: 16px;
+                font-size: 20px;
+                bottom: 80px;
+                right: 10px;
+            }
+            
+            .vs-float-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+            
+            .notes-bubble {
+                bottom: 135px;
+                right: 10px;
+                max-width: 200px;
+                padding: 10px;
+                font-size: 0.75rem;
+            }
+            
+            .countdown-message {
+                bottom: 80px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+            
+            .countdown-number {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -1776,9 +2054,13 @@
             </div>
         </div>
         
-        <!-- ===== BOTÃO FLUTUANTE VS DENTRO DO MODAL ===== -->
+        <!-- ===== BOTÕES FLUTUANTES DENTRO DO MODAL ===== -->
+        <!-- BOTÃO DE NOTAS (ACIMA DO VS) -->
+        <button id="notes-float-btn" class="notes-float-btn" onclick="toggleNotesBubble()" title="Ver notas da música">📝</button>
+        
+        <!-- BOTÃO VS (ABAIXO) -->
         <button id="vs-float-btn" class="vs-float-btn" onclick="toggleVS()" title="Virtual Sound - Tocar/Parar faixa de áudio">VS</button>
-        <!-- ===== FIM DO BOTÃO FLUTUANTE ===== -->
+        <!-- ===== FIM DOS BOTÕES FLUTUANTES ===== -->
     </div>
 
     <!-- NOVO MODAL DO METRÔNOMO INDEPENDENTE -->
@@ -2225,11 +2507,17 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         let metronomePrecountCount = 0;
         let metronomePrecountInterval = null;
 
-        // ===== NOVAS VARIÁVEIS PARA O VS =====
+        // ===== NOVAS VARIÁVEIS PARA O VS E NOTAS =====
         let vsAudio = null;
         let vsAtivo = false;
         let musicaVSAberta = null;
-        // ===== FIM DAS VARIÁVEIS VS =====
+        let vsCountdownInterval = null;
+        let vsCountdown = 0;
+        let vsAguardandoArquivo = false;
+        
+        // Variáveis para o balão de notas
+        let notesBubbleAberto = false;
+        // ===== FIM DAS VARIÁVEIS =====
 
         // URL do repertório online
         const REPERTORIO_URL = "https://jecwb.github.io/bluevox/repertorio.xml";
@@ -2973,21 +3261,113 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             // Atualiza o display do metrônomo (caso necessário)
         }
 
-        // ===== NOVAS FUNÇÕES PARA O VS =====
+        // ===== FUNÇÕES PARA O BOTÃO DE NOTAS =====
+        function toggleNotesBubble() {
+            if (!musicaVSAberta) return;
+            
+            if (notesBubbleAberto) {
+                fecharNotesBubble();
+            } else {
+                abrirNotesBubble();
+            }
+        }
+        
+        function abrirNotesBubble() {
+            if (!musicaVSAberta) return;
+            
+            // Fechar bubble anterior se existir
+            fecharNotesBubble();
+            
+            const musica = musicaVSAberta;
+            const notas = musica.notas || "📝 Nenhuma nota cadastrada para esta música.";
+            
+            // Criar elemento do balão
+            const bubble = document.createElement('div');
+            bubble.className = 'notes-bubble';
+            bubble.id = 'notes-bubble';
+            
+            // Formatar notas (escapar HTML e converter quebras de linha)
+            const notasFormatadas = notas
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+            
+            bubble.innerHTML = `
+                <div class="notes-bubble-header">
+                    <span>📝 NOTAS</span>
+                    <span class="notes-bubble-close" onclick="fecharNotesBubble()">✕</span>
+                </div>
+                <div class="notes-bubble-content">
+                    ${notasFormatadas}
+                </div>
+            `;
+            
+            document.body.appendChild(bubble);
+            notesBubbleAberto = true;
+            
+            // Atualizar visual do botão
+            const notesBtn = document.getElementById('notes-float-btn');
+            if (musica.notas) {
+                notesBtn.classList.add('has-notes');
+                notesBtn.classList.remove('no-notes');
+            } else {
+                notesBtn.classList.add('no-notes');
+                notesBtn.classList.remove('has-notes');
+            }
+            
+            // Fechar ao clicar fora (com delay para não fechar imediatamente ao clicar no botão)
+            setTimeout(() => {
+                document.addEventListener('click', fecharNotesBubbleFora);
+            }, 100);
+        }
+        
+        function fecharNotesBubble() {
+            const bubble = document.getElementById('notes-bubble');
+            if (bubble) {
+                bubble.remove();
+            }
+            notesBubbleAberto = false;
+            document.removeEventListener('click', fecharNotesBubbleFora);
+        }
+        
+        function fecharNotesBubbleFora(e) {
+            const bubble = document.getElementById('notes-bubble');
+            const notesBtn = document.getElementById('notes-float-btn');
+            
+            // Se clicou no botão de notas, não fechar (o toggle cuida disso)
+            if (notesBtn && notesBtn.contains(e.target)) {
+                return;
+            }
+            
+            // Se clicou fora do balão, fechar
+            if (bubble && !bubble.contains(e.target)) {
+                fecharNotesBubble();
+            }
+        }
+        
+        function atualizarNotesButton() {
+            const notesBtn = document.getElementById('notes-float-btn');
+            if (!notesBtn) return;
+            
+            if (musicaVSAberta && musicaVSAberta.notas) {
+                notesBtn.classList.add('has-notes');
+                notesBtn.classList.remove('no-notes');
+                notesBtn.title = 'Ver notas da música';
+            } else {
+                notesBtn.classList.add('no-notes');
+                notesBtn.classList.remove('has-notes');
+                notesBtn.title = 'Nenhuma nota cadastrada';
+            }
+        }
+        // ===== FIM DAS FUNÇÕES DE NOTAS =====
+
+        // ===== FUNÇÕES PARA O VS =====
         function formatarNomeArquivoVS(nomeMusica) {
             // Converter para minúsculas e remover acentos
             let nomeFormatado = nomeMusica.toLowerCase();
-            
-            // Mapeamento de caracteres acentuados
-            const acentos = {
-                'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a',
-                'é': 'e', 'è': 'e', 'ê': 'e',
-                'í': 'i', 'ì': 'i', 'î': 'i',
-                'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o',
-                'ú': 'u', 'ù': 'u', 'û': 'u',
-                'ç': 'c',
-                'ñ': 'n'
-            };
             
             // Substituir acentos
             nomeFormatado = nomeFormatado.replace(/[áàãâä]/g, 'a')
@@ -3017,13 +3397,112 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             if (!musicaVSAberta) return;
             
             if (vsAtivo) {
+                // Se está tocando, parar imediatamente
+                pararVS();
+            } else if (vsCountdownInterval) {
+                // Se está em contagem regressiva, cancelar
+                cancelarCountdownVS();
                 pararVS();
             } else {
-                tocarVS();
+                // Iniciar contagem regressiva de 5 segundos
+                iniciarCountdownVS();
             }
         }
 
-        function tocarVS() {
+        function iniciarCountdownVS() {
+            vsCountdown = 5;
+            vsAguardandoArquivo = false;
+            
+            // Atualizar interface para modo countdown
+            const vsFloatBtn = document.getElementById('vs-float-btn');
+            const vsHeaderBtn = document.getElementById('vs-header-btn');
+            
+            vsFloatBtn.classList.add('countdown');
+            vsFloatBtn.innerHTML = vsCountdown;
+            
+            if (vsHeaderBtn) {
+                vsHeaderBtn.classList.add('countdown');
+                vsHeaderBtn.innerHTML = vsCountdown;
+            }
+            
+            // Mostrar mensagem de contagem regressiva
+            mostrarMensagemCountdown();
+            
+            // Iniciar contagem regressiva
+            vsCountdownInterval = setInterval(() => {
+                vsCountdown--;
+                
+                // Atualizar botões com o número atual
+                vsFloatBtn.innerHTML = vsCountdown;
+                if (vsHeaderBtn) vsHeaderBtn.innerHTML = vsCountdown;
+                
+                // Atualizar mensagem
+                atualizarMensagemCountdown();
+                
+                if (vsCountdown <= 0) {
+                    clearInterval(vsCountdownInterval);
+                    vsCountdownInterval = null;
+                    
+                    // Remover classe countdown
+                    vsFloatBtn.classList.remove('countdown');
+                    if (vsHeaderBtn) vsHeaderBtn.classList.remove('countdown');
+                    
+                    // Iniciar o VS de verdade
+                    iniciarVS();
+                }
+            }, 1000);
+        }
+
+        function cancelarCountdownVS() {
+            if (vsCountdownInterval) {
+                clearInterval(vsCountdownInterval);
+                vsCountdownInterval = null;
+            }
+            
+            // Remover mensagem de countdown
+            const countdownMsg = document.querySelector('.countdown-message');
+            if (countdownMsg) countdownMsg.remove();
+            
+            // Resetar botões
+            const vsFloatBtn = document.getElementById('vs-float-btn');
+            const vsHeaderBtn = document.getElementById('vs-header-btn');
+            
+            vsFloatBtn.classList.remove('countdown');
+            vsFloatBtn.innerHTML = 'VS';
+            
+            if (vsHeaderBtn) {
+                vsHeaderBtn.classList.remove('countdown');
+                vsHeaderBtn.innerHTML = 'VS';
+            }
+        }
+
+        function mostrarMensagemCountdown() {
+            // Remover mensagem anterior se existir
+            const msgAnterior = document.querySelector('.countdown-message');
+            if (msgAnterior) msgAnterior.remove();
+            
+            // Criar nova mensagem
+            const msg = document.createElement('div');
+            msg.className = 'countdown-message';
+            msg.id = 'countdown-message';
+            msg.innerHTML = `⏳ VS iniciará em:<br><span class="countdown-number" id="countdown-number">5</span>`;
+            document.body.appendChild(msg);
+        }
+
+        function atualizarMensagemCountdown() {
+            const countdownNumber = document.getElementById('countdown-number');
+            if (countdownNumber) {
+                countdownNumber.textContent = vsCountdown;
+                
+                // Efeito visual a cada segundo
+                countdownNumber.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    if (countdownNumber) countdownNumber.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+
+        function iniciarVS() {
             if (!musicaVSAberta) return;
             
             const nomeArquivo = formatarNomeArquivoVS(musicaVSAberta.nome);
@@ -3033,37 +3512,48 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             // Criar elemento de áudio
             vsAudio = new Audio(caminhoArquivo);
+            vsAguardandoArquivo = true;
+            
+            // Timeout para evitar espera infinita
+            const timeoutId = setTimeout(() => {
+                if (vsAguardandoArquivo) {
+                    console.error('❌ Timeout ao carregar VS');
+                    vsAudio = null;
+                    vsAguardandoArquivo = false;
+                    mostrarVSNaoDisponivel();
+                }
+            }, 3000);
             
             // Verificar se o arquivo existe
             vsAudio.addEventListener('canplaythrough', function() {
+                clearTimeout(timeoutId);
+                vsAguardandoArquivo = false;
+                
                 vsAudio.play()
                     .then(() => {
                         vsAtivo = true;
                         atualizarInterfaceVS(true);
                         console.log('▶️ VS tocando:', caminhoArquivo);
+                        
+                        // Remover mensagem de countdown
+                        const countdownMsg = document.querySelector('.countdown-message');
+                        if (countdownMsg) countdownMsg.remove();
                     })
                     .catch(error => {
                         console.error('❌ Erro ao tocar VS:', error);
-                        mostrarVSNaoDisponivel();
                         vsAudio = null;
+                        vsAguardandoArquivo = false;
+                        mostrarVSNaoDisponivel();
                     });
             });
             
             vsAudio.addEventListener('error', function() {
+                clearTimeout(timeoutId);
                 console.error('❌ Arquivo VS não encontrado:', caminhoArquivo);
-                mostrarVSNaoDisponivel();
                 vsAudio = null;
+                vsAguardandoArquivo = false;
+                mostrarVSNaoDisponivel();
             });
-            
-            // Timeout para evitar espera infinita
-            setTimeout(() => {
-                if (vsAudio && !vsAtivo) {
-                    vsAudio = null;
-                    if (!vsAtivo) {
-                        mostrarVSNaoDisponivel();
-                    }
-                }
-            }, 3000);
         }
 
         function pararVS() {
@@ -3072,7 +3562,19 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 vsAudio.currentTime = 0;
                 vsAudio = null;
             }
+            
+            if (vsCountdownInterval) {
+                clearInterval(vsCountdownInterval);
+                vsCountdownInterval = null;
+            }
+            
             vsAtivo = false;
+            vsAguardandoArquivo = false;
+            
+            // Remover mensagem de countdown
+            const countdownMsg = document.querySelector('.countdown-message');
+            if (countdownMsg) countdownMsg.remove();
+            
             atualizarInterfaceVS(false);
             console.log('⏹️ VS parado');
         }
@@ -3083,20 +3585,22 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             
             if (ativo) {
                 vsFloatBtn.classList.add('playing');
+                vsFloatBtn.classList.remove('countdown');
                 vsFloatBtn.innerHTML = '⏹️';
                 vsFloatBtn.title = 'Virtual Sound - Parar';
                 
                 if (vsHeaderBtn) {
                     vsHeaderBtn.classList.add('playing');
+                    vsHeaderBtn.classList.remove('countdown');
                     vsHeaderBtn.innerHTML = '⏹️';
                 }
             } else {
-                vsFloatBtn.classList.remove('playing');
+                vsFloatBtn.classList.remove('playing', 'countdown');
                 vsFloatBtn.innerHTML = 'VS';
                 vsFloatBtn.title = 'Virtual Sound - Tocar faixa de áudio';
                 
                 if (vsHeaderBtn) {
-                    vsHeaderBtn.classList.remove('playing');
+                    vsHeaderBtn.classList.remove('playing', 'countdown');
                     vsHeaderBtn.innerHTML = 'VS';
                 }
             }
@@ -3108,6 +3612,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
             if (toastAnterior) {
                 toastAnterior.remove();
             }
+            
+            // Remover mensagem de countdown
+            const countdownMsg = document.querySelector('.countdown-message');
+            if (countdownMsg) countdownMsg.remove();
             
             // Criar novo toast
             const toast = document.createElement('div');
@@ -3141,7 +3649,7 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportURLModal();
                     fecharUpdateModal();
                     fecharTunerModal();
-                    fecharMetronomeModal(); // ADICIONADO
+                    fecharMetronomeModal();
                 }
             });
 
@@ -3157,7 +3665,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                     fecharImportURLModal();
                     fecharUpdateModal();
                     fecharTunerModal();
-                    fecharMetronomeModal(); // ADICIONADO
+                    fecharMetronomeModal();
+                    
+                    // Fechar balão de notas também
+                    fecharNotesBubble();
                 }
             });
 
@@ -3456,15 +3967,21 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
         function abrirMusica(index) {
             indiceMusicaAberta = index;
             const musica = musicas[index];
-            musicaVSAberta = musica; // Salvar música atual para o VS
+            musicaVSAberta = musica; // Salvar música atual para o VS e Notas
             document.getElementById('modal-title').textContent = musica.nome;
             document.getElementById('lyrics-content').innerHTML = formatarLetra(musica.letra);
             document.getElementById('music-modal').style.display = 'block';
             
             // Resetar VS ao abrir nova música
-            if (vsAtivo) {
+            if (vsAtivo || vsCountdownInterval) {
                 pararVS();
             }
+            
+            // Fechar balão de notas ao abrir nova música
+            fecharNotesBubble();
+            
+            // Atualizar botão de notas
+            atualizarNotesButton();
             
             // Aplicar modo de visualização salvo
             aplicarModoVisualizacaoAtual();
@@ -3566,10 +4083,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
                 if (metronomeBtn) metronomeBtn.classList.remove('active');
             }
             
-            // Parar VS se estiver tocando
-            if (vsAtivo) {
+            // Parar VS se estiver tocando ou em contagem
+            if (vsAtivo || vsCountdownInterval) {
                 pararVS();
             }
+            
+            // Fechar balão de notas
+            fecharNotesBubble();
             
             musicaVSAberta = null;
             document.getElementById('music-modal').style.display = 'none';
@@ -4541,7 +5061,6 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • ♫ Metrônomo = Inicia/para metrônomo no BPM da música (requer BPM definido)
 • ⏮️ ⏭️ = Navegação no setlist durante apresentação (botões compactos)
 • 🔄 Visualização = Alternar entre modo Retrato e Paisagem (colunas)
-• VS (Virtual Sound) = Toca a faixa de áudio correspondente da pasta /vs/
 
 ➕ ADICIONAR MÚSICA:
 • Clique em "Adicionar Música"
@@ -4556,9 +5075,10 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Use o botão "🗑️ Excluir Música" para remover a música
 
 📝 NOTAS DE EXECUÇÃO:
-• Clique no ícone 📝 ao lado do BPM para ver as instruções de execução
-• As notas são exibidas em um modal separado
-• Útil para instruções específicas da banda
+• Botão flutuante 📝 acima do VS mostra as notas em um balão
+• Balão tem seta apontando para o botão
+• Clique novamente para fechar, ou clique fora
+• Se não houver notas, botão fica mais fraco
 
 ♫ METRÔNOMO:
 • Clique no botão ♫ para iniciar/parar
@@ -4567,11 +5087,13 @@ CHEIRO DE MOFO E LIXO, SINTO TABACO NO AR |G|
 • Funciona apenas se a música tiver BPM definido
 
 🎧 VIRTUAL SOUND (VS):
-• Botão "VS" no cabeçalho e botão flutuante
-• Toca o arquivo MP3 correspondente da pasta "vs"
+• Botão flutuante VS na parte inferior
+• Ao clicar, inicia contagem regressiva de 5 segundos (5,4,3,2,1) no próprio botão
+• Após a contagem, toca o arquivo MP3 correspondente da pasta "vs"
 • Nome do arquivo deve seguir o formato: nome-da-musica.mp3
 • Exemplo: "NÃO TENHO COMO PAGAR" → "nao-tenho-como-pagar.mp3"
 • Mensagem de "VS não disponível" se o arquivo não existir
+• Clique novamente durante a contagem para cancelar
 
 🛠️ UTILITÁRIOS:
 • 🎸 Afinador de Baixo = Notas de referência para baixo 4 cordas (E-A-D-G)
