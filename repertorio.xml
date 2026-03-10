@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-03-07T18:26:02.340Z</dataExportacao>
-    <totalMusicas>13</totalMusicas>
+    <dataExportacao>2026-03-10T12:32:19.093Z</dataExportacao>
+    <totalMusicas>14</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -208,7 +208,6 @@ Vai ter que tentar [|A|]mais![|E|]
       <bpm>170</bpm>
       <notas><![CDATA[Não ensaiada ainda]]></notas>
       <dataCriacao></dataCriacao>
-      <dataModificacao>2026-03-07T18:25:47.119Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[NÃO TENHO COMO PAGAR]]></nome>
@@ -432,6 +431,43 @@ A MOTHER DREAM YOU SUFFOCATE?
       <bpm>210</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
       <dataCriacao></dataCriacao>
+    </musica>
+    <musica>
+      <nome><![CDATA[WIP - A PAREDE]]></nome>
+      <letra><![CDATA[No celeiro nasceu um grito
+feito de fome e poeira
+cascos batendo no chão
+contra a velha coleira
+
+Prometeram um mundo novo
+sem dono e sem patrão
+mas o poder é uma semente
+que cresce na mesma mão
+
+[R]Quebrem as cercas!
+[R]Quebrem o chão!
+[R]Se nasce um trono
+[R]morre a revolução!
+
+Escreveram na parede
+Somos “todos iguais”
+mas com tirania
+o sentido fica pra trás
+
+Os porcos aprenderam rápido
+o jogo do poder
+quem gritava por justiça
+voltou a obedecer
+
+[R]Refrão
+
+"Todos os animais são iguais, mas alguns animais são mais iguais do que outros."
+
+[R]Refrão]]></letra>
+      <bpm>200</bpm>
+      <notas><![CDATA[Em desenvolvimento]]></notas>
+      <dataCriacao>2026-03-10T12:31:12.723Z</dataCriacao>
+      <dataModificacao>2026-03-10T12:31:41.423Z</dataModificacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
