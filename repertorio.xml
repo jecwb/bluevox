@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-03-10T12:32:19.093Z</dataExportacao>
-    <totalMusicas>14</totalMusicas>
+    <dataExportacao>2026-03-25T16:44:11.444Z</dataExportacao>
+    <totalMusicas>15</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -407,6 +407,56 @@ o poder é o que desejo!
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
+      <nome><![CDATA[SENHORES DO TRIBUTO]]></nome>
+      <letra><![CDATA[[|INTRO.: EM D G F#M E|] 
+[|E|]Do suor nasce a riqueza
+Do trabalho vem o [|D|]pão
+Mas o peso das correntes
+Cai na mesma dire[|E|]ção
+
+Cada moeda conquistada
+Cada hora sem [|D|]dormir
+Tem um selo do sistema
+Pron[|g|]to pra nos [|F#|]consumi[|EM|]r
+
+[R]Senhores do tributo
+[R]Sentados no salã[|D|]o
+[R]Contando nosso [|B|]esforço
+[R]Como se fosse criaçã[|E|]o
+
+[R]Senhores do tributo
+[R]Donos da decisã[|D|]o
+[R]Mas quem move esse [|BM|]mundo
+[R]É o [|G|]suor da [|F#|]nação[|EM|]
+[|EM D G F#M E|] 
+Nas estradas e nos campos
+Nas fábricas sem par[|D|]ar
+O motor do povo forte
+Nunca vai se cal[|EM|]ar
+
+Porque quando o povo acorda
+E começa a perce[|D|]ber
+Nenhum trono dura muito
+Se o [|G|]povo [|EM|]se erguer
+
+[R]Senhores do tributo
+[R]Escutem nossa [|D|]voz
+[R]Sem o povo traba[|BM|]lhador
+[R]Não existe nenhum de [|E|]vós
+
+[R]Senhores do tributo
+[R]O tempo vai [|D|]virar
+[R]Quem sustenta esse [|BM|]mundo
+[R]Também [|G|]pode [|F#|]parar
+[|EM D G F#M E|]
+
+[R] REFRÃO]]></letra>
+      <bpm>140</bpm>
+      <notas><![CDATA[N/D]]></notas>
+      <dataCriacao>2026-03-25T16:42:19.163Z</dataCriacao>
+      <dataModificacao>2026-03-25T16:43:52.966Z</dataModificacao>
+    </musica>
+    <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
       <letra><![CDATA[[|EM G EM C  D|]        
 DO YOU CARE WHAT THEY SAY?
@@ -466,8 +516,7 @@ voltou a obedecer
 [R]Refrão]]></letra>
       <bpm>200</bpm>
       <notas><![CDATA[Em desenvolvimento]]></notas>
-      <dataCriacao>2026-03-10T12:31:12.723Z</dataCriacao>
-      <dataModificacao>2026-03-10T12:31:41.423Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[WIP - AO SOM DO ROCK’N’ROLL]]></nome>
