@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-03-25T16:44:11.444Z</dataExportacao>
-    <totalMusicas>15</totalMusicas>
+    <dataExportacao>2026-10-09T15:35:23.168Z</dataExportacao>
+    <totalMusicas>16</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -407,6 +407,67 @@ o poder é o que desejo!
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
+      <nome><![CDATA[SEM PEDIR LICENÇA]]></nome>
+      <letra><![CDATA[[|G D EM C D 2X|]
+
+JÁ PERDI TEMPO DEMAIS,
+ESPERANDO A HORA CHEGAR
+GUARDANDO PALAVRAS E ABRAÇOS,
+COM MEDO DE FALAR!
+AMANHÃ É UMA PROMESSA,
+QUE NINGUÉM PODE GARANTIR
+O QUE EXISTE É ESSE INSTANTE,
+E ESTÁ PRESTES A PARTIR
+
+ENTÃO ACENDE ESSA FOGUEIRA,
+DEIXA A NOITE TESTEMUNHAR
+SE A VIDA É UMA ESTRADA CURTA,
+TEM HISTÓRIA PRA CONTAR
+
+[R]EU VOU VIVER!
+[R]SEM PEDIR LICENÇA!
+[R]VOU ME LIBERTAR!
+[R]SEM MEDO DA SENTENÇA!
+[R]VOU QUEBRAR TODAS AS CORRENTES,
+[R]VOU DEIXAR ELES FALAR
+[R]NÃO VOU CUMPRIR AS ORDENS,
+[R]SOU EU QUE VOU MANDAR!
+
+JÁ PERDI NOITES POR ORGULHO,
+JÁ CALEI MEU CORAÇÃO
+FIZ DE CONTA QUE ERA FORTE,
+QUANDO ERA SOLIDÃO
+QUANTOS SONHOS FORAM EMBORA
+POR MEDO DE TENTAR?
+QUANTAS VEZES DISSE “AMANHÃ”,
+SEM SABER SE IA CHEGAR?
+
+HOJE EU ABRO A VELHA PORTA,
+DEIXO O VENTO ENTRAR
+SE EU AINDA TENHO TEMPO,
+EU TENHO QUE APROVEITAR
+NÃO QUERO UMA VIDA PERFEITA,
+NEM PRECISO DE APROVAÇÃO
+QUERO CHEGAR AO FIM DA ESTRADA
+COM O FOGO NAS MINHAS MÃOS
+
+[R] [REFRÃO]
+
+E SE AMANHÃ FOR TARDE DEMAIS?
+E SE O TEMPO DISSER QUE ACABOU?
+EU QUERO LEMBRAR DAS NOITES,
+DAS PESSOAS QUE MEU CORAÇÃO AMOU
+NÃO QUERO LEVAR COMIGO
+O PESO DO QUE NÃO TENTEI
+PREFIRO CAIR PELO CAMINHO
+DO QUE NUNCA SABER ONDE CHEGUEI
+]]></letra>
+      <bpm>134</bpm>
+      <notas><![CDATA[Ainda em Definição]]></notas>
+      <dataCriacao>2026-10-09T15:33:00.703Z</dataCriacao>
+      <dataModificacao>2026-10-09T15:35:06.104Z</dataModificacao>
+    </musica>
+    <musica>
       <nome><![CDATA[SENHORES DO TRIBUTO]]></nome>
       <letra><![CDATA[[|INTRO.: EM D G F#M E|] 
 [|E|]Do suor nasce a riqueza
@@ -453,8 +514,7 @@ Se o [|G|]povo [|EM|]se erguer
 [R] REFRÃO]]></letra>
       <bpm>140</bpm>
       <notas><![CDATA[N/D]]></notas>
-      <dataCriacao>2026-03-25T16:42:19.163Z</dataCriacao>
-      <dataModificacao>2026-03-25T16:43:52.966Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[WANNA BREAK THE WALL]]></nome>
