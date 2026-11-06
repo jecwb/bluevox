@@ -3,8 +3,8 @@
   <info>
     <aplicacao>Repertório BlueVox</aplicacao>
     <versao>2.0</versao>
-    <dataExportacao>2026-10-09T15:35:23.168Z</dataExportacao>
-    <totalMusicas>16</totalMusicas>
+    <dataExportacao>2026-11-06T17:13:56.402Z</dataExportacao>
+    <totalMusicas>17</totalMusicas>
   </info>
   <musicas>
     <musica>
@@ -277,6 +277,47 @@ Chorus: 1x | Full Band › "Sigo Olhando pra baixo…"
       <dataCriacao></dataCriacao>
     </musica>
     <musica>
+      <nome><![CDATA[O CARA]]></nome>
+      <letra><![CDATA[Eu era forte, eu era o tal
+Não tinha medo, não tinha igual
+Cara fechada, punho no ar
+Se vinha guerra, eu ia lutar!
+
+Agora eu acordo todo quebrado
+Joelho doendo, coluna travada
+Já não dou murro, não quero brigar
+Mando todo mundo se foder... devagar!
+
+[R]EU NÃO SOU MAIS AQUELE CARA!
+[R]Aquele louco que não se calava!
+[R]EU NÃO SOU MAIS AQUELE CARA!
+[R]O tempo bateu, a conta chegou!
+
+Já não acredito em revolução
+Nem nas promessas, nem na salvação
+O mundo continua uma porcaria
+E eu tô mais cansado a cada dia!
+
+[R]Refrão
+
+Cadê a raiva?
+Cadê a paixão?
+Cadê aquele fogo
+No meu coração?
+
+ENVELHECER!
+SEM PERCEBER!
+
+[R]Refrão
+
+AINDA TENHO ROCK!
+AINDA TENHO ROCK!]]></letra>
+      <bpm>200</bpm>
+      <notas><![CDATA[N/D]]></notas>
+      <dataCriacao>2026-11-06T16:21:33.757Z</dataCriacao>
+      <dataModificacao>2026-11-06T16:22:23.263Z</dataModificacao>
+    </musica>
+    <musica>
       <nome><![CDATA[PORTA ABERTA]]></nome>
       <letra><![CDATA[andando de lado,
 me acostumo com a dor,
@@ -464,8 +505,7 @@ DO QUE NUNCA SABER ONDE CHEGUEI
 ]]></letra>
       <bpm>134</bpm>
       <notas><![CDATA[Ainda em Definição]]></notas>
-      <dataCriacao>2026-10-09T15:33:00.703Z</dataCriacao>
-      <dataModificacao>2026-10-09T15:35:06.104Z</dataModificacao>
+      <dataCriacao></dataCriacao>
     </musica>
     <musica>
       <nome><![CDATA[SENHORES DO TRIBUTO]]></nome>
